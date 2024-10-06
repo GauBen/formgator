@@ -1,4 +1,4 @@
-import { failures, methods, succeed, type FormInput } from "../definitions.js";
+import { type FormInput, failures, methods, succeed } from "../definitions.js";
 
 /** `<input type="image">` form input validator. */
 export function image(): FormInput<{ x: number; y: number }> {

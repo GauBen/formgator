@@ -1,8 +1,8 @@
 import {
   type FormInput,
+  type TextAttributes,
   methods,
   safeParseText,
-  type TextAttributes,
 } from "../definitions.js";
 
 /**

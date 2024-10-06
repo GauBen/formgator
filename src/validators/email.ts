@@ -1,9 +1,9 @@
 import {
+  type FormInput,
+  type TextAttributes,
   failures,
   methods,
   succeed,
-  type FormInput,
-  type TextAttributes,
 } from "../definitions.js";
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation

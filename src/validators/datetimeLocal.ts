@@ -1,4 +1,4 @@
-import { failures, type FormInput, methods, succeed } from "../definitions.js";
+import { type FormInput, failures, methods, succeed } from "../definitions.js";
 
 /**
  * `<input type="datetime-local">` form input validator.

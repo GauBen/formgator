@@ -1,4 +1,4 @@
-import { failures, type FormInput, methods, succeed } from "../definitions.js";
+import { type FormInput, failures, methods, succeed } from "../definitions.js";
 
 /**
  * `<input type="color">` form input validator.
@@ -22,9 +22,9 @@ export function color(): FormInput<`#${string}`> & {
     },
     asRGB() {
       return this.transform(([_, r1, r2, g1, g2, b1, b2]) => [
-        parseInt(r1 + r2, 16),
-        parseInt(g1 + g2, 16),
-        parseInt(b1 + b2, 16),
+        Number.parseInt(r1 + r2, 16),
+        Number.parseInt(g1 + g2, 16),
+        Number.parseInt(b1 + b2, 16),
       ]);
     },
   };

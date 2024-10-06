@@ -1,10 +1,10 @@
 import {
-  fail,
-  succeed,
   type FormInput,
   type ReadonlyFormData,
   type Result,
   type ValidationIssue,
+  fail,
+  succeed,
 } from "./definitions.js";
 
 export { checkbox } from "./validators/checkbox.js";

@@ -1,10 +1,10 @@
 import {
-  failures,
   type FormInput,
+  type TextAttributes,
+  failures,
   methods,
   safeParseText,
   succeed,
-  type TextAttributes,
 } from "../definitions.js";
 
 /**
