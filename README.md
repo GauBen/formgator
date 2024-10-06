@@ -1,5 +1,5 @@
 <div align="center">
-	<img src="https://raw.githubusercontent.com/GauBen/timeline/2b93c661b3aef52f5bafe3f0265590d73a64a47f/packages/formgator/formgator.jpg" alt="Ali, the friendly alligator that guards your forms" width="200" height="200">
+	<img src="https://raw.githubusercontent.com/GauBen/formgator/refs/heads/main/formgator.jpg" alt="Ali, the friendly alligator that guards your forms" width="200" height="200">
 </div>
 
 # formgator
