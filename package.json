@@ -33,16 +33,17 @@
   "main": "dist/index.js",
   "files": ["dist"],
   "scripts": {
-    "build": "pkgroll --clean-dist --sourcemap",
+    "build": "pkgroll --clean-dist --sourcemap && publint",
     "dev": "pkgroll --sourcemap --watch",
-    "test": "tsc --noEmit && tsx --experimental-test-coverage --experimental-test-isolation=none --test-coverage-exclude='src/**/*.test.ts' --test-coverage-branches=1 --test 'src/**/*.test.ts'",
-    "lint": "biome check"
+    "lint": "biome check",
+    "test": "tsc --noEmit && tsx --experimental-test-coverage --experimental-test-isolation=none --test-coverage-exclude='src/**/*.test.ts' --test-coverage-branches=1 --test 'src/**/*.test.ts'"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.3",
     "@sveltejs/kit": "^2.6.2",
     "@types/node": "^20.16.10",
     "pkgroll": "^2.5.0",
+    "publint": "^0.2.11",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
   },
