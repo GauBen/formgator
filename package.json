@@ -37,10 +37,10 @@
   "scripts": {
     "build": "pkgroll --clean-dist --sourcemap",
     "dev": "pkgroll --sourcemap --watch",
-    "test": "tsc --noEmit && tsx --experimental-test-coverage --test src/**/*.test.ts"
+    "test": "tsc --noEmit && tsx --experimental-test-coverage --experimental-test-isolation=none --test-coverage-exclude='src/**/*.test.ts' --test-coverage-branches=1 --test 'src/**/*.test.ts'"
   },
   "devDependencies": {
-    "@sveltejs/kit": "^2.6.1",
+    "@sveltejs/kit": "^2.6.2",
     "@types/node": "^20.16.10",
     "pkgroll": "^2.5.0",
     "tsx": "^4.19.1",
@@ -53,5 +53,6 @@
     "@sveltejs/kit": {
       "optional": true
     }
-  }
+  },
+  "packageManager": "yarn@4.5.0"
 }
