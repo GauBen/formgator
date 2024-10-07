@@ -35,11 +35,13 @@
   "scripts": {
     "build": "pkgroll --clean-dist --sourcemap && publint",
     "dev": "pkgroll --sourcemap --watch",
-    "lint": "biome check",
+    "lint": "biome check --fix",
+    "release": "yarn build && changeset publish",
     "test": "tsc --noEmit && tsx --experimental-test-coverage --experimental-test-isolation=none --test-coverage-exclude='src/**/*.test.ts' --test-coverage-branches=1 --test 'src/**/*.test.ts'"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.3",
+    "@changesets/cli": "^2.27.9",
     "@sveltejs/kit": "^2.6.2",
     "@types/node": "^22.7.4",
     "pkgroll": "^2.5.0",

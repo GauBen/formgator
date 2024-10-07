@@ -1,0 +1,24 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pkgxdev/dev@v0
+      - run: yarn install --immutable
+      - name: Create Release Pull Request or Publish to npm
+        uses: changesets/action@v1
+        with:
+          publish: yarn release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
