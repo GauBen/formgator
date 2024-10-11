@@ -58,7 +58,10 @@ export function file(
         }
       : (data, name) => {
           const value = data.get(name);
-          if (!(value instanceof File)) return failures.type();
+          if (value !== null && !(value instanceof File))
+            return failures.type();
+          if (value === null || (value.size === 0 && value.name === ""))
+            return attributes.required ? failures.required() : succeed(null);
           if (!accept(value)) return failures.accept(attributes.accept!);
           return succeed(value);
         },

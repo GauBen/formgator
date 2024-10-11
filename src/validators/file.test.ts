@@ -10,6 +10,7 @@ describe("file()", async () => {
     data.append("input", f);
 
     assert.deepEqualTyped(file().safeParse(data, "input"), succeed(f));
+    assert.deepEqualTyped(file().safeParse(data, "missing"), succeed(null));
     assert.deepEqualTyped(
       file({ multiple: true }).safeParse(data, "input"),
       succeed([f]),
@@ -39,6 +40,10 @@ describe("file()", async () => {
     data.append("ok", f);
 
     assert.deepEqualTyped(file().safeParse(data, "input"), failures.type());
+    assert.deepEqualTyped(
+      file({ required: true }).safeParse(data, "missing"),
+      failures.required(),
+    );
     assert.deepEqualTyped(
       file({ multiple: true }).safeParse(data, "input"),
       failures.type(),
