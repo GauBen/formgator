@@ -1,6 +1,6 @@
 {
   "name": "formgator",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "A validator for FormData and URLSearchParams objects",
   "keywords": [
     "typescript",
