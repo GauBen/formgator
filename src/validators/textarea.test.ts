@@ -8,9 +8,10 @@ describe("textarea()", async () => {
     const data = new FormData();
     data.append("input", "hello\nworld!");
     data.append("trim", "  hello ");
+    data.append("empty", "");
 
     assert.deepEqualTyped(
-      textarea().safeParse(data, "input"),
+      textarea({ required: true }).safeParse(data, "input"),
       succeed("hello\nworld!"),
     );
     assert.deepEqualTyped(
@@ -24,6 +25,11 @@ describe("textarea()", async () => {
     assert.deepEqualTyped(
       textarea().trim().safeParse(data, "trim"),
       succeed("hello"),
+    );
+    assert.deepEqualTyped(textarea().safeParse(data, "empty"), succeed(null));
+    assert.deepEqualTyped(
+      textarea().trim().safeParse(data, "empty"),
+      succeed(""),
     );
   });
 

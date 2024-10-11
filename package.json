@@ -39,7 +39,7 @@
     "dev": "pkgroll --sourcemap --watch",
     "lint": "biome check --fix",
     "release": "yarn build && changeset publish",
-    "test": "tsc --noEmit && tsx --experimental-test-coverage --experimental-test-isolation=none --test-coverage-exclude='src/**/*.test.ts' --test-coverage-branches=1 --test 'src/**/*.test.ts'"
+    "test": "tsc --noEmit && tsx --experimental-test-coverage --experimental-test-isolation=none --test-coverage-exclude='src/**/*.test.ts' --test-coverage-branches=100 --test 'src/**/*.test.ts'"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.3",
