@@ -1,10 +1,4 @@
-import {
-  type FormInput,
-  failures,
-  methods,
-  safeParse,
-  succeed,
-} from "../definitions.js";
+import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.js";
 
 /**
  * `<textarea>` form input validator.
@@ -38,8 +32,7 @@ export function textarea(
     [safeParse]: (data, name) => {
       const value = data.get(name);
       if (typeof value !== "string") return failures.type();
-      if (value === "")
-        return attributes.required ? failures.required() : succeed(null);
+      if (value === "") return attributes.required ? failures.required() : succeed(null);
       if (attributes.maxlength && value.length > attributes.maxlength)
         return failures.maxlength(attributes.maxlength);
       if (attributes.minlength && value.length < attributes.minlength)

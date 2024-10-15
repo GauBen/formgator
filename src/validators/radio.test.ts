@@ -8,18 +8,12 @@ describe("radio()", async () => {
     const data = new FormData();
     data.append("input", "option");
 
-    assert.deepEqualTyped(
-      radio(["option"])[safeParse](data, "input"),
-      succeed("option" as const),
-    );
+    assert.deepEqualTyped(radio(["option"])[safeParse](data, "input"), succeed("option" as const));
     assert.deepEqualTyped(
       radio(["option"], { required: true })[safeParse](data, "input"),
       succeed("option" as const),
     );
-    assert.deepEqualTyped(
-      radio(["option"])[safeParse](data, "missing"),
-      succeed(null),
-    );
+    assert.deepEqualTyped(radio(["option"])[safeParse](data, "missing"), succeed(null));
   });
 
   it("should refuse invalid inputs", () => {
@@ -27,10 +21,7 @@ describe("radio()", async () => {
     data.append("input", "invalid");
     data.append("file", new File([], "file.txt"));
 
-    assert.deepEqualTyped(
-      radio([])[safeParse](data, "input"),
-      failures.invalid(),
-    );
+    assert.deepEqualTyped(radio([])[safeParse](data, "input"), failures.invalid());
     assert.deepEqualTyped(radio([])[safeParse](data, "file"), failures.type());
     assert.deepEqualTyped(
       radio([], { required: true })[safeParse](data, "missing"),

@@ -1,10 +1,4 @@
-import {
-  type FormInput,
-  failures,
-  methods,
-  safeParse,
-  succeed,
-} from "../definitions.js";
+import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.js";
 
 /**
  * `<input type="month">` form input validator.
@@ -45,13 +39,10 @@ export function month(
     [safeParse]: (data, name) => {
       const value = data.get(name);
       if (typeof value !== "string") return failures.type();
-      if (value === "")
-        return attributes.required ? failures.required() : succeed(null);
+      if (value === "") return attributes.required ? failures.required() : succeed(null);
       if (!/^\d{4}-(0\d|1[12])$/.test(value)) return failures.invalid();
-      if (attributes.min && value < attributes.min)
-        return failures.min(attributes.min);
-      if (attributes.max && value > attributes.max)
-        return failures.max(attributes.max);
+      if (attributes.min && value < attributes.min) return failures.min(attributes.min);
+      if (attributes.max && value > attributes.max) return failures.max(attributes.max);
       return succeed(value);
     },
     /**
@@ -59,15 +50,11 @@ export function month(
      * since January 1, 1970, 00:00:00 UTC.
      */
     asNumber() {
-      return this.transform((value) =>
-        value === null ? null : Date.parse(value),
-      );
+      return this.transform((value) => (value === null ? null : Date.parse(value)));
     },
     /** Returns the month as a Date object. */
     asDate() {
-      return this.transform((value) =>
-        value === null ? null : new Date(value),
-      );
+      return this.transform((value) => (value === null ? null : new Date(value)));
     },
   };
 }

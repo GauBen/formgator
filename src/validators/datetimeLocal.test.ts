@@ -9,14 +9,8 @@ describe("date()", async () => {
     data.append("input", "2024-09-30T22:45");
     data.append("empty", "");
 
-    assert.deepEqualTyped(
-      datetimeLocal()[safeParse](data, "input"),
-      succeed("2024-09-30T22:45"),
-    );
-    assert.deepEqualTyped(
-      datetimeLocal()[safeParse](data, "empty"),
-      succeed(null),
-    );
+    assert.deepEqualTyped(datetimeLocal()[safeParse](data, "input"), succeed("2024-09-30T22:45"));
+    assert.deepEqualTyped(datetimeLocal()[safeParse](data, "empty"), succeed(null));
     assert.deepEqualTyped(
       datetimeLocal({
         min: "2024-09-30T22:45",
@@ -37,14 +31,8 @@ describe("date()", async () => {
       datetimeLocal().asDate()[safeParse](data, "input"),
       succeed(new Date("2024-09-30T22:45")),
     );
-    assert.deepEqualTyped(
-      datetimeLocal().asNumber()[safeParse](data, "empty"),
-      succeed(null),
-    );
-    assert.deepEqualTyped(
-      datetimeLocal().asDate()[safeParse](data, "empty"),
-      succeed(null),
-    );
+    assert.deepEqualTyped(datetimeLocal().asNumber()[safeParse](data, "empty"), succeed(null));
+    assert.deepEqualTyped(datetimeLocal().asDate()[safeParse](data, "empty"), succeed(null));
   });
 
   it("should refuse invalid inputs", () => {
@@ -54,22 +42,13 @@ describe("date()", async () => {
     data.append("nad", "2024-13-01T22:45");
     data.append("ok", "2024-09-30T22:45");
 
-    assert.deepEqualTyped(
-      datetimeLocal()[safeParse](data, "missing"),
-      failures.type(),
-    );
+    assert.deepEqualTyped(datetimeLocal()[safeParse](data, "missing"), failures.type());
     assert.deepEqualTyped(
       datetimeLocal({ required: true })[safeParse](data, "empty"),
       failures.required(),
     );
-    assert.deepEqualTyped(
-      datetimeLocal()[safeParse](data, "input"),
-      failures.invalid(),
-    );
-    assert.deepEqualTyped(
-      datetimeLocal()[safeParse](data, "nad"),
-      failures.invalid(),
-    );
+    assert.deepEqualTyped(datetimeLocal()[safeParse](data, "input"), failures.invalid());
+    assert.deepEqualTyped(datetimeLocal()[safeParse](data, "nad"), failures.invalid());
     assert.deepEqualTyped(
       datetimeLocal({
         min: "2024-09-30T22:46",

@@ -10,10 +10,7 @@ describe("select()", async () => {
     data.append("multiple", "foo");
     data.append("multiple", "bar");
 
-    assert.deepEqualTyped(
-      select(["option"])[safeParse](data, "input"),
-      succeed("option" as const),
-    );
+    assert.deepEqualTyped(select(["option"])[safeParse](data, "input"), succeed("option" as const));
     assert.deepEqualTyped(
       select(new Set(["option"]))[safeParse](data, "input"),
       succeed("option" as const),
@@ -39,10 +36,7 @@ describe("select()", async () => {
     data.append("empty", "");
     data.append("file", new File([], "file.txt"));
 
-    assert.deepEqualTyped(
-      select(["option"])[safeParse](data, "input"),
-      failures.invalid(),
-    );
+    assert.deepEqualTyped(select(["option"])[safeParse](data, "input"), failures.invalid());
     assert.deepEqualTyped(
       select(["option"], { multiple: true })[safeParse](data, "input"),
       failures.invalid(),
@@ -52,19 +46,13 @@ describe("select()", async () => {
       failures.type(),
     );
     assert.deepEqualTyped(
-      select([], { multiple: true, required: true })[safeParse](
-        data,
-        "missing",
-      ),
+      select([], { multiple: true, required: true })[safeParse](data, "missing"),
       failures.required(),
     );
     assert.deepEqualTyped(
       select([], { required: true })[safeParse](data, "empty"),
       failures.required(),
     );
-    assert.deepEqualTyped(
-      select([], { multiple: true })[safeParse](data, "file"),
-      failures.type(),
-    );
+    assert.deepEqualTyped(select([], { multiple: true })[safeParse](data, "file"), failures.type());
   });
 });

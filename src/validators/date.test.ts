@@ -29,14 +29,8 @@ describe("date()", async () => {
       date().asDate()[safeParse](data, "input"),
       succeed(new Date("2024-09-30")),
     );
-    assert.deepEqualTyped(
-      date().asNumber()[safeParse](data, "empty"),
-      succeed(null),
-    );
-    assert.deepEqualTyped(
-      date().asDate()[safeParse](data, "empty"),
-      succeed(null),
-    );
+    assert.deepEqualTyped(date().asNumber()[safeParse](data, "empty"), succeed(null));
+    assert.deepEqualTyped(date().asDate()[safeParse](data, "empty"), succeed(null));
   });
 
   it("should refuse invalid inputs", () => {
@@ -47,10 +41,7 @@ describe("date()", async () => {
     data.append("ok", "2024-09-30");
 
     assert.deepEqualTyped(date()[safeParse](data, "missing"), failures.type());
-    assert.deepEqualTyped(
-      date({ required: true })[safeParse](data, "empty"),
-      failures.required(),
-    );
+    assert.deepEqualTyped(date({ required: true })[safeParse](data, "empty"), failures.required());
     assert.deepEqualTyped(date()[safeParse](data, "input"), failures.invalid());
     assert.deepEqualTyped(date()[safeParse](data, "nad"), failures.invalid());
     assert.deepEqualTyped(

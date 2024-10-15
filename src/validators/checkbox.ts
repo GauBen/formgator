@@ -1,10 +1,4 @@
-import {
-  type FormInput,
-  failures,
-  methods,
-  safeParse,
-  succeed,
-} from "../definitions.js";
+import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.js";
 
 /**
  * `<input type="checkbox">` form input validator.
@@ -17,9 +11,7 @@ import {
  * instead if you want to handle several checkboxes with the same name but
  * different values.
  */
-export function checkbox(
-  attributes: { required?: boolean } = {},
-): FormInput<boolean> {
+export function checkbox(attributes: { required?: boolean } = {}): FormInput<boolean> {
   return {
     ...methods,
     attributes,

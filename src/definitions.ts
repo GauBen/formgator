@@ -3,9 +3,7 @@ export const safeParse = Symbol("fg.safeParse");
 
 // #region Types
 
-export type Result<Data, Error> =
-  | { success: true; data: Data }
-  | { success: false; error: Error };
+export type Result<Data, Error> = { success: true; data: Data } | { success: false; error: Error };
 
 /**
  * An interface matching both `FormData` and `URLSearchParams` for read
@@ -33,10 +31,7 @@ export type ValidationIssue =
 
 export interface FormInput<T = unknown> {
   /** Attributes given when creating the validator. */
-  attributes: Record<
-    string,
-    string | string[] | number | boolean | RegExp | undefined
-  >;
+  attributes: Record<string, string | string[] | number | boolean | RegExp | undefined>;
 
   /**
    * Transforms the output of the validator into another value.
@@ -48,20 +43,14 @@ export interface FormInput<T = unknown> {
    * @param catcher - In case the transformation function throws, this function
    *   is called to generate an error message.
    */
-  transform<U>(
-    fn: (value: T) => U,
-    catcher?: (error: unknown) => string,
-  ): FormInput<U>;
+  transform<U>(fn: (value: T) => U, catcher?: (error: unknown) => string): FormInput<U>;
 
   /** Adds a custom validation to the input. */
   refine<U extends T>(
     fn: (value: T) => value is U,
     message?: string | ((value: T) => string),
   ): FormInput<U>;
-  refine(
-    fn: (value: T) => unknown,
-    message?: string | ((value: T) => string),
-  ): FormInput<T>;
+  refine(fn: (value: T) => unknown, message?: string | ((value: T) => string)): FormInput<T>;
 
   /**
    * Makes the field optional, for inputs that may be removed or added
@@ -73,10 +62,7 @@ export interface FormInput<T = unknown> {
   optional(): FormInput<T | undefined>;
 
   /** @private @internal */
-  [safeParse]: (
-    data: ReadonlyFormData,
-    name: string,
-  ) => Result<T, ValidationIssue>;
+  [safeParse]: (data: ReadonlyFormData, name: string) => Result<T, ValidationIssue>;
 }
 
 // #region Utils
@@ -106,22 +92,17 @@ export const failures = {
       maxlength,
       message: `Too long, maximum length is ${maxlength}`,
     }),
-  pattern: (pattern: RegExp) =>
-    fail({ code: "pattern", pattern, message: "Invalid format" }),
+  pattern: (pattern: RegExp) => fail({ code: "pattern", pattern, message: "Invalid format" }),
   min: (min: number | string) =>
     fail({ code: "min", min, message: `Too small, minimum value is ${min}` }),
   max: (max: number | string) =>
     fail({ code: "max", max, message: `Too big, maximum value is ${max}` }),
   step: (step: number) => fail({ code: "step", step, message: "Invalid step" }),
-  accept: (accept: string[]) =>
-    fail({ code: "accept", accept, message: "Invalid file type" }),
-  refine: (received: unknown, message: string) =>
-    fail({ code: "refine", received, message }),
+  accept: (accept: string[]) => fail({ code: "accept", accept, message: "Invalid file type" }),
+  refine: (received: unknown, message: string) => fail({ code: "refine", received, message }),
   transform: (message: string) => fail({ code: "transform", message }),
 } satisfies {
-  [K in ValidationIssue["code"]]: (
-    ...args: never
-  ) => Result<never, ValidationIssue>;
+  [K in ValidationIssue["code"]]: (...args: never) => Result<never, ValidationIssue>;
 };
 
 // #region Methods

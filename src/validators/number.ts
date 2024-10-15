@@ -1,10 +1,4 @@
-import {
-  type FormInput,
-  failures,
-  methods,
-  safeParse,
-  succeed,
-} from "../definitions.js";
+import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.js";
 
 /**
  * `<input type="number">` form input validator.
@@ -50,15 +44,13 @@ export function number(
     [safeParse]: (data, name) => {
       const value = data.get(name);
       if (typeof value !== "string") return failures.type();
-      if (value === "")
-        return attributes.required ? failures.required() : succeed(null);
+      if (value === "") return attributes.required ? failures.required() : succeed(null);
 
       const number = Number(value);
       if (Number.isNaN(number)) return failures.invalid();
 
       const step = attributes.step ?? 1;
-      if (step > 0 && (number - (attributes.min ?? 0)) % step !== 0)
-        return failures.step(step);
+      if (step > 0 && (number - (attributes.min ?? 0)) % step !== 0) return failures.step(step);
 
       if (attributes.min !== undefined && number < attributes.min)
         return failures.min(attributes.min);

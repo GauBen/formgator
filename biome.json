@@ -12,7 +12,8 @@
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "ignore": ["package.json"]
+    "ignore": ["package.json"],
+    "lineWidth": 100
   },
   "organizeImports": {
     "enabled": true

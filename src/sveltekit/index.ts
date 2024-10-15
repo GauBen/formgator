@@ -27,9 +27,7 @@ export function formgate<
   ID extends string = string,
 >(
   inputs: Inputs,
-  action: Action extends (
-    event: infer Event extends { request: Request; url: URL },
-  ) => infer Output
+  action: Action extends (event: infer Event extends { request: Request; url: URL }) => infer Output
     ? (data: fg.Infer<Inputs>, event: Event) => Output
     : never,
   options: {
@@ -47,13 +45,10 @@ export function formgate<
     const data = fg
       .form(inputs)
       .safeParse(
-        options.method === "GET"
-          ? event.url.searchParams
-          : await event.request.formData(),
+        options.method === "GET" ? event.url.searchParams : await event.request.formData(),
       );
 
-    if (!data.success)
-      return fail(400, { id: options.id ?? "default", ...data.error });
+    if (!data.success) return fail(400, { id: options.id ?? "default", ...data.error });
 
     return action(data.data, event);
   }) as never;

@@ -31,14 +31,9 @@ describe("methods", () => {
       const data = new FormData();
       data.append("input", "nan");
 
-      const input = text({ required: true, pattern: /^\d+$/ }).transform(
-        BigInt,
-      );
+      const input = text({ required: true, pattern: /^\d+$/ }).transform(BigInt);
 
-      assert.deepEqualTyped(
-        input[safeParse](data, "input"),
-        failures.pattern(/^\d+$/),
-      );
+      assert.deepEqualTyped(input[safeParse](data, "input"), failures.pattern(/^\d+$/));
     });
   });
 
@@ -102,10 +97,7 @@ describe("methods", () => {
         value.startsWith("1"),
       );
 
-      assert.deepEqualTyped(
-        input[safeParse](data, "input"),
-        failures.pattern(/^\d+$/),
-      );
+      assert.deepEqualTyped(input[safeParse](data, "input"), failures.pattern(/^\d+$/));
     });
   });
 
@@ -113,20 +105,14 @@ describe("methods", () => {
     it("should accept missing fields", () => {
       const data = new FormData();
 
-      assert.deepEqualTyped(
-        text().optional()[safeParse](data, "input"),
-        succeed(undefined),
-      );
+      assert.deepEqualTyped(text().optional()[safeParse](data, "input"), succeed(undefined));
     });
 
     it("should accept present fields", () => {
       const data = new FormData();
       data.append("input", "123");
 
-      assert.deepEqualTyped(
-        text().optional()[safeParse](data, "input"),
-        succeed("123"),
-      );
+      assert.deepEqualTyped(text().optional()[safeParse](data, "input"), succeed("123"));
     });
   });
 

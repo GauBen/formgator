@@ -1,16 +1,8 @@
 import assert from "node:assert/strict";
 
 declare module "assert" {
-  function equalTyped<T>(
-    actual: T,
-    expected: T,
-    message?: string | Error,
-  ): asserts actual is T;
-  function deepEqualTyped<T>(
-    actual: T,
-    expected: T,
-    message?: string | Error,
-  ): asserts actual is T;
+  function equalTyped<T>(actual: T, expected: T, message?: string | Error): asserts actual is T;
+  function deepEqualTyped<T>(actual: T, expected: T, message?: string | Error): asserts actual is T;
 }
 
 assert.equalTyped = function (actual, expected, message) {

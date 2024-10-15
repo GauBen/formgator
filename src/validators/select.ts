@@ -1,10 +1,4 @@
-import {
-  type FormInput,
-  failures,
-  methods,
-  safeParse,
-  succeed,
-} from "../definitions.js";
+import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.js";
 
 /**
  * `<select>` form input validator.
@@ -45,8 +39,7 @@ export function select<T extends string>(
     [safeParse]: attributes.multiple
       ? (data, name) => {
           const values = data.getAll(name);
-          if (values.length === 0 && attributes.required)
-            return failures.required();
+          if (values.length === 0 && attributes.required) return failures.required();
           for (const value of values) {
             if (typeof value !== "string") return failures.type();
             if (!accept(value)) return failures.invalid();

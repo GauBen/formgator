@@ -11,14 +11,8 @@ describe("image()", async () => {
     data.append("input.x", "56");
     data.append("input.y", "78");
 
-    assert.deepEqualTyped(
-      image()[safeParse](data, ""),
-      succeed({ x: 12, y: 34 }),
-    );
-    assert.deepEqualTyped(
-      image()[safeParse](data, "input"),
-      succeed({ x: 56, y: 78 }),
-    );
+    assert.deepEqualTyped(image()[safeParse](data, ""), succeed({ x: 12, y: 34 }));
+    assert.deepEqualTyped(image()[safeParse](data, "input"), succeed({ x: 56, y: 78 }));
   });
 
   it("should refuse invalid inputs", () => {
@@ -26,10 +20,7 @@ describe("image()", async () => {
     data.append("input.x", "invalid");
     data.append("input.y", "invalid");
 
-    assert.deepEqualTyped(
-      image()[safeParse](data, "input"),
-      failures.invalid(),
-    );
+    assert.deepEqualTyped(image()[safeParse](data, "input"), failures.invalid());
     assert.deepEqualTyped(image()[safeParse](data, "missing"), failures.type());
   });
 });

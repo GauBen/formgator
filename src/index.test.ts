@@ -28,15 +28,10 @@ describe("form()", () => {
       const data = new FormData();
       data.append("input", "hello world!");
 
-      const result = fg
-        .form({ input: fg.text({ maxlength: 10 }) })
-        .safeParse(data);
+      const result = fg.form({ input: fg.text({ maxlength: 10 }) }).safeParse(data);
 
       assert(!result.success);
-      assert.deepEqualTyped(
-        fail(result.error.issues.input),
-        failures.maxlength(10),
-      );
+      assert.deepEqualTyped(fail(result.error.issues.input), failures.maxlength(10));
     });
   });
 

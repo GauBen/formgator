@@ -22,15 +22,9 @@ describe("textarea()", async () => {
       textarea({ maxlength: 12 })[safeParse](data, "input"),
       succeed("hello\nworld!"),
     );
-    assert.deepEqualTyped(
-      textarea().trim()[safeParse](data, "trim"),
-      succeed("hello"),
-    );
+    assert.deepEqualTyped(textarea().trim()[safeParse](data, "trim"), succeed("hello"));
     assert.deepEqualTyped(textarea()[safeParse](data, "empty"), succeed(null));
-    assert.deepEqualTyped(
-      textarea().trim()[safeParse](data, "empty"),
-      succeed(""),
-    );
+    assert.deepEqualTyped(textarea().trim()[safeParse](data, "empty"), succeed(""));
   });
 
   it("should refuse invalid inputs", () => {
@@ -38,10 +32,7 @@ describe("textarea()", async () => {
     data.append("empty", "");
     data.append("ok", "hello world!");
 
-    assert.deepEqualTyped(
-      textarea()[safeParse](data, "missing"),
-      failures.type(),
-    );
+    assert.deepEqualTyped(textarea()[safeParse](data, "missing"), failures.type());
     assert.deepEqualTyped(
       textarea({ required: true })[safeParse](data, "empty"),
       failures.required(),

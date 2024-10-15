@@ -1,10 +1,4 @@
-import {
-  type FormInput,
-  failures,
-  methods,
-  safeParse,
-  succeed,
-} from "../definitions.js";
+import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.js";
 
 /**
  * `<input type="week">` form input validator.
@@ -36,14 +30,10 @@ export function week(
     [safeParse]: (data, name) => {
       const value = data.get(name);
       if (typeof value !== "string") return failures.type();
-      if (value === "")
-        return attributes.required ? failures.required() : succeed(null);
-      if (!/^\d{4}-W(0[1-9]|[1-4]\d|5[0-3])$/.test(value))
-        return failures.invalid();
-      if (attributes.min && value < attributes.min)
-        return failures.min(attributes.min);
-      if (attributes.max && value > attributes.max)
-        return failures.max(attributes.max);
+      if (value === "") return attributes.required ? failures.required() : succeed(null);
+      if (!/^\d{4}-W(0[1-9]|[1-4]\d|5[0-3])$/.test(value)) return failures.invalid();
+      if (attributes.min && value < attributes.min) return failures.min(attributes.min);
+      if (attributes.max && value > attributes.max) return failures.max(attributes.max);
       return succeed(value);
     },
   };

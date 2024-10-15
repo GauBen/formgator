@@ -8,10 +8,7 @@ describe("color()", async () => {
     const data = new FormData();
     data.append("input", "#cafe99");
 
-    assert.deepEqualTyped(
-      color()[safeParse](data, "input"),
-      succeed<`#${string}`>("#cafe99"),
-    );
+    assert.deepEqualTyped(color()[safeParse](data, "input"), succeed<`#${string}`>("#cafe99"));
     assert.deepEqualTyped(
       color().asRGB()[safeParse](data, "input"),
       succeed<[number, number, number]>([202, 254, 153]),
@@ -22,10 +19,7 @@ describe("color()", async () => {
     const data = new FormData();
     data.append("input", "invalid");
 
-    assert.deepEqualTyped(
-      color()[safeParse](data, "input"),
-      failures.invalid(),
-    );
+    assert.deepEqualTyped(color()[safeParse](data, "input"), failures.invalid());
     assert.deepEqualTyped(color()[safeParse](data, "missing"), failures.type());
   });
 });

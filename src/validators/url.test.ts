@@ -9,19 +9,13 @@ describe("url()", async () => {
     data.append("input", "http://example.com/~gautier");
     data.append("empty", "");
 
-    assert.deepEqualTyped(
-      url()[safeParse](data, "input"),
-      succeed("http://example.com/~gautier"),
-    );
+    assert.deepEqualTyped(url()[safeParse](data, "input"), succeed("http://example.com/~gautier"));
     assert.deepEqualTyped(
       url().asURL()[safeParse](data, "input"),
       succeed(new URL("http://example.com/~gautier")),
     );
     assert.deepEqualTyped(url()[safeParse](data, "empty"), succeed(null));
-    assert.deepEqualTyped(
-      url().asURL()[safeParse](data, "empty"),
-      succeed(null),
-    );
+    assert.deepEqualTyped(url().asURL()[safeParse](data, "empty"), succeed(null));
   });
 
   it("should refuse invalid inputs", () => {
@@ -30,10 +24,7 @@ describe("url()", async () => {
     data.append("empty", "");
 
     assert.deepEqualTyped(url()[safeParse](data, "missing"), failures.type());
-    assert.deepEqualTyped(
-      url({ required: true })[safeParse](data, "empty"),
-      failures.required(),
-    );
+    assert.deepEqualTyped(url({ required: true })[safeParse](data, "empty"), failures.required());
     assert.deepEqualTyped(url()[safeParse](data, "input"), failures.invalid());
   });
 });

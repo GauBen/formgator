@@ -1,10 +1,4 @@
-import {
-  type FormInput,
-  failures,
-  methods,
-  safeParse,
-  succeed,
-} from "../definitions.js";
+import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.js";
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation
 const emailRegex =
@@ -60,9 +54,7 @@ export function email(
       if (typeof value !== "string") return failures.type();
       if (/[\r\n]/.test(value)) return failures.invalid();
       if (value === "")
-        return attributes.required
-          ? failures.required()
-          : succeed(attributes.multiple ? [] : null);
+        return attributes.required ? failures.required() : succeed(attributes.multiple ? [] : null);
       if (attributes.maxlength && value.length > attributes.maxlength)
         return failures.maxlength(attributes.maxlength);
       if (attributes.minlength && value.length < attributes.minlength)

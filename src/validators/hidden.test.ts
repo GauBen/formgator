@@ -8,16 +8,10 @@ describe("hidden()", async () => {
     const data = new FormData();
     data.append("input", "hello world!");
 
-    assert.deepEqualTyped(
-      hidden()[safeParse](data, "input"),
-      succeed("hello world!"),
-    );
+    assert.deepEqualTyped(hidden()[safeParse](data, "input"), succeed("hello world!"));
   });
 
   it("should refuse invalid inputs", () => {
-    assert.deepEqualTyped(
-      hidden()[safeParse](new FormData(), "missing"),
-      failures.type(),
-    );
+    assert.deepEqualTyped(hidden()[safeParse](new FormData(), "missing"), failures.type());
   });
 });

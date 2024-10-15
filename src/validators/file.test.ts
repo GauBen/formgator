@@ -10,26 +10,11 @@ describe("file()", async () => {
     data.append("input", f);
     assert.deepEqualTyped(file()[safeParse](data, "missing"), succeed(null));
     assert.deepEqualTyped(file()[safeParse](data, "input"), succeed(f));
-    assert.deepEqualTyped(
-      file({ multiple: true })[safeParse](data, "input"),
-      succeed([f]),
-    );
-    assert.deepEqualTyped(
-      file({ accept: [".txt"] })[safeParse](data, "input"),
-      succeed(f),
-    );
-    assert.deepEqualTyped(
-      file({ accept: ["text/*"] })[safeParse](data, "input"),
-      succeed(f),
-    );
-    assert.deepEqualTyped(
-      file({ accept: ["text/plain"] })[safeParse](data, "input"),
-      succeed(f),
-    );
-    assert.deepEqualTyped(
-      file({ multiple: true })[safeParse](data, "missing"),
-      succeed([]),
-    );
+    assert.deepEqualTyped(file({ multiple: true })[safeParse](data, "input"), succeed([f]));
+    assert.deepEqualTyped(file({ accept: [".txt"] })[safeParse](data, "input"), succeed(f));
+    assert.deepEqualTyped(file({ accept: ["text/*"] })[safeParse](data, "input"), succeed(f));
+    assert.deepEqualTyped(file({ accept: ["text/plain"] })[safeParse](data, "input"), succeed(f));
+    assert.deepEqualTyped(file({ multiple: true })[safeParse](data, "missing"), succeed([]));
   });
 
   it("should refuse invalid inputs", () => {
@@ -43,10 +28,7 @@ describe("file()", async () => {
       file({ required: true })[safeParse](data, "missing"),
       failures.required(),
     );
-    assert.deepEqualTyped(
-      file({ multiple: true })[safeParse](data, "input"),
-      failures.type(),
-    );
+    assert.deepEqualTyped(file({ multiple: true })[safeParse](data, "input"), failures.type());
     assert.deepEqualTyped(
       file({ multiple: true, required: true })[safeParse](data, "missing"),
       failures.required(),

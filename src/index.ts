@@ -34,12 +34,9 @@ export { week } from "./validators/week.js";
 export type { FormInput, ValidationIssue };
 
 const stringifyRegex = (regex: RegExp) => {
-  if (regex.flags !== "u")
-    console.warn("[formgator] RegExp attribute must be written with u flag");
+  if (regex.flags !== "u") console.warn("[formgator] RegExp attribute must be written with u flag");
   if (!regex.source.startsWith("^") || !regex.source.endsWith("$"))
-    console.warn(
-      "[formgator] RegExp attribute must start with ^ and end with $",
-    );
+    console.warn("[formgator] RegExp attribute must start with ^ and end with $");
   return regex.source.replaceAll(/^\^|\$$/g, "");
 };
 
@@ -96,9 +93,7 @@ export class FormgatorError<T extends Record<string, FormInput>> extends Error {
 }
 
 /** Creates a form validator from a record of form inputs. */
-export function form<T extends Record<string, FormInput<unknown>>>(
-  inputs: T,
-): FormGator<T> {
+export function form<T extends Record<string, FormInput<unknown>>>(inputs: T): FormGator<T> {
   return {
     inputs,
     safeParse: (data) => {

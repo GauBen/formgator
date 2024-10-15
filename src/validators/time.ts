@@ -1,10 +1,4 @@
-import {
-  type FormInput,
-  failures,
-  methods,
-  safeParse,
-  succeed,
-} from "../definitions.js";
+import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.js";
 
 /**
  * `<input type="time">` form input validator.
@@ -42,21 +36,16 @@ export function time(
     [safeParse]: (data, name) => {
       const value = data.get(name);
       if (typeof value !== "string") return failures.type();
-      if (value === "")
-        return attributes.required ? failures.required() : succeed(null);
+      if (value === "") return attributes.required ? failures.required() : succeed(null);
       if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)) return failures.invalid();
-      if (attributes.min && value < attributes.min)
-        return failures.min(attributes.min);
-      if (attributes.max && value > attributes.max)
-        return failures.max(attributes.max);
+      if (attributes.min && value < attributes.min) return failures.min(attributes.min);
+      if (attributes.max && value > attributes.max) return failures.max(attributes.max);
       return succeed(value);
     },
     /** Returns the time as a number of seconds. */
     asSeconds() {
       return this.transform((value) =>
-        value === null
-          ? null
-          : Number(value.slice(0, 2)) * 3600 + Number(value.slice(3, 5)) * 60,
+        value === null ? null : Number(value.slice(0, 2)) * 3600 + Number(value.slice(3, 5)) * 60,
       );
     },
   };

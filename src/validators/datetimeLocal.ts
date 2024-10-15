@@ -1,10 +1,4 @@
-import {
-  type FormInput,
-  failures,
-  methods,
-  safeParse,
-  succeed,
-} from "../definitions.js";
+import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.js";
 
 /**
  * `<input type="datetime-local">` form input validator.
@@ -45,15 +39,11 @@ export function datetimeLocal(
     [safeParse]: (data, name) => {
       const value = data.get(name);
       if (typeof value !== "string") return failures.type();
-      if (value === "")
-        return attributes.required ? failures.required() : succeed(null);
-      if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value))
-        return failures.invalid();
+      if (value === "") return attributes.required ? failures.required() : succeed(null);
+      if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) return failures.invalid();
       if (Number.isNaN(Date.parse(value))) return failures.invalid();
-      if (attributes.min && value < attributes.min)
-        return failures.min(attributes.min);
-      if (attributes.max && value > attributes.max)
-        return failures.max(attributes.max);
+      if (attributes.min && value < attributes.min) return failures.min(attributes.min);
+      if (attributes.max && value > attributes.max) return failures.max(attributes.max);
       return succeed(value);
     },
     /**
@@ -61,15 +51,11 @@ export function datetimeLocal(
      * since January 1, 1970, 00:00:00 UTC.
      */
     asNumber() {
-      return this.transform((value) =>
-        value === null ? null : Date.parse(value),
-      );
+      return this.transform((value) => (value === null ? null : Date.parse(value)));
     },
     /** Returns the date as a Date object. */
     asDate() {
-      return this.transform((value) =>
-        value === null ? null : new Date(value),
-      );
+      return this.transform((value) => (value === null ? null : new Date(value)));
     },
   };
 }
