@@ -1,4 +1,10 @@
-import { type FormInput, failures, methods, succeed } from "../definitions.js";
+import {
+  type FormInput,
+  failures,
+  methods,
+  safeParse,
+  succeed,
+} from "../definitions.js";
 
 /**
  * `<input type="checkbox">` form input validator.
@@ -17,7 +23,7 @@ export function checkbox(
   return {
     ...methods,
     attributes,
-    safeParse: (data, name) => {
+    [safeParse]: (data, name) => {
       const value = data.get(name);
       if (value !== null && value !== "on") return failures.invalid();
       if (attributes.required && value === null) return failures.required();

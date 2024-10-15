@@ -1,3 +1,5 @@
+export const safeParse = Symbol("fg.safeParse");
+
 // #region Types
 
 export type Result<Data, Error> =
@@ -29,11 +31,11 @@ export type ValidationIssue =
   | { code: "refine"; received: unknown; message: string };
 
 export interface FormInput<T = unknown> {
+  /** Attributes given when creating the validator. */
   attributes: Record<
     string,
     string | string[] | number | boolean | RegExp | undefined
   >;
-  safeParse(data: ReadonlyFormData, name: string): Result<T, ValidationIssue>;
 
   /**
    * Transforms the output of the validator into another value.
@@ -68,6 +70,12 @@ export interface FormInput<T = unknown> {
    * field (`undefined`) and a field with an empty value (`null`).
    */
   optional(): FormInput<T | undefined>;
+
+  /** @private @internal */
+  [safeParse]: (
+    data: ReadonlyFormData,
+    name: string,
+  ) => Result<T, ValidationIssue>;
 }
 
 // #region Utils
@@ -162,8 +170,8 @@ function transform<T, U>(
   return {
     ...this,
     ...methods,
-    safeParse: (data, name) => {
-      const result = this.safeParse(data, name);
+    [safeParse]: (data, name) => {
+      const result = this[safeParse](data, name);
       if (result.success === false) return result;
       try {
         return succeed(fn(result.data));
@@ -183,8 +191,8 @@ function refine<T, U extends T>(
   return {
     ...this,
     ...methods,
-    safeParse: (data, name) => {
-      const result = this.safeParse(data, name);
+    [safeParse]: (data, name) => {
+      const result = this[safeParse](data, name);
       if (result.success === false) return result;
 
       if (!fn(result.data)) {
@@ -202,9 +210,9 @@ function refine<T, U extends T>(
 function optional<T>(this: FormInput<T>): FormInput<T | undefined> {
   return {
     ...this,
-    safeParse: (data, name) => {
+    [safeParse]: (data, name) => {
       if (!data.has(name)) return succeed(undefined);
-      return this.safeParse(data, name);
+      return this[safeParse](data, name);
     },
   };
 }

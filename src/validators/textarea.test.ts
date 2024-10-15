@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.js";
-import { failures, succeed } from "../definitions.js";
+import { failures, safeParse, succeed } from "../definitions.js";
 import { textarea } from "./textarea.js";
 
 describe("textarea()", async () => {
@@ -11,24 +11,24 @@ describe("textarea()", async () => {
     data.append("empty", "");
 
     assert.deepEqualTyped(
-      textarea({ required: true }).safeParse(data, "input"),
+      textarea({ required: true })[safeParse](data, "input"),
       succeed("hello\nworld!"),
     );
     assert.deepEqualTyped(
-      textarea({ minlength: 12 }).safeParse(data, "input"),
+      textarea({ minlength: 12 })[safeParse](data, "input"),
       succeed("hello\nworld!"),
     );
     assert.deepEqualTyped(
-      textarea({ maxlength: 12 }).safeParse(data, "input"),
+      textarea({ maxlength: 12 })[safeParse](data, "input"),
       succeed("hello\nworld!"),
     );
     assert.deepEqualTyped(
-      textarea().trim().safeParse(data, "trim"),
+      textarea().trim()[safeParse](data, "trim"),
       succeed("hello"),
     );
-    assert.deepEqualTyped(textarea().safeParse(data, "empty"), succeed(null));
+    assert.deepEqualTyped(textarea()[safeParse](data, "empty"), succeed(null));
     assert.deepEqualTyped(
-      textarea().trim().safeParse(data, "empty"),
+      textarea().trim()[safeParse](data, "empty"),
       succeed(""),
     );
   });
@@ -39,19 +39,19 @@ describe("textarea()", async () => {
     data.append("ok", "hello world!");
 
     assert.deepEqualTyped(
-      textarea().safeParse(data, "missing"),
+      textarea()[safeParse](data, "missing"),
       failures.type(),
     );
     assert.deepEqualTyped(
-      textarea({ required: true }).safeParse(data, "empty"),
+      textarea({ required: true })[safeParse](data, "empty"),
       failures.required(),
     );
     assert.deepEqualTyped(
-      textarea({ minlength: 13 }).safeParse(data, "ok"),
+      textarea({ minlength: 13 })[safeParse](data, "ok"),
       failures.minlength(13),
     );
     assert.deepEqualTyped(
-      textarea({ maxlength: 11 }).safeParse(data, "ok"),
+      textarea({ maxlength: 11 })[safeParse](data, "ok"),
       failures.maxlength(11),
     );
   });

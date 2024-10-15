@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "./assert.js";
-import { failures, succeed } from "./definitions.js";
+import { failures, safeParse, succeed } from "./definitions.js";
 import { text } from "./validators/text.js";
 
 describe("methods", () => {
@@ -10,7 +10,7 @@ describe("methods", () => {
       data.append("input", "123");
 
       assert.deepEqualTyped(
-        text({ required: true }).transform(BigInt).safeParse(data, "input"),
+        text({ required: true }).transform(BigInt)[safeParse](data, "input"),
         succeed(123n),
       );
     });
@@ -22,7 +22,7 @@ describe("methods", () => {
       assert.deepEqualTyped(
         text({ required: true })
           .transform(BigInt, () => "Not a number")
-          .safeParse(data, "input"),
+          [safeParse](data, "input"),
         failures.transform("Not a number"),
       );
     });
@@ -36,7 +36,7 @@ describe("methods", () => {
       );
 
       assert.deepEqualTyped(
-        input.safeParse(data, "input"),
+        input[safeParse](data, "input"),
         failures.pattern(/^\d+$/),
       );
     });
@@ -50,7 +50,7 @@ describe("methods", () => {
       assert.deepEqualTyped(
         text({ required: true })
           .refine((value) => value.startsWith("1"))
-          .safeParse(data, "input"),
+          [safeParse](data, "input"),
         succeed("123"),
       );
     });
@@ -62,7 +62,7 @@ describe("methods", () => {
       assert.deepEqualTyped(
         text({ required: true })
           .refine((value) => value.startsWith("1"))
-          .safeParse(data, "input"),
+          [safeParse](data, "input"),
         failures.refine("nan", "Invalid value"),
       );
     });
@@ -77,7 +77,7 @@ describe("methods", () => {
             (value) => value.startsWith("1"),
             () => "Nope",
           )
-          .safeParse(data, "input"),
+          [safeParse](data, "input"),
         failures.refine("nan", "Nope"),
       );
     });
@@ -91,7 +91,7 @@ describe("methods", () => {
       );
 
       assert.deepEqualTyped(
-        input.safeParse(data, "input"),
+        input[safeParse](data, "input"),
         failures.pattern(/^\d+$/),
       );
     });
@@ -102,7 +102,7 @@ describe("methods", () => {
       const data = new FormData();
 
       assert.deepEqualTyped(
-        text().optional().safeParse(data, "input"),
+        text().optional()[safeParse](data, "input"),
         succeed(undefined),
       );
     });
@@ -112,7 +112,7 @@ describe("methods", () => {
       data.append("input", "123");
 
       assert.deepEqualTyped(
-        text().optional().safeParse(data, "input"),
+        text().optional()[safeParse](data, "input"),
         succeed("123"),
       );
     });
@@ -127,6 +127,6 @@ describe("methods", () => {
       .refine((value) => value % 2 === 1)
       .transform(String);
 
-    assert.deepEqualTyped(input.safeParse(data, "input"), succeed("123"));
+    assert.deepEqualTyped(input[safeParse](data, "input"), succeed("123"));
   });
 });

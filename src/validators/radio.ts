@@ -1,4 +1,10 @@
-import { type FormInput, failures, methods, succeed } from "../definitions.js";
+import {
+  type FormInput,
+  failures,
+  methods,
+  safeParse,
+  succeed,
+} from "../definitions.js";
 
 /**
  * `<input type="radio">` form input validator.
@@ -22,7 +28,7 @@ export function radio<T extends string>(
   return {
     ...methods,
     attributes,
-    safeParse: (data, name) => {
+    [safeParse]: (data, name) => {
       const value = data.get(name);
       if (value === null)
         return attributes.required ? failures.required() : succeed(null);

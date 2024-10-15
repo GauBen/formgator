@@ -1,4 +1,10 @@
-import { type FormInput, failures, methods, succeed } from "../definitions.js";
+import {
+  type FormInput,
+  failures,
+  methods,
+  safeParse,
+  succeed,
+} from "../definitions.js";
 
 /**
  * `<input type="date">` form input validator.
@@ -16,27 +22,27 @@ export function date(attributes?: {
   min?: string;
   max?: string;
 }): FormInput<string | null> & {
-  asNumber: () => FormInput<number | null>;
-  asDate: () => FormInput<Date | null>;
+  asNumber(): FormInput<number | null>;
+  asDate(): FormInput<Date | null>;
 };
 export function date(attributes: {
   required: true;
   min?: string;
   max?: string;
 }): FormInput<string> & {
-  asNumber: () => FormInput<number>;
-  asDate: () => FormInput<Date>;
+  asNumber(): FormInput<number>;
+  asDate(): FormInput<Date>;
 };
 export function date(
   attributes: { required?: boolean; min?: string; max?: string } = {},
 ): FormInput<string | null> & {
-  asNumber: () => FormInput<number | null>;
-  asDate: () => FormInput<Date | null>;
+  asNumber(): FormInput<number | null>;
+  asDate(): FormInput<Date | null>;
 } {
   return {
     ...methods,
     attributes,
-    safeParse: (data, name) => {
+    [safeParse]: (data, name) => {
       const value = data.get(name);
       if (typeof value !== "string") return failures.type();
       if (value === "")

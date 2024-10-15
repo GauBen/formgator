@@ -3,6 +3,7 @@ import {
   type TextAttributes,
   failures,
   methods,
+  safeParse,
   safeParseText,
   succeed,
 } from "../definitions.js";
@@ -26,7 +27,7 @@ export function url(
   return {
     ...methods,
     attributes,
-    safeParse: safeParseText(attributes, (value) =>
+    [safeParse]: safeParseText(attributes, (value) =>
       URL.canParse(value) ? succeed(value) : failures.invalid(),
     ),
     asURL() {

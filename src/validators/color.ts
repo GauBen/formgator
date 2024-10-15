@@ -1,4 +1,10 @@
-import { type FormInput, failures, methods, succeed } from "../definitions.js";
+import {
+  type FormInput,
+  failures,
+  methods,
+  safeParse,
+  succeed,
+} from "../definitions.js";
 
 /**
  * `<input type="color">` form input validator.
@@ -14,7 +20,7 @@ export function color(): FormInput<`#${string}`> & {
   return {
     ...methods,
     attributes: {},
-    safeParse: (data, name) => {
+    [safeParse]: (data, name) => {
       const value = data.get(name);
       if (typeof value !== "string") return failures.type();
       if (!/^#[0-9a-f]{6}$/.test(value)) return failures.invalid();

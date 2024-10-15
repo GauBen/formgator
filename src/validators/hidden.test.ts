@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.js";
-import { failures, succeed } from "../definitions.js";
+import { failures, safeParse, succeed } from "../definitions.js";
 import { hidden } from "./hidden.js";
 
 describe("hidden()", async () => {
@@ -9,14 +9,14 @@ describe("hidden()", async () => {
     data.append("input", "hello world!");
 
     assert.deepEqualTyped(
-      hidden().safeParse(data, "input"),
+      hidden()[safeParse](data, "input"),
       succeed("hello world!"),
     );
   });
 
   it("should refuse invalid inputs", () => {
     assert.deepEqualTyped(
-      hidden().safeParse(new FormData(), "missing"),
+      hidden()[safeParse](new FormData(), "missing"),
       failures.type(),
     );
   });

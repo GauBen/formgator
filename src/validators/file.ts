@@ -1,4 +1,10 @@
-import { type FormInput, failures, methods, succeed } from "../definitions.js";
+import {
+  type FormInput,
+  failures,
+  methods,
+  safeParse,
+  succeed,
+} from "../definitions.js";
 
 /**
  * `<input type="file">` form input validator.
@@ -45,7 +51,7 @@ export function file(
   return {
     ...methods,
     attributes,
-    safeParse: attributes.multiple
+    [safeParse]: attributes.multiple
       ? (data, name) => {
           const values = data.getAll(name);
           if (values.length === 0)

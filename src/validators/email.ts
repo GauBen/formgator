@@ -3,6 +3,7 @@ import {
   type TextAttributes,
   failures,
   methods,
+  safeParse,
   succeed,
 } from "../definitions.js";
 
@@ -37,7 +38,7 @@ export function email(
   return {
     ...methods,
     attributes,
-    safeParse: (data, name) => {
+    [safeParse]: (data, name) => {
       const value = data.get(name);
       if (typeof value !== "string") return failures.type();
       if (/[\r\n]/.test(value)) return failures.invalid();

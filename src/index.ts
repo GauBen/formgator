@@ -4,6 +4,7 @@ import {
   type Result,
   type ValidationIssue,
   fail,
+  safeParse,
   succeed,
 } from "./definitions.js";
 
@@ -104,7 +105,7 @@ export function form<T extends Record<string, FormInput<unknown>>>(
       const entries: Array<[string, unknown]> = [];
       const errorEntries: Array<[string, ValidationIssue | null]> = [];
       for (const [name, input] of Object.entries(inputs)) {
-        const result = input.safeParse(data, name);
+        const result = input[safeParse](data, name);
         if (result.success === false) errorEntries.push([name, result.error]);
         else entries.push([name, result.data]);
       }

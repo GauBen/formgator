@@ -2,6 +2,7 @@ import {
   type FormInput,
   type TextAttributes,
   methods,
+  safeParse,
   safeParseText,
 } from "../definitions.js";
 
@@ -19,17 +20,17 @@ import {
  */
 export function text(
   attributes?: TextAttributes<false>,
-): FormInput<string | null> & { trim: () => FormInput<string> };
+): FormInput<string | null> & { trim(): FormInput<string> };
 export function text(
   attributes: TextAttributes<true>,
-): FormInput<string> & { trim: () => FormInput<string> };
+): FormInput<string> & { trim(): FormInput<string> };
 export function text(
   attributes: TextAttributes = {},
-): FormInput<string | null> & { trim: () => FormInput<string> } {
+): FormInput<string | null> & { trim(): FormInput<string> } {
   return {
     ...methods,
     attributes,
-    safeParse: safeParseText(attributes),
+    [safeParse]: safeParseText(attributes),
     /**
      * Removes the leading and trailing white space from the value.
      *
