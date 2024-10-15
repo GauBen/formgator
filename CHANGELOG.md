@@ -1,5 +1,11 @@
 # formgator
 
+## 0.0.13
+
+### Patch Changes
+
+- 1eb61c3: Hide `.safeParse` on validators
+
 ## 0.0.12
 
 ### Patch Changes
