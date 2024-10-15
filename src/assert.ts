@@ -21,5 +21,5 @@ assert.deepEqualTyped = function (actual, expected, message) {
   return this.deepEqual(actual, expected, message);
 };
 
-/** A re-export of "node:assert/strict" with an additional typed methods. */
+/** A re-export of "node:assert/strict" with additional typed methods. */
 export default assert;

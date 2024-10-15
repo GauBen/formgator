@@ -1,9 +1,9 @@
 import {
   type FormInput,
-  type TextAttributes,
+  failures,
   methods,
   safeParse,
-  safeParseText,
+  succeed,
 } from "../definitions.js";
 
 /**
@@ -18,19 +18,43 @@ import {
  * - `minlength` - Minimum length of the input.
  * - `pattern` - Regular expression pattern to match.
  */
+export function text(attributes?: {
+  required?: false;
+  minlength?: number;
+  maxlength?: number;
+  pattern?: RegExp;
+}): FormInput<string | null> & { trim(): FormInput<string> };
+export function text(attributes: {
+  required: true;
+  minlength?: number;
+  maxlength?: number;
+  pattern?: RegExp;
+}): FormInput<string> & { trim(): FormInput<string> };
 export function text(
-  attributes?: TextAttributes<false>,
-): FormInput<string | null> & { trim(): FormInput<string> };
-export function text(
-  attributes: TextAttributes<true>,
-): FormInput<string> & { trim(): FormInput<string> };
-export function text(
-  attributes: TextAttributes = {},
+  attributes: {
+    required?: boolean;
+    minlength?: number;
+    maxlength?: number;
+    pattern?: RegExp;
+  } = {},
 ): FormInput<string | null> & { trim(): FormInput<string> } {
   return {
     ...methods,
     attributes,
-    [safeParse]: safeParseText(attributes),
+    [safeParse]: (data, name) => {
+      const value = data.get(name);
+      if (typeof value !== "string") return failures.type();
+      if (/[\r\n]/.test(value)) return failures.invalid();
+      if (value === "")
+        return attributes.required ? failures.required() : succeed(null);
+      if (attributes.maxlength && value.length > attributes.maxlength)
+        return failures.maxlength(attributes.maxlength);
+      if (attributes.minlength && value.length < attributes.minlength)
+        return failures.minlength(attributes.minlength);
+      if (attributes.pattern && !attributes.pattern.test(value))
+        return failures.pattern(attributes.pattern);
+      return succeed(value);
+    },
     /**
      * Removes the leading and trailing white space from the value.
      *

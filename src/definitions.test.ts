@@ -53,6 +53,12 @@ describe("methods", () => {
           [safeParse](data, "input"),
         succeed("123"),
       );
+      assert.deepEqualTyped(
+        text({ required: true })
+          .refine((value) => value === "123")
+          [safeParse](data, "input"),
+        succeed("123" as const),
+      );
     });
 
     it("should refuse invalid predicates", () => {
@@ -62,6 +68,12 @@ describe("methods", () => {
       assert.deepEqualTyped(
         text({ required: true })
           .refine((value) => value.startsWith("1"))
+          [safeParse](data, "input"),
+        failures.refine("nan", "Invalid value"),
+      );
+      assert.deepEqualTyped(
+        text({ required: true })
+          .refine((value) => value === "124")
           [safeParse](data, "input"),
         failures.refine("nan", "Invalid value"),
       );

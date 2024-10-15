@@ -1,6 +1,5 @@
 import {
   type FormInput,
-  type TextAttributes,
   failures,
   methods,
   safeParse,
@@ -23,17 +22,35 @@ const emailRegex =
  * - `multiple` - Whether the input allows multiple comma-separated email
  *   addresses.
  */
+export function email(attributes?: {
+  multiple?: false;
+  required?: false;
+  minlength?: number;
+  maxlength?: number;
+  pattern?: RegExp;
+}): FormInput<string | null>;
+export function email(attributes: {
+  multiple?: false;
+  required: true;
+  minlength?: number;
+  maxlength?: number;
+  pattern?: RegExp;
+}): FormInput<string>;
+export function email(attributes: {
+  multiple: true;
+  required?: boolean;
+  minlength?: number;
+  maxlength?: number;
+  pattern?: RegExp;
+}): FormInput<string[]>;
 export function email(
-  attributes?: { multiple?: false } & TextAttributes<false>,
-): FormInput<string | null>;
-export function email(
-  attributes: { multiple?: false } & TextAttributes<true>,
-): FormInput<string>;
-export function email(
-  attributes: { multiple: true } & TextAttributes,
-): FormInput<string[]>;
-export function email(
-  attributes: { multiple?: boolean } & TextAttributes = {},
+  attributes: {
+    multiple?: boolean;
+    required?: boolean;
+    minlength?: number;
+    maxlength?: number;
+    pattern?: RegExp;
+  } = {},
 ): FormInput<string | string[] | null> {
   return {
     ...methods,
