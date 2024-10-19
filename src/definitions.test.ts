@@ -106,6 +106,7 @@ describe("methods", () => {
       const data = new FormData();
 
       assert.deepEqualTyped(text().optional()[safeParse](data, "input"), succeed(undefined));
+      assert.deepEqualTyped(text().optional("")[safeParse](data, "input"), succeed(""));
     });
 
     it("should accept present fields", () => {

@@ -58,8 +58,11 @@ export interface FormInput<T = unknown> {
    *
    * It returns `undefined` instead of `null` to differentiate between a missing
    * field (`undefined`) and a field with an empty value (`null`).
+   *
+   * You may provide a default value to be used when the field is missing.
    */
   optional(): FormInput<T | undefined>;
+  optional<U>(value: U): FormInput<T | U>;
 
   /** @private @internal */
   [safeParse]: (data: ReadonlyFormData, name: string) => Result<T, ValidationIssue>;
@@ -153,11 +156,11 @@ function refine<T, U extends T>(
   };
 }
 
-function optional<T>(this: FormInput<T>): FormInput<T | undefined> {
+function optional<T, U>(this: FormInput<T>, value?: U): FormInput<T | U> {
   return {
     ...this,
     [safeParse]: (data, name) => {
-      if (!data.has(name)) return succeed(undefined);
+      if (!data.has(name)) return succeed(value as U);
       return this[safeParse](data, name);
     },
   };
