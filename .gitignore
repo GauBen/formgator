@@ -5,5 +5,9 @@
 !.yarn/sdks
 !.yarn/versions
 
+.svelte-kit/
 dist/
 node_modules/
+
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
