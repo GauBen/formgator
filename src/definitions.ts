@@ -16,18 +16,19 @@ export interface ReadonlyFormData {
 }
 
 export type ValidationIssue =
-  | { code: "type"; message: string }
-  | { code: "invalid"; message: string }
-  | { code: "required"; message: string }
-  | { code: "minlength"; minlength: number; message: string }
-  | { code: "maxlength"; maxlength: number; message: string }
-  | { code: "pattern"; pattern: RegExp; message: string }
-  | { code: "min"; min: number | string; message: string }
-  | { code: "max"; max: number | string; message: string }
-  | { code: "step"; step: number; message: string }
   | { code: "accept"; message: string }
+  | { code: "custom"; message: string }
+  | { code: "invalid"; message: string }
+  | { code: "max"; max: number | string; message: string }
+  | { code: "maxlength"; maxlength: number; message: string }
+  | { code: "min"; min: number | string; message: string }
+  | { code: "minlength"; minlength: number; message: string }
+  | { code: "pattern"; pattern: RegExp; message: string }
+  | { code: "refine"; received: unknown; message: string }
+  | { code: "required"; message: string }
+  | { code: "step"; step: number; message: string }
   | { code: "transform"; message: string }
-  | { code: "refine"; received: unknown; message: string };
+  | { code: "type"; message: string };
 
 export interface FormInput<T = unknown> {
   /** Attributes given when creating the validator. */
@@ -80,30 +81,23 @@ export const fail = <T>(errors: T): Result<never, T> => ({
 });
 
 export const failures = {
-  type: () => fail({ code: "type", message: "Invalid type" }),
+  accept: (accept: string[]) => fail({ code: "accept", accept, message: "Invalid file type" }),
+  custom: (message: string) => fail({ code: "custom", message }),
   invalid: () => fail({ code: "invalid", message: "Invalid value" }),
-  required: () => fail({ code: "required", message: "Required" }),
-  minlength: (minlength: number) =>
-    fail({
-      code: "minlength",
-      minlength,
-      message: `Too short, minimum length is ${minlength}`,
-    }),
-  maxlength: (maxlength: number) =>
-    fail({
-      code: "maxlength",
-      maxlength,
-      message: `Too long, maximum length is ${maxlength}`,
-    }),
-  pattern: (pattern: RegExp) => fail({ code: "pattern", pattern, message: "Invalid format" }),
-  min: (min: number | string) =>
-    fail({ code: "min", min, message: `Too small, minimum value is ${min}` }),
   max: (max: number | string) =>
     fail({ code: "max", max, message: `Too big, maximum value is ${max}` }),
-  step: (step: number) => fail({ code: "step", step, message: "Invalid step" }),
-  accept: (accept: string[]) => fail({ code: "accept", accept, message: "Invalid file type" }),
+  maxlength: (maxlength: number) =>
+    fail({ code: "maxlength", maxlength, message: `Too long, maximum length is ${maxlength}` }),
+  min: (min: number | string) =>
+    fail({ code: "min", min, message: `Too small, minimum value is ${min}` }),
+  minlength: (minlength: number) =>
+    fail({ code: "minlength", minlength, message: `Too short, minimum length is ${minlength}` }),
+  pattern: (pattern: RegExp) => fail({ code: "pattern", pattern, message: "Invalid format" }),
   refine: (received: unknown, message: string) => fail({ code: "refine", received, message }),
+  required: () => fail({ code: "required", message: "Required" }),
+  step: (step: number) => fail({ code: "step", step, message: "Invalid step" }),
   transform: (message: string) => fail({ code: "transform", message }),
+  type: () => fail({ code: "type", message: "Invalid type" }),
 } satisfies {
   [K in ValidationIssue["code"]]: (...args: never) => Result<never, ValidationIssue>;
 };
