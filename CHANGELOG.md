@@ -1,5 +1,12 @@
 # formgator
 
+## 0.0.14
+
+### Patch Changes
+
+- 3849970: Added `custom` validator, for custom validation (you bet)
+- 740af0e: Added `loadgate` for SvelteKit users
+
 ## 0.0.13
 
 ### Patch Changes
