@@ -4,10 +4,7 @@ import type { PageLoad } from "./$types.js";
 
 export const load = loadgate(
   {
-    page: fg
-      .number({ required: true })
-      .optional(1)
-      .refine((x) => x >= 1),
+    page: fg.number({ min: 1, required: true }).optional(1),
     search: fg.search().trim().optional(),
   },
   (data) => data,

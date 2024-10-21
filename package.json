@@ -40,6 +40,7 @@
   ],
   "scripts": {
     "build": "pkgroll --clean-dist --sourcemap && publint",
+    "check": "yarn workspaces foreach -W run check",
     "dev": "pkgroll --sourcemap --watch",
     "lint": "biome check --fix",
     "release": "yarn build && changeset publish",

@@ -118,6 +118,8 @@ Validators can be chained with additional methods to transform the value:
   // You should then check if at least one is properly defined
   ```
 
+  You can provide a value to `optional` to replace `undefined` with a default value.
+
 The schema produced by `fg.form()` has two methods:
 
 - `.parse()` that returns the parsed form data or throws an error if the form data is invalid.
@@ -185,6 +187,8 @@ If some fields were accepted nonetheless, the `error` object will have an `accep
 
 ## Usage with SvelteKit
 
+### Form actions
+
 `formgator` exposes a SvelteKit adapter that can be used to validate form data in SvelteKit [form actions](https://kit.svelte.dev/docs/form-actions).
 
 ```ts
@@ -227,6 +231,30 @@ export let form: {
 ```
 
 If you have several forms on the same page, you can add a third argument to `formgate` to specify the form name: `formgate(..., { id: "login" })`. This id will be propagated to `form.id` in your page component.
+
+### Page load
+
+As formgator works on `URLSearchParams` objects and can run client-side, you can use it to validate query parameters in your SvelteKit page components.
+
+```ts
+// +page.ts
+import * as fg from 'formgator';
+import { loadgate } from 'formgator/sveltekit';
+
+export const load = loadgate(
+  {
+    page: fg.number({ min: 1, required: true }).optional(1),
+    search: fg.search().trim().optional(),
+  },
+  (data, event) => {
+    // data has the shape { page: number, search: string | undefined }
+    // event is the object that would be your first argument without formgator
+    // The page will load as 400 Bad Request if the query parameters are invalid
+  }
+);
+```
+
+For now this requires adding `satisfies PageLoad` after `loadgate()` but [a pull request should solve this issue](https://github.com/sveltejs/language-tools/pull/2540).
 
 ## Disclaimer
 
