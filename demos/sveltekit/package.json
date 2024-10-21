@@ -7,18 +7,15 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "dev": "vite dev",
-    "format": "prettier --write .",
-    "lint": "prettier --check .",
     "preview": "vite preview"
   },
   "dependencies": {
-    "formgator": "../.."
+    "formgator": "workspace:*"
   },
   "devDependencies": {
+    "@sveltejs/kit": "^2.7.2",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "modern-normalize": "^3.0.1",
-    "prettier": "^3.3.3",
-    "prettier-plugin-svelte": "^3.2.7",
     "svelte": "^5.0.3",
     "svelte-check": "^4.0.5",
     "typescript": "^5.6.3",

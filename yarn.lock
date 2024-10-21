@@ -1415,11 +1415,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "demo-sveltekit@workspace:demos/sveltekit"
   dependencies:
+    "@sveltejs/kit": "npm:^2.7.2"
     "@sveltejs/vite-plugin-svelte": "npm:^4.0.0"
-    formgator: ../..
+    formgator: "workspace:*"
     modern-normalize: "npm:^3.0.1"
-    prettier: "npm:^3.3.3"
-    prettier-plugin-svelte: "npm:^3.2.7"
     svelte: "npm:^5.0.3"
     svelte-check: "npm:^4.0.5"
     typescript: "npm:^5.6.3"
@@ -1789,19 +1788,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"formgator@file:../..::locator=demo-sveltekit%40workspace%3Ademos%2Fsveltekit":
-  version: 0.0.13
-  resolution: "formgator@file:../..#../..::hash=a062cb&locator=demo-sveltekit%40workspace%3Ademos%2Fsveltekit"
-  peerDependencies:
-    "@sveltejs/kit": ">=2.0.0"
-  peerDependenciesMeta:
-    "@sveltejs/kit":
-      optional: true
-  checksum: 10c0/fcd8f39c1b84c7cc40bd4d02467f7d125af260c2333c5d46503e2bb9f830022fbe6397b4745e189ad9707fad292d6d41ee75d8561186d609f5ce73521dce7853
-  languageName: node
-  linkType: hard
-
-"formgator@workspace:.":
+"formgator@workspace:*, formgator@workspace:.":
   version: 0.0.0-use.local
   resolution: "formgator@workspace:."
   dependencies:
@@ -2737,31 +2724,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-svelte@npm:^3.2.7":
-  version: 3.2.7
-  resolution: "prettier-plugin-svelte@npm:3.2.7"
-  peerDependencies:
-    prettier: ^3.0.0
-    svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
-  checksum: 10c0/0f3b7cbbedd17983eecea4006dbe3069cc138fc2dc985ccffde4914e86640586b5db896802c1cdb5764c99c8c30fca0377c5872edc1b5a9099544296c545e7bc
-  languageName: node
-  linkType: hard
-
 "prettier@npm:^2.7.1":
   version: 2.8.8
   resolution: "prettier@npm:2.8.8"
   bin:
     prettier: bin-prettier.js
   checksum: 10c0/463ea8f9a0946cd5b828d8cf27bd8b567345cf02f56562d5ecde198b91f47a76b7ac9eae0facd247ace70e927143af6135e8cf411986b8cb8478784a4d6d724a
-  languageName: node
-  linkType: hard
-
-"prettier@npm:^3.3.3":
-  version: 3.3.3
-  resolution: "prettier@npm:3.3.3"
-  bin:
-    prettier: bin/prettier.cjs
-  checksum: 10c0/b85828b08e7505716324e4245549b9205c0cacb25342a030ba8885aba2039a115dbcf75a0b7ca3b37bc9d101ee61fab8113fc69ca3359f2a226f1ecc07ad2e26
   languageName: node
   linkType: hard
 

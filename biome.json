@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": []
+    "ignore": [".svelte-kit", "*.svelte"]
   },
   "formatter": {
     "enabled": true,
