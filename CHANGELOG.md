@@ -1,5 +1,11 @@
 # formgator
 
+## 0.0.15
+
+### Patch Changes
+
+- 593d556: Expose `custom`
+
 ## 0.0.14
 
 ### Patch Changes

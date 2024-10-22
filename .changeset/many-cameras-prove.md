@@ -1,5 +1,0 @@
----
-"formgator": patch
----
-
-Expose `custom`
