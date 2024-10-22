@@ -10,6 +10,7 @@ import {
 
 export { checkbox } from "./validators/checkbox.js";
 export { color } from "./validators/color.js";
+export { custom } from "./validators/custom.js";
 export { date } from "./validators/date.js";
 export { datetimeLocal } from "./validators/datetimeLocal.js";
 export { email } from "./validators/email.js";
