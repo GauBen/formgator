@@ -71,14 +71,8 @@ export interface FormInput<T = unknown> {
 
 // #region Utils
 
-export const succeed = <T>(data: T): Result<T, never> => ({
-  success: true as const,
-  data,
-});
-export const fail = <T>(errors: T): Result<never, T> => ({
-  success: false as const,
-  error: errors,
-});
+export const succeed = <T>(data: T): Result<T, never> => ({ success: true as const, data });
+export const fail = <T>(error: T): Result<never, T> => ({ success: false as const, error });
 
 export const failures = {
   accept: (accept: string[]) => fail({ code: "accept", accept, message: "Invalid file type" }),
