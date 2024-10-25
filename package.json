@@ -43,16 +43,15 @@
     "check": "yarn workspaces foreach -W run check",
     "dev": "pkgroll --sourcemap --watch",
     "lint": "biome check --fix",
-    "release": "yarn build && changeset publish",
+    "release": "yarn build && yarn dlx @changesets/cli@2 publish",
     "test": "tsc --noEmit && tsx --experimental-test-coverage --experimental-test-isolation=none --test-coverage-exclude='src/**/*.test.ts' --test-coverage-branches=100 --test 'src/**/*.test.ts'"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@changesets/cli": "^2.27.9",
-    "@sveltejs/kit": "^2.7.2",
-    "@types/node": "^22.7.7",
+    "@sveltejs/kit": "^2.7.3",
+    "@types/node": "^22.8.0",
     "pkgroll": "^2.5.0",
-    "publint": "^0.2.11",
+    "publint": "^0.2.12",
     "tsx": "^4.19.1",
     "typescript": "^5.6.3"
   },
