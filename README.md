@@ -2,7 +2,7 @@
 	<img src="https://raw.githubusercontent.com/GauBen/formgator/refs/heads/main/formgator.jpg" alt="Ali, the friendly alligator that guards your forms" width="200" height="200">
 </div>
 
-# formgator
+# Formgator
 
 A validation library for JavaScript `FormData` and `URLSearchParams` objects.
 
@@ -187,9 +187,16 @@ If some fields were accepted nonetheless, the `error` object will have an `accep
 
 ## Usage with SvelteKit
 
+Formgator can be used in SvelteKit to validate form data and query parameters. Because formgator imports `@sveltejs/kit` internally, you need to bundle it with your application to avoid weird runtime behaviors:
+
+- Move `formgator` from `dependencies` to `devDependencies` in your `package.json`.
+- Add `ssr: { noExternal: ['formgator'] }` to the root of `vite.config.{js|ts}`.
+
+This will ensure that formgator use the bundled version of `@sveltejs/kit` instead of an external one. This also means that formgator will be tree-shaken in your production build, and no longer imported from `node_modules` at runtime.
+
 ### Form actions
 
-`formgator` exposes a SvelteKit adapter that can be used to validate form data in SvelteKit [form actions](https://kit.svelte.dev/docs/form-actions).
+Formgator exposes a SvelteKit adapter that can be used to validate form data in SvelteKit [form actions](https://kit.svelte.dev/docs/form-actions).
 
 ```ts
 // +page.server.ts
