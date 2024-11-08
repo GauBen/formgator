@@ -1,6 +1,6 @@
 {
   "name": "formgator",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "A validator for FormData and URLSearchParams objects",
   "keywords": [
     "form",
@@ -43,7 +43,7 @@
     "check": "yarn workspaces foreach -W run check",
     "dev": "pkgroll --sourcemap --watch",
     "lint": "biome check --fix",
-    "release": "yarn build && yarn changesets publish",
+    "release": "yarn build && yarn changeset publish",
     "test": "tsc --noEmit && tsx --experimental-test-coverage --experimental-test-isolation=none --test-coverage-exclude='src/**/*.test.ts' --test-coverage-branches=100 --test 'src/**/*.test.ts'"
   },
   "devDependencies": {

@@ -1,5 +1,11 @@
 # formgator
 
+## 0.0.16
+
+### Patch Changes
+
+- 4e7b7d1: Release formgator to JSR: https://jsr.io/@gauben/formgator
+
 ## 0.0.15
 
 ### Patch Changes
