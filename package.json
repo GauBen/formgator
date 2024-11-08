@@ -3,12 +3,12 @@
   "version": "0.0.15",
   "description": "A validator for FormData and URLSearchParams objects",
   "keywords": [
-    "typescript",
     "form",
-    "validator",
     "formdata",
+    "sveltekit",
+    "typescript",
     "urlsearchparams",
-    "sveltekit"
+    "validator"
   ],
   "homepage": "https://github.com/gauben/formgator#readme",
   "bugs": "https://github.com/gauben/formgator/issues",
@@ -43,16 +43,17 @@
     "check": "yarn workspaces foreach -W run check",
     "dev": "pkgroll --sourcemap --watch",
     "lint": "biome check --fix",
-    "release": "yarn build && yarn dlx @changesets/cli@2 publish",
+    "release": "yarn build && yarn changesets publish",
     "test": "tsc --noEmit && tsx --experimental-test-coverage --experimental-test-isolation=none --test-coverage-exclude='src/**/*.test.ts' --test-coverage-branches=100 --test 'src/**/*.test.ts'"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@sveltejs/kit": "^2.7.3",
-    "@types/node": "^22.8.0",
-    "pkgroll": "^2.5.0",
+    "@changesets/cli": "^2.27.9",
+    "@sveltejs/kit": "^2.8.0",
+    "@types/node": "^22.9.0",
+    "pkgroll": "^2.5.1",
     "publint": "^0.2.12",
-    "tsx": "^4.19.1",
+    "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   },
   "peerDependencies": {
@@ -63,5 +64,5 @@
       "optional": true
     }
   },
-  "packageManager": "yarn@4.5.0"
+  "packageManager": "yarn@4.5.1"
 }

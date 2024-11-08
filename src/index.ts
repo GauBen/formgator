@@ -46,7 +46,9 @@ const stringifyRegex = (regex: RegExp) => {
  *
  * This feature is considered experimental and may be removed in the future.
  */
-export function splat(attributes: FormInput["attributes"]) {
+export function splat(
+  attributes: FormInput["attributes"],
+): Record<string, string | number | boolean | undefined> {
   return Object.fromEntries(
     Object.entries(attributes)
       .filter(([, value]) => value !== false && value !== undefined)

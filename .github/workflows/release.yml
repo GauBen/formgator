@@ -13,11 +13,12 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      id-token: write # Used for authentication with JSR
     steps:
       - uses: actions/checkout@v4
       - uses: pkgxdev/dev@v0
       - run: yarn install --immutable
-      - name: Create Release Pull Request or Publish to npm
+      - name: Create release PR or publish packages
         uses: changesets/action@v1
         with:
           title: "chore: release packages"

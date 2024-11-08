@@ -1,0 +1,13 @@
+{
+  "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
+  "name": "@gauben/formgator",
+  "version": "0.0.15",
+  "exports": {
+    ".": "./src/index.ts",
+    "./sveltekit": "./src/sveltekit/index.ts"
+  },
+  "publish": {
+    "include": ["LICENSE", "README.md", "src/"],
+    "exclude": ["src/**/*.test.ts"]
+  }
+}
