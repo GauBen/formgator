@@ -82,6 +82,7 @@ Some validators have additional methods to transform the value into a native Jav
 - `datetimeLocal()`, `date()` and `month()` have `asDate()` to return a `Date` object, and `asNumber()` to return a timestamp.
 - `color()` has `asRgb()` to return a `[number, number, number]` tuple.
 - `textarea()` has `trim()` to remove leading and trailing whitespace.
+- `url()` has `asURL()` to return a `URL` object.
 
 Validators can be chained with additional methods to transform the value:
 
@@ -260,8 +261,6 @@ export const load = loadgate(
   }
 );
 ```
-
-For now this requires adding `satisfies PageLoad` after `loadgate()` but [a pull request should solve this issue](https://github.com/sveltejs/language-tools/pull/2540).
 
 ## Disclaimer
 

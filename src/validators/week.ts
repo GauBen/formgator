@@ -9,7 +9,7 @@ import { type FormInput, failures, methods, safeParse, succeed } from "../defini
  * - `min` - Minimum date.
  * - `max` - Maximum date.
  *
- * The output value is a string with the format `yyyy-mm-dd`.
+ * The output value is a string with the format `yyyy-Www` (e.g. `1999-W01`).
  */
 export function week(attributes?: {
   required?: false;

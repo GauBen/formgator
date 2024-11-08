@@ -1,6 +1,13 @@
-<script>
+<script lang="ts">
   import { enhance } from "$app/forms";
   import { tags } from "$lib";
+
+  export let data;
+
+  data satisfies {
+    page: number;
+    search: string | undefined;
+  };
 </script>
 
 <form method="post" enctype="multipart/form-data" use:enhance>

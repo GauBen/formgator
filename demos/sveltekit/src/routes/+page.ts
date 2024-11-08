@@ -1,6 +1,5 @@
 import * as fg from "formgator";
 import { loadgate } from "formgator/sveltekit";
-import type { PageLoad } from "./$types.js";
 
 export const load = loadgate(
   {
@@ -8,4 +7,4 @@ export const load = loadgate(
     search: fg.search().trim().optional(),
   },
   (data) => data,
-) satisfies PageLoad;
+);
