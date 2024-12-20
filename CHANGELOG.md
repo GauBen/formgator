@@ -1,5 +1,11 @@
 # formgator
 
+## 0.0.17
+
+### Patch Changes
+
+- ec21627: Auto-publish to JSR
+
 ## 0.0.16
 
 ### Patch Changes
