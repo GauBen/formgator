@@ -10,11 +10,11 @@
     "urlsearchparams",
     "validator"
   ],
-  "homepage": "https://github.com/gauben/formgator#readme",
-  "bugs": "https://github.com/gauben/formgator/issues",
+  "homepage": "https://github.com/GauBen/formgator#readme",
+  "bugs": "https://github.com/GauBen/formgator/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gauben/formgator.git"
+    "url": "git+https://github.com/GauBen/formgator.git"
   },
   "license": "MIT",
   "author": "Gautier Ben Aïm (https://gautier.dev)",
@@ -62,8 +62,5 @@
       "optional": true
     }
   },
-  "packageManager": "yarn@4.5.3",
-  "publishConfig": {
-    "provenance": true
-  }
+  "packageManager": "yarn@4.5.3"
 }
