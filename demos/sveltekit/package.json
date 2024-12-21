@@ -7,7 +7,7 @@
     "test": "svelte-kit sync && svelte-check && playwright test",
     "dev": "vite dev",
     "preview": "vite preview",
-    "postinstall": "yarn playwright install chrome firefox --with-deps"
+    "postinstall": "yarn playwright install chromium firefox --with-deps"
   },
   "dependencies": {
     "formgator": "workspace:*"
