@@ -11,7 +11,7 @@ export default defineConfig({
   reporter: "html",
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: "http://127.0.0.1:4173",
+    baseURL: "http://localhost:4173",
   },
 
   /* Configure projects for major browsers */
@@ -28,7 +28,7 @@ export default defineConfig({
 
   webServer: {
     command: "yarn preview",
-    url: "http://127.0.0.1:4173",
+    url: "http://localhost:4173",
     reuseExistingServer: !process.env.CI,
     stdout: "pipe",
     stderr: "pipe",
