@@ -12,8 +12,10 @@ export const actions = {
       newsletter: fg.checkbox(),
       content: fg.textarea({ required: true }),
     },
-    async (data) => {
+    (data) => {
       console.log(data);
+      data.banner = null; // File cannot be serialized
+      return data;
     },
   ),
 };

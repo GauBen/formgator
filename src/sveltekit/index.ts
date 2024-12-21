@@ -38,6 +38,7 @@ export function formgate<
 ): Action &
   (() => Promise<{
     id: ID;
+    success: false;
     issues: fg.InferError<Inputs>;
     accepted: Partial<fg.Infer<Inputs>>;
   }>) {
@@ -48,7 +49,13 @@ export function formgate<
         options.method === "GET" ? event.url.searchParams : await event.request.formData(),
       );
 
-    if (!data.success) return fail(400, { id: options.id ?? "default", ...data.error });
+    if (!data.success) {
+      return fail(400, {
+        id: options.id ?? "default",
+        success: false,
+        ...data.error,
+      });
+    }
 
     return action(data.data, event);
   }) as never;

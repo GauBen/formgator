@@ -1,17 +1,55 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { tags } from "$lib";
+  import type { ValidationIssue } from "formgator";
 
-  export let data;
+  const { data, form } = $props();
 
   data satisfies {
     page: number;
     search: string | undefined;
   };
+
+  form satisfies
+    | {
+        title: string;
+        date: Date;
+        tags: ("HTML" | "CSS" | "TypeScript" | "Svelte" | "GitHub" | "Node.js")[];
+        banner: File | null;
+        newsletter: boolean;
+        content: string;
+      }
+    | {
+        success: false;
+        issues: {
+          title?: ValidationIssue;
+          date?: ValidationIssue;
+          tags?: ValidationIssue;
+          banner?: ValidationIssue;
+          newsletter?: ValidationIssue;
+          content?: ValidationIssue;
+        };
+        accepted: {
+          title?: string;
+          date?: Date;
+          tags?: ("HTML" | "CSS" | "TypeScript" | "Svelte" | "GitHub" | "Node.js")[];
+          banner?: File | null;
+          newsletter?: boolean;
+          content?: string;
+        };
+      }
+    | null;
 </script>
 
 <form method="post" enctype="multipart/form-data" use:enhance>
   <h1>Create a new post</h1>
+  {#if form}
+    {#if form.success === false}
+      <p>Invalid form</p>
+    {:else}
+      <p>Post successfully created</p>
+    {/if}
+  {/if}
   <p>
     <label>
       Title

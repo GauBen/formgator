@@ -4,17 +4,19 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "test": "svelte-kit sync && svelte-check && playwright test",
     "dev": "vite dev",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "yarn playwright install --with-deps"
   },
   "dependencies": {
     "formgator": "workspace:*"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.1",
     "@sveltejs/kit": "^2.13.0",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@types/node": "^22.10.2",
     "modern-normalize": "^3.0.1",
     "svelte": "^5.15.0",
     "svelte-check": "^4.1.1",

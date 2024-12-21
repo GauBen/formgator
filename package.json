@@ -40,10 +40,8 @@
   ],
   "scripts": {
     "build": "pkgroll --clean-dist --sourcemap && publint",
-    "check": "yarn workspaces foreach -W run check",
     "dev": "pkgroll --sourcemap --watch",
     "lint": "biome check --fix",
-    "release": "yarn build && yarn changeset publish && yarn dlx jsr publish",
     "test": "tsc --noEmit && tsx --experimental-test-coverage --experimental-test-isolation=none --test-coverage-exclude='src/**/*.test.ts' --test-coverage-branches=100 --test 'src/**/*.test.ts'"
   },
   "devDependencies": {
@@ -64,5 +62,8 @@
       "optional": true
     }
   },
-  "packageManager": "yarn@4.5.1"
+  "packageManager": "yarn@4.5.3",
+  "publishConfig": {
+    "provenance": true
+  }
 }
