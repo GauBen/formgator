@@ -1,5 +1,11 @@
 # formgator
 
+## 0.0.18
+
+### Patch Changes
+
+- 9530ec8: Added `reportValidity()` function for sveltekit
+
 ## 0.0.17
 
 ### Patch Changes
