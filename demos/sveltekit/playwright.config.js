@@ -30,5 +30,7 @@ export default defineConfig({
     command: "yarn preview",
     url: "http://127.0.0.1:4173",
     reuseExistingServer: !process.env.CI,
+    stdout: "pipe",
+    stderr: "pipe",
   },
 });
