@@ -1,5 +1,11 @@
 # formgator
 
+## 0.0.19
+
+### Patch Changes
+
+- 2c3239c: complete API documentation in readme
+
 ## 0.0.18
 
 ### Patch Changes
