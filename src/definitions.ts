@@ -15,6 +15,9 @@ export interface ReadonlyFormData {
   getAll(name: string): Array<string | File>;
 }
 
+/**
+ * All possible validation issues that can be returned by a form input.
+ */
 export type ValidationIssue =
   | { code: "accept"; message: string }
   | { code: "custom"; message: string }
@@ -30,6 +33,9 @@ export type ValidationIssue =
   | { code: "transform"; message: string }
   | { code: "type"; message: string };
 
+/**
+ * Base interface for all form inputs.
+ */
 export interface FormInput<T = unknown> {
   /** Attributes given when creating the validator. */
   attributes: Record<string, string | string[] | number | boolean | RegExp | undefined>;

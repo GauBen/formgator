@@ -126,6 +126,437 @@ The schema produced by `fg.form()` has two methods:
 - `.parse()` that returns the parsed form data or throws an error if the form data is invalid.
 - `.safeParse()` that returns an object with this shape: `{ success: true, data: Output } | { success: false, error: Error }`.
 
+## Complete API
+
+<details><summary><h3><code>interface FormInput</code></h3></summary>
+
+Base interface for all form inputs.
+
+```ts
+interface FormInput<T = unknown> {
+    /** Attributes given when creating the validator. */
+    attributes: Record<string, string | string[] | number | boolean | RegExp | undefined>;
+    /**
+     * Transforms the output of the validator into another value.
+     *
+     * @example
+     *   text().transform((value) => value.length);
+     *
+     * @param fn - The transformation function.
+     * @param catcher - In case the transformation function throws, this function
+     *   is called to generate an error message.
+     */
+    transform<U>(fn: (value: T) => U, catcher?: (error: unknown) => string): FormInput<U>;
+    /** Adds a custom validation to the input. */
+    refine<U extends T>(fn: (value: T) => value is U, message?: string | ((value: T) => string)): FormInput<U>;
+    refine(fn: (value: T) => unknown, message?: string | ((value: T) => string)): FormInput<T>;
+    /**
+     * Makes the field optional, for inputs that may be removed or added
+     * dynamically to the form.
+     *
+     * It returns `undefined` instead of `null` to differentiate between a missing
+     * field (`undefined`) and a field with an empty value (`null`).
+     *
+     * You may provide a default value to be used when the field is missing.
+     */
+    optional(): FormInput<T | undefined>;
+    optional<U>(value: U): FormInput<T | U>;
+    /** @private @internal */
+    [safeParse]: (data: ReadonlyFormData, name: string) => Result<T, ValidationIssue>;
+}
+```
+
+</details>
+
+<details><summary><h3><code>class FormgatorError</code></h3></summary>
+
+An error thrown when using `form.parse()`. It has two fields: `issues` and `accepted`,
+containing the issues and accepted values respectively.
+
+Type-safety cannot be guaranteed when using exceptions. If you want type-safety, use
+`form.safeParse()`.
+
+</details>
+
+<details><summary><h3><code>type Issues</code></h3></summary>
+
+Transforms an object of form inputs into the issues object.
+
+```ts
+type Issues<T extends Record<string, FormInput> = Record<string, FormInput<unknown>>> = {
+    [K in keyof T]?: ValidationIssue;
+} extends infer O ? {
+    [K in keyof O]: O[K];
+} : never;
+```
+
+</details>
+
+<details><summary><h3><code>type Output</code></h3></summary>
+
+Transforms an object of form inputs into the success object.
+
+```ts
+type Output<T extends Record<string, FormInput> = Record<string, FormInput<unknown>>> = {
+    [K in keyof T]: T[K] extends FormInput<infer U> ? U : never;
+} extends infer O ? {
+    [K in keyof O]: O[K];
+} : never;
+```
+
+</details>
+
+<details><summary><h3><code>type ValidationIssue</code></h3></summary>
+
+All possible validation issues that can be returned by a form input.
+
+```ts
+type ValidationIssue = {
+    code: "accept";
+    message: string;
+} | {
+    code: "custom";
+    message: string;
+} | {
+    code: "invalid";
+    message: string;
+} | {
+    code: "max";
+    max: number | string;
+    message: string;
+} | {
+    code: "maxlength";
+    maxlength: number;
+    message: string;
+} | {
+    code: "min";
+    min: number | string;
+    message: string;
+} | {
+    code: "minlength";
+    minlength: number;
+    message: string;
+} | {
+    code: "pattern";
+    pattern: RegExp;
+    message: string;
+} | {
+    code: "refine";
+    received: unknown;
+    message: string;
+} | {
+    code: "required";
+    message: string;
+} | {
+    code: "step";
+    step: number;
+    message: string;
+} | {
+    code: "transform";
+    message: string;
+} | {
+    code: "type";
+    message: string;
+};
+```
+
+</details>
+
+<details><summary><h3><code>function checkbox()</code></h3></summary>
+
+`<input type="checkbox">` form input validator.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+
+The `value` attribute is not supported, use `select({ multiple: true })`
+instead if you want to handle several checkboxes with the same name but
+different values.
+
+</details>
+
+<details><summary><h3><code>function color()</code></h3></summary>
+
+`<input type="color">` form input validator.
+
+It does not support any attributes.
+
+The output value is a string with the format `#rrggbb`.
+
+</details>
+
+<details><summary><h3><code>function custom()</code></h3></summary>
+
+A custom validator, transformer, whatever, for you to implement if formgator falls short on
+features.
+
+Returning a value will be considered a success, while throwing an error will be considered a
+validation issue. The error message will be used as the issue message.
+
+</details>
+
+<details><summary><h3><code>function date()</code></h3></summary>
+
+`<input type="date">` form input validator.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+- `min` - Minimum date.
+- `max` - Maximum date.
+
+The output value is a string with the format `yyyy-mm-dd`.
+
+</details>
+
+<details><summary><h3><code>function datetimeLocal()</code></h3></summary>
+
+`<input type="datetime-local">` form input validator.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+- `min` - Minimum date.
+- `max` - Maximum date.
+
+The output value is a string with the format `yyyy-mm-ddThh:mm`.
+
+</details>
+
+<details><summary><h3><code>function email()</code></h3></summary>
+
+`<input type="email">` form input validator.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+- `maxlength` - Maximum length of the input.
+- `minlength` - Minimum length of the input.
+- `pattern` - Regular expression pattern to match by each email address.
+- `multiple` - Whether the input allows multiple comma-separated email
+  addresses.
+
+</details>
+
+<details><summary><h3><code>function file()</code></h3></summary>
+
+`<input type="file">` form input validator.
+
+Supported attributes:
+
+- `multiple` - Whether the input allows multiple files.
+- `required` - Whether the input is required.
+- `accept` - The accepted file types, as an array of MIME types (`image/png`),
+  MIME wildcards (`image/*`), or file extensions (`.png`).
+
+</details>
+
+<details><summary><h3><code>function form()</code></h3></summary>
+
+Creates a form validator from a record of form inputs.
+
+The return schema has two methods: `parse` and `safeParse`:
+- `parse(data: FormData)` returns the data object if valid, throws a `FormgatorError` otherwise.
+- `safeParse(data: FormData)` returns an object with `success` a success boolean flag, and
+  either `data` or `error` containing the parsed data or the issues respectively.
+
+</details>
+
+<details><summary><h3><code>function hidden()</code></h3></summary>
+
+`<input type="hidden">` form input validator.
+
+Not very useful, but included for completeness.
+
+</details>
+
+<details><summary><h3><code>function image()</code></h3></summary>
+
+`<input type="image">` form input validator.
+
+</details>
+
+<details><summary><h3><code>function month()</code></h3></summary>
+
+`<input type="month">` form input validator.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+- `min` - Minimum date.
+- `max` - Maximum date.
+
+The output value is a string with the format `yyyy-mm-dd`.
+
+</details>
+
+<details><summary><h3><code>function number()</code></h3></summary>
+
+`<input type="number">` form input validator.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+- `min` - Minimum value.
+- `max` - Maximum value.
+
+</details>
+
+<details><summary><h3><code>function password()</code></h3></summary>
+
+`<input type="text">` form input validator.
+
+Does not accept new lines, use `textarea()` instead.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+- `maxlength` - Maximum length of the input.
+- `minlength` - Minimum length of the input.
+- `pattern` - Regular expression pattern to match.
+
+</details>
+
+<details><summary><h3><code>function radio()</code></h3></summary>
+
+`<input type="radio">` form input validator.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+
+</details>
+
+<details><summary><h3><code>function range()</code></h3></summary>
+
+`<input type="range">` form input validator.
+
+Supported attributes:
+
+- `min` - Minimum value, defaults to `0`.
+- `max` - Maximum value, defaults to `100`.
+- `step` - Step value, defaults to `1`.
+
+</details>
+
+<details><summary><h3><code>function search()</code></h3></summary>
+
+`<input type="text">` form input validator.
+
+Does not accept new lines, use `textarea()` instead.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+- `maxlength` - Maximum length of the input.
+- `minlength` - Minimum length of the input.
+- `pattern` - Regular expression pattern to match.
+
+</details>
+
+<details><summary><h3><code>function select()</code></h3></summary>
+
+`<select>` form input validator.
+
+Supported attributes:
+
+- `multiple` - Whether the input allows multiple selections.
+- `required` - Whether the input is required.
+
+</details>
+
+<details><summary><h3><code>function splat()</code></h3></summary>
+
+Allows you to splat attributes into Svelte HTML template.
+
+This feature is considered experimental and may be removed in the future.
+
+</details>
+
+<details><summary><h3><code>function tel()</code></h3></summary>
+
+`<input type="text">` form input validator.
+
+Does not accept new lines, use `textarea()` instead.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+- `maxlength` - Maximum length of the input.
+- `minlength` - Minimum length of the input.
+- `pattern` - Regular expression pattern to match.
+
+</details>
+
+<details><summary><h3><code>function text()</code></h3></summary>
+
+`<input type="text">` form input validator.
+
+Does not accept new lines, use `textarea()` instead.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+- `maxlength` - Maximum length of the input.
+- `minlength` - Minimum length of the input.
+- `pattern` - Regular expression pattern to match.
+
+</details>
+
+<details><summary><h3><code>function textarea()</code></h3></summary>
+
+`<textarea>` form input validator.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+- `maxlength` - Maximum length of the input.
+- `minlength` - Minimum length of the input.
+
+</details>
+
+<details><summary><h3><code>function time()</code></h3></summary>
+
+`<input type="time">` form input validator.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+- `min` - Minimum date.
+- `max` - Maximum date.
+
+The output value is a string with the format `yyyy-mm-dd`.
+
+</details>
+
+<details><summary><h3><code>function url()</code></h3></summary>
+
+`<input type="url">` form input validator.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+- `maxlength` - Maximum length of the input.
+- `minlength` - Minimum length of the input.
+- `pattern` - Regular expression pattern to match.
+
+</details>
+
+<details><summary><h3><code>function week()</code></h3></summary>
+
+`<input type="week">` form input validator.
+
+Supported attributes:
+
+- `required` - Whether the input is required.
+- `min` - Minimum date.
+- `max` - Maximum date.
+
+The output value is a string with the format `yyyy-Www` (e.g. `1999-W01`).
+
+</details>
+
 ## Errors
 
 An invalid form will produce an error with the same shape as your form schema:
