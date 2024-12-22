@@ -33,7 +33,7 @@ for (const sourceFile of program.getSourceFiles()) {
       [ts.SyntaxKind.TypeAliasDeclaration]: "type",
     }[declaration.kind];
 
-    out += `<details><summary><h3><code>${kind} ${symbol.name}${kind === "function" ? "()" : ""}</code></h3></summary>\n\n`;
+    out += `<details><summary><code>${kind} ${symbol.name}${kind === "function" ? "()" : ""}</code></summary>\n\n`;
     out += `${ts.displayPartsToString(source.getDocumentationComment(checker))}\n\n`;
 
     if (kind === "interface" || kind === "type") {

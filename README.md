@@ -128,7 +128,7 @@ The schema produced by `fg.form()` has two methods:
 
 ## Complete API
 
-<details><summary><h3><code>interface FormInput</code></h3></summary>
+<details><summary><code>interface FormInput</code></summary>
 
 Base interface for all form inputs.
 
@@ -168,7 +168,7 @@ interface FormInput<T = unknown> {
 
 </details>
 
-<details><summary><h3><code>class FormgatorError</code></h3></summary>
+<details><summary><code>class FormgatorError</code></summary>
 
 An error thrown when using `form.parse()`. It has two fields: `issues` and `accepted`,
 containing the issues and accepted values respectively.
@@ -178,7 +178,7 @@ Type-safety cannot be guaranteed when using exceptions. If you want type-safety,
 
 </details>
 
-<details><summary><h3><code>type Issues</code></h3></summary>
+<details><summary><code>type Issues</code></summary>
 
 Transforms an object of form inputs into the issues object.
 
@@ -192,7 +192,7 @@ type Issues<T extends Record<string, FormInput> = Record<string, FormInput<unkno
 
 </details>
 
-<details><summary><h3><code>type Output</code></h3></summary>
+<details><summary><code>type Output</code></summary>
 
 Transforms an object of form inputs into the success object.
 
@@ -206,7 +206,7 @@ type Output<T extends Record<string, FormInput> = Record<string, FormInput<unkno
 
 </details>
 
-<details><summary><h3><code>type ValidationIssue</code></h3></summary>
+<details><summary><code>type ValidationIssue</code></summary>
 
 All possible validation issues that can be returned by a form input.
 
@@ -262,7 +262,7 @@ type ValidationIssue = {
 
 </details>
 
-<details><summary><h3><code>function checkbox()</code></h3></summary>
+<details><summary><code>function checkbox()</code></summary>
 
 `<input type="checkbox">` form input validator.
 
@@ -276,7 +276,7 @@ different values.
 
 </details>
 
-<details><summary><h3><code>function color()</code></h3></summary>
+<details><summary><code>function color()</code></summary>
 
 `<input type="color">` form input validator.
 
@@ -286,7 +286,7 @@ The output value is a string with the format `#rrggbb`.
 
 </details>
 
-<details><summary><h3><code>function custom()</code></h3></summary>
+<details><summary><code>function custom()</code></summary>
 
 A custom validator, transformer, whatever, for you to implement if formgator falls short on
 features.
@@ -296,7 +296,7 @@ validation issue. The error message will be used as the issue message.
 
 </details>
 
-<details><summary><h3><code>function date()</code></h3></summary>
+<details><summary><code>function date()</code></summary>
 
 `<input type="date">` form input validator.
 
@@ -310,7 +310,7 @@ The output value is a string with the format `yyyy-mm-dd`.
 
 </details>
 
-<details><summary><h3><code>function datetimeLocal()</code></h3></summary>
+<details><summary><code>function datetimeLocal()</code></summary>
 
 `<input type="datetime-local">` form input validator.
 
@@ -324,7 +324,7 @@ The output value is a string with the format `yyyy-mm-ddThh:mm`.
 
 </details>
 
-<details><summary><h3><code>function email()</code></h3></summary>
+<details><summary><code>function email()</code></summary>
 
 `<input type="email">` form input validator.
 
@@ -339,7 +339,7 @@ Supported attributes:
 
 </details>
 
-<details><summary><h3><code>function file()</code></h3></summary>
+<details><summary><code>function file()</code></summary>
 
 `<input type="file">` form input validator.
 
@@ -352,7 +352,7 @@ Supported attributes:
 
 </details>
 
-<details><summary><h3><code>function form()</code></h3></summary>
+<details><summary><code>function form()</code></summary>
 
 Creates a form validator from a record of form inputs.
 
@@ -363,7 +363,7 @@ The return schema has two methods: `parse` and `safeParse`:
 
 </details>
 
-<details><summary><h3><code>function hidden()</code></h3></summary>
+<details><summary><code>function hidden()</code></summary>
 
 `<input type="hidden">` form input validator.
 
@@ -371,13 +371,13 @@ Not very useful, but included for completeness.
 
 </details>
 
-<details><summary><h3><code>function image()</code></h3></summary>
+<details><summary><code>function image()</code></summary>
 
 `<input type="image">` form input validator.
 
 </details>
 
-<details><summary><h3><code>function month()</code></h3></summary>
+<details><summary><code>function month()</code></summary>
 
 `<input type="month">` form input validator.
 
@@ -391,7 +391,7 @@ The output value is a string with the format `yyyy-mm-dd`.
 
 </details>
 
-<details><summary><h3><code>function number()</code></h3></summary>
+<details><summary><code>function number()</code></summary>
 
 `<input type="number">` form input validator.
 
@@ -403,7 +403,7 @@ Supported attributes:
 
 </details>
 
-<details><summary><h3><code>function password()</code></h3></summary>
+<details><summary><code>function password()</code></summary>
 
 `<input type="text">` form input validator.
 
@@ -418,7 +418,7 @@ Supported attributes:
 
 </details>
 
-<details><summary><h3><code>function radio()</code></h3></summary>
+<details><summary><code>function radio()</code></summary>
 
 `<input type="radio">` form input validator.
 
@@ -428,7 +428,7 @@ Supported attributes:
 
 </details>
 
-<details><summary><h3><code>function range()</code></h3></summary>
+<details><summary><code>function range()</code></summary>
 
 `<input type="range">` form input validator.
 
@@ -440,7 +440,7 @@ Supported attributes:
 
 </details>
 
-<details><summary><h3><code>function search()</code></h3></summary>
+<details><summary><code>function search()</code></summary>
 
 `<input type="text">` form input validator.
 
@@ -455,7 +455,7 @@ Supported attributes:
 
 </details>
 
-<details><summary><h3><code>function select()</code></h3></summary>
+<details><summary><code>function select()</code></summary>
 
 `<select>` form input validator.
 
@@ -466,7 +466,7 @@ Supported attributes:
 
 </details>
 
-<details><summary><h3><code>function splat()</code></h3></summary>
+<details><summary><code>function splat()</code></summary>
 
 Allows you to splat attributes into Svelte HTML template.
 
@@ -474,7 +474,7 @@ This feature is considered experimental and may be removed in the future.
 
 </details>
 
-<details><summary><h3><code>function tel()</code></h3></summary>
+<details><summary><code>function tel()</code></summary>
 
 `<input type="text">` form input validator.
 
@@ -489,7 +489,7 @@ Supported attributes:
 
 </details>
 
-<details><summary><h3><code>function text()</code></h3></summary>
+<details><summary><code>function text()</code></summary>
 
 `<input type="text">` form input validator.
 
@@ -504,7 +504,7 @@ Supported attributes:
 
 </details>
 
-<details><summary><h3><code>function textarea()</code></h3></summary>
+<details><summary><code>function textarea()</code></summary>
 
 `<textarea>` form input validator.
 
@@ -516,7 +516,7 @@ Supported attributes:
 
 </details>
 
-<details><summary><h3><code>function time()</code></h3></summary>
+<details><summary><code>function time()</code></summary>
 
 `<input type="time">` form input validator.
 
@@ -530,7 +530,7 @@ The output value is a string with the format `yyyy-mm-dd`.
 
 </details>
 
-<details><summary><h3><code>function url()</code></h3></summary>
+<details><summary><code>function url()</code></summary>
 
 `<input type="url">` form input validator.
 
@@ -543,7 +543,7 @@ Supported attributes:
 
 </details>
 
-<details><summary><h3><code>function week()</code></h3></summary>
+<details><summary><code>function week()</code></summary>
 
 `<input type="week">` form input validator.
 
