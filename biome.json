@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": [".svelte-kit", "dist", "*.svelte"]
+    "ignore": [".svelte-kit", "dist", "*.svelte", "playwright-report", "test-results"]
   },
   "formatter": {
     "enabled": true,

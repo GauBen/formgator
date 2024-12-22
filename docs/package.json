@@ -1,0 +1,8 @@
+{
+  "name": "formgator-docs",
+  "type": "module",
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

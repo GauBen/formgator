@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.49.1",
-    "@sveltejs/kit": "^2.13.0",
+    "@sveltejs/kit": "^2.14.1",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@types/node": "^22.10.2",
     "modern-normalize": "^3.0.1",

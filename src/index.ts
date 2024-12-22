@@ -1,3 +1,37 @@
+/**
+ * Formgator, a validation library for `FormData` and `URLSearchParams` objects.
+ *
+ * @example
+ * ```ts
+ * import * as fg from "formgator";
+ *
+ * // Describe the form schema
+ * const schema = fg.form({
+ *   email: fg.email({ required: true }),
+ *   password: fg.password({ required: true }),
+ * });
+ *
+ * // Retrieve the data from a form
+ * const data = new FormData(document.querySelector("form"));
+ * const result = schema.parse(data);
+ *
+ * // Handle the result
+ * if (result.success) {
+ *   console.log(result.data.email);
+ * } else {
+ *   console.error(result.error.issues);
+ * }
+ * ```
+ *
+ * If you're using SvelteKit, there is a separate export for SvelteKit-specific utilities:
+ *
+ * ```ts
+ * import { formgate } from "formgator/sveltekit";
+ * ```
+ *
+ * @module
+ */
+
 import {
   type FormInput,
   type ReadonlyFormData,
@@ -22,12 +56,7 @@ export { number } from "./validators/number.js";
 export { radio } from "./validators/radio.js";
 export { range } from "./validators/range.js";
 export { select } from "./validators/select.js";
-export {
-  text as password,
-  text as search,
-  text as tel,
-  text,
-} from "./validators/text.js";
+export { text, text as password, text as search, text as tel } from "./validators/text.js";
 export { textarea } from "./validators/textarea.js";
 export { time } from "./validators/time.js";
 export { url } from "./validators/url.js";
@@ -63,40 +92,73 @@ export function splat(
   );
 }
 
-export type Infer<T extends Record<string, FormInput>> = {
+/**
+ * Transforms an object of form inputs into the success object.
+ */
+export type Output<T extends Record<string, FormInput> = Record<string, FormInput<unknown>>> = {
   [K in keyof T]: T[K] extends FormInput<infer U> ? U : never;
 } extends infer O // Black magic to make the type human-readable
   ? { [K in keyof O]: O[K] }
   : never;
 
-export type InferError<T extends Record<string, FormInput>> = {
+/**
+ * Transforms an object of form inputs into the issues object.
+ */
+export type Issues<T extends Record<string, FormInput> = Record<string, FormInput<unknown>>> = {
   [K in keyof T]?: ValidationIssue;
-};
+} extends infer O // Black magic to make the type human-readable
+  ? { [K in keyof O]: O[K] }
+  : never;
 
-export interface FormGator<T extends Record<string, FormInput>> {
-  inputs: T;
-  parse(data: ReadonlyFormData): Infer<T>;
-  safeParse(data: ReadonlyFormData): Result<
-    Infer<T>,
-    {
-      issues: { [K in keyof T]?: ValidationIssue };
-      accepted: Partial<Infer<T>>;
-    }
-  >;
-}
-
-export class FormgatorError<T extends Record<string, FormInput>> extends Error {
+/**
+ * An error thrown when using `form.parse()`. It has two fields: `issues` and `accepted`,
+ * containing the issues and accepted values respectively.
+ *
+ * Type-safety cannot be guaranteed when using exceptions. If you want type-safety, use
+ * `form.safeParse()`.
+ */
+export class FormgatorError extends Error {
   constructor(
-    public issues: InferError<T>,
-    public accepted: Partial<Infer<T>>,
+    public issues: Issues,
+    public accepted: Partial<Output>,
   ) {
     super("Form validation failed");
     this.name = "FormgatorError";
   }
 }
 
-/** Creates a form validator from a record of form inputs. */
-export function form<T extends Record<string, FormInput<unknown>>>(inputs: T): FormGator<T> {
+/**
+ * Creates a form validator from a record of form inputs.
+ *
+ * The return schema has two methods: `parse` and `safeParse`:
+ * - `parse(data: FormData)` returns the data object if valid, throws a `FormgatorError` otherwise.
+ * - `safeParse(data: FormData)` returns an object with `success` a success boolean flag, and
+ *   either `data` or `error` containing the parsed data or the issues respectively.
+ */
+export function form<T extends Record<string, FormInput<unknown>>>(
+  inputs: T,
+): {
+  /** The form schema object, returned as is. */
+  inputs: T;
+  /**
+   * Takes a `FormData` or `URLSearchParams` object and returns an object with the same shape as
+   * the schema if the data is valid, or throws a `FormgatorError` otherwise.
+   */
+  parse(data: ReadonlyFormData): Output<T>;
+  /**
+   * Takes a `FormData` or `URLSearchParams` object and returns an object with a `success` flag,
+   * and either `data` or `error` containing the parsed data or the issues respectively.
+   */
+  safeParse(data: ReadonlyFormData): Result<
+    Output<T>,
+    {
+      /** An object that maps fields to their validation issue. */
+      issues: Issues<T>;
+      /** Not all fields might be invalid. Valid values are accessible in this object. */
+      accepted: Partial<Output<T>>;
+    }
+  >;
+} {
   return {
     inputs,
     safeParse: (data) => {
@@ -108,10 +170,10 @@ export function form<T extends Record<string, FormInput<unknown>>>(inputs: T): F
         else entries.push([name, result.data]);
       }
       return errorEntries.length === 0
-        ? succeed(Object.fromEntries(entries) as Infer<T>)
+        ? succeed(Object.fromEntries(entries) as Output<T>)
         : fail({
-            issues: Object.fromEntries(errorEntries) as InferError<T>,
-            accepted: Object.fromEntries(entries) as Partial<Infer<T>>,
+            issues: Object.fromEntries(errorEntries) as Issues<T>,
+            accepted: Object.fromEntries(entries) as Partial<Output<T>>,
           });
     },
     parse(data) {

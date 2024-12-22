@@ -36,6 +36,7 @@
   ],
   "workspaces": [
     ".",
+    "docs",
     "demos/*"
   ],
   "scripts": {
@@ -47,7 +48,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@changesets/cli": "^2.27.11",
-    "@sveltejs/kit": "^2.13.0",
+    "@sveltejs/kit": "^2.14.1",
     "@types/node": "^22.10.2",
     "pkgroll": "^2.5.1",
     "publint": "^0.2.12",

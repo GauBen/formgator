@@ -1,4 +1,31 @@
-import { error, fail, type SubmitFunction } from "@sveltejs/kit";
+/**
+ * SvelteKit utilities for form and request validation.
+ *
+ * @example
+ * ```ts
+ * // +page.server.ts
+ * import * as fg from 'formgator';
+ * import { formgate } from 'formgator/sveltekit';
+ *
+ * export const actions = {
+ *   login: formgate(
+ *     {
+ *       email: fg.email({ required: true }),
+ *       password: fg.password({ required: true }),
+ *     },
+ *     (data, event) => {
+ *       // data.email and data.password are guaranteed to be strings
+ *       // The form will be rejected as 400 Bad Request if they are missing or empty
+ *       // event is the object that would be your first argument without formgator
+ *     }
+ *   ),
+ * };
+ * ```
+ *
+ * @module
+ */
+
+import { type SubmitFunction, error, fail } from "@sveltejs/kit";
 import * as fg from "../index.js";
 
 class FormError extends Error {
@@ -13,22 +40,22 @@ class FormError extends Error {
  * Usage: `formfail({ email: "Account already exists" })`
  *
  * @example
- *   ```ts
- *   export const actions = {
- *     register: formgate(
- *       {
- *         email: fg.email({ required: true }),
- *         password: fg.password({ required: true }),
- *       },
- *       async ({ data }) => {
- *         if (await userExists(data.email))
- *           formfail({ email: "Account already exists" });
+ * ```ts
+ * export const actions = {
+ *   register: formgate(
+ *     {
+ *       email: fg.email({ required: true }),
+ *       password: fg.password({ required: true }),
+ *     },
+ *     async ({ data }) => {
+ *       if (await userExists(data.email))
+ *         formfail({ email: "Account already exists" });
  *
- *         // ...
- *       }
- *     )
- *   }
- *   ```
+ *       // ...
+ *     }
+ *   )
+ * }
+ * ```
  */
 export function formfail(issues: Record<string, string>): never {
   throw new FormError(issues);
@@ -67,20 +94,20 @@ export function reportValidity(): ReturnType<SubmitFunction> {
  * action](https://kit.svelte.dev/docs/form-actions).
  *
  * @example
- *   ```ts
- *   export const actions = {
- *     login: formgate(
- *       {
- *         email: fg.email({ required: true }),
- *         password: fg.password({ required: true }),
- *       },
- *       (data) => {
- *         // data.email and data.password are guaranteed to be strings
- *         // The form will be rejected as 400 Bad Request if they are missing or empty
- *       }
- *     )
- *   }
- *   ```
+ * ```ts
+ * export const actions = {
+ *   login: formgate(
+ *     {
+ *       email: fg.email({ required: true }),
+ *       password: fg.password({ required: true }),
+ *     },
+ *     (data) => {
+ *       // data.email and data.password are guaranteed to be strings
+ *       // The form will be rejected as 400 Bad Request if they are missing or empty
+ *     }
+ *   )
+ * }
+ * ```
  */
 export function formgate<
   Action,
@@ -90,7 +117,7 @@ export function formgate<
 >(
   inputs: Inputs,
   action: (
-    data: fg.Infer<Inputs>,
+    data: fg.Output<Inputs>,
     event: Action extends (event: infer Event) => unknown ? Event : never,
   ) => Output,
   options: {
@@ -101,8 +128,8 @@ export function formgate<
   | {
       id: ID;
       success: false;
-      issues: fg.InferError<Inputs>;
-      accepted: Partial<fg.Infer<Inputs>>;
+      issues: fg.Issues<Inputs>;
+      accepted: Partial<fg.Output<Inputs>>;
     } {
   return (async (event: { request: Request; url: URL }) => {
     const data = fg.form(inputs).safeParse(await event.request.formData());
@@ -145,23 +172,23 @@ export function formgate<
  * Adds request validation to a [load function](https://kit.svelte.dev/docs/load#page-data).
  *
  * @example
- *   ```ts
- *   export const load = loadgate(
- *     {
- *       page: fg.number({ required: true }).optional(1),
- *       search: fg.search().trim().optional(),
- *     },
- *     (data) => {
- *       // data.page is a number, defaults to 1
- *       // data.search is string | undefined
- *     }
- *   )
- *   ```
+ * ```ts
+ * export const load = loadgate(
+ *   {
+ *     page: fg.number({ required: true }).optional(1),
+ *     search: fg.search().trim().optional(),
+ *   },
+ *   (data) => {
+ *     // data.page is a number, defaults to 1
+ *     // data.search is string | undefined
+ *   }
+ * )
+ * ```
  */
 export function loadgate<Load, Output, Inputs extends Record<string, fg.FormInput>>(
   inputs: Inputs,
   load: (
-    data: fg.Infer<Inputs>,
+    data: fg.Output<Inputs>,
     event: Load extends (event: infer Event) => unknown ? Event : never,
   ) => Output,
 ): Load & (() => Output) {

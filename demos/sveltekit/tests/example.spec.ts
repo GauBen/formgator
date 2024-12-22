@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { fileURLToPath } from "node:url";
 
 test("correct form is accepted", async ({ page }) => {
