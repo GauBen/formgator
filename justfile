@@ -8,7 +8,7 @@ install:
 
 # Build formgator and its demos
 build: install
-	yarn workspaces foreach --all --parallel --topological run build
+	yarn workspaces foreach --all --parallel --topological-dev run build
 
 # Run all tests
 test: build

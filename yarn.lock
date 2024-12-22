@@ -1835,6 +1835,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "formgator-docs@workspace:docs"
   dependencies:
+    formgator: "workspace:*"
     tsx: "npm:^4.19.2"
     typescript: "npm:^5.7.2"
   languageName: unknown

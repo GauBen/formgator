@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "devDependencies": {
+    "formgator": "workspace:*",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   },
