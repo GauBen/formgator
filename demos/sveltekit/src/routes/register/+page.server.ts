@@ -7,7 +7,9 @@ export const actions = {
       email: fg.email({ required: true }),
       password: fg.password({ required: true }),
     },
-    async ({ email }) => {
+    async ({ email }, event) => {
+      event.route satisfies { id: "/register" };
+
       if (email === "alice@example.com") {
         formfail({ email: "Account already exists" });
       }

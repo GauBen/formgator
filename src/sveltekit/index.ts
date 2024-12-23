@@ -111,7 +111,7 @@ export function reportValidity(): ReturnType<SubmitFunction> {
  */
 export function formgate<
   Action,
-  Output,
+  ActionData,
   Inputs extends Record<string, fg.FormInput>,
   ID extends string = string,
 >(
@@ -119,18 +119,19 @@ export function formgate<
   action: (
     data: fg.Output<Inputs>,
     event: Action extends (event: infer Event) => unknown ? Event : never,
-  ) => Output,
+  ) => ActionData,
   options: {
     id?: ID;
   } = {},
-): () =>
-  | Awaited<Output>
-  | {
-      id: ID;
-      success: false;
-      issues: fg.Issues<Inputs>;
-      accepted: Partial<fg.Output<Inputs>>;
-    } {
+): Action &
+  (() =>
+    | Awaited<ActionData>
+    | {
+        id: ID;
+        success: false;
+        issues: fg.Issues<Inputs>;
+        accepted: Partial<fg.Output<Inputs>>;
+      }) {
   return (async (event: { request: Request; url: URL }) => {
     const data = fg.form(inputs).safeParse(await event.request.formData());
 
@@ -185,13 +186,13 @@ export function formgate<
  * )
  * ```
  */
-export function loadgate<Load, Output, Inputs extends Record<string, fg.FormInput>>(
+export function loadgate<Load, PageData, Inputs extends Record<string, fg.FormInput>>(
   inputs: Inputs,
   load: (
     data: fg.Output<Inputs>,
     event: Load extends (event: infer Event) => unknown ? Event : never,
-  ) => Output,
-): Load & (() => Output) {
+  ) => PageData,
+): Load & (() => PageData) {
   return ((event: { url: URL }) => {
     const data = fg.form(inputs).safeParse(event.url.searchParams);
 
