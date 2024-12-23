@@ -1,5 +1,11 @@
 # formgator
 
+## 0.0.20
+
+### Patch Changes
+
+- 73d27ef: Fixed sveltekit types
+
 ## 0.0.19
 
 ### Patch Changes

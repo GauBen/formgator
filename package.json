@@ -1,6 +1,6 @@
 {
   "name": "formgator",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "A validator for FormData and URLSearchParams objects",
   "keywords": [
     "form",
