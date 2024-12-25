@@ -9,13 +9,13 @@ import { type FormInput, failures, methods, safeParse, succeed } from "../defini
  * - `min` - Minimum date.
  * - `max` - Maximum date.
  *
- * The output value is a string with the format `yyyy-mm-dd`.
+ * The output value is a string with the format `yyyy-mm`.
  */
 export function month(attributes?: {
   required?: false;
   min?: string;
   max?: string;
-}): FormInput<string | null> & {
+}): FormInput<`${number}-${number}` | null> & {
   asNumber(): FormInput<number | null>;
   asDate(): FormInput<Date | null>;
 };
@@ -23,13 +23,13 @@ export function month(attributes: {
   required: true;
   min?: string;
   max?: string;
-}): FormInput<string> & {
+}): FormInput<`${number}-${number}`> & {
   asNumber(): FormInput<number>;
   asDate(): FormInput<Date>;
 };
 export function month(
   attributes: { required?: boolean; min?: string; max?: string } = {},
-): FormInput<string | null> & {
+): FormInput<`${number}-${number}` | null> & {
   asNumber(): FormInput<number | null>;
   asDate(): FormInput<Date | null>;
 } {
@@ -43,7 +43,7 @@ export function month(
       if (!/^\d{4}-(0\d|1[12])$/.test(value)) return failures.invalid();
       if (attributes.min && value < attributes.min) return failures.min(attributes.min);
       if (attributes.max && value > attributes.max) return failures.max(attributes.max);
-      return succeed(value);
+      return succeed(value as `${number}-${number}`);
     },
     /**
      * Returns the month as a number representing the number of milliseconds

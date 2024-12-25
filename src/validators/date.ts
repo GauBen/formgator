@@ -15,7 +15,7 @@ export function date(attributes?: {
   required?: false;
   min?: string;
   max?: string;
-}): FormInput<string | null> & {
+}): FormInput<`${number}-${number}-${number}` | null> & {
   asNumber(): FormInput<number | null>;
   asDate(): FormInput<Date | null>;
 };
@@ -23,13 +23,13 @@ export function date(attributes: {
   required: true;
   min?: string;
   max?: string;
-}): FormInput<string> & {
+}): FormInput<`${number}-${number}-${number}`> & {
   asNumber(): FormInput<number>;
   asDate(): FormInput<Date>;
 };
 export function date(
   attributes: { required?: boolean; min?: string; max?: string } = {},
-): FormInput<string | null> & {
+): FormInput<`${number}-${number}-${number}` | null> & {
   asNumber(): FormInput<number | null>;
   asDate(): FormInput<Date | null>;
 } {
@@ -44,7 +44,7 @@ export function date(
       if (Number.isNaN(Date.parse(value))) return failures.invalid();
       if (attributes.min && value < attributes.min) return failures.min(attributes.min);
       if (attributes.max && value > attributes.max) return failures.max(attributes.max);
-      return succeed(value);
+      return succeed(value as `${number}-${number}-${number}`);
     },
     /**
      * Returns the date as a number representing the number of milliseconds
