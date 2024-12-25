@@ -66,9 +66,12 @@ export function formfail(issues: Record<string, string>): never {
  *
  * Usage: `<form use:enhance={reportValidity} />`
  */
-export function reportValidity(): ReturnType<SubmitFunction> {
+export function reportValidity(options?: {
+  reset?: boolean;
+  invalidateAll?: boolean;
+}): ReturnType<SubmitFunction> {
   return ({ update, result, formElement }) => {
-    update();
+    update(options);
 
     if (result.type === "failure" && typeof result.data?.issues === "object") {
       const issues = result.data.issues as Record<string, fg.ValidationIssue>;
