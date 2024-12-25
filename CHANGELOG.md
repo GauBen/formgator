@@ -1,5 +1,11 @@
 # formgator
 
+## 0.0.21
+
+### Patch Changes
+
+- 3469bb4: Expose update options in `reportValidity`
+
 ## 0.0.20
 
 ### Patch Changes
