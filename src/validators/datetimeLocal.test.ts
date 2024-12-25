@@ -9,19 +9,22 @@ describe("date()", async () => {
     data.append("input", "2024-09-30T22:45");
     data.append("empty", "");
 
-    assert.deepEqualTyped(datetimeLocal()[safeParse](data, "input"), succeed("2024-09-30T22:45"));
+    assert.deepEqualTyped(
+      datetimeLocal()[safeParse](data, "input"),
+      succeed<`${number}-${number}-${number}T${number}:${number}`>("2024-09-30T22:45"),
+    );
     assert.deepEqualTyped(datetimeLocal()[safeParse](data, "empty"), succeed(null));
     assert.deepEqualTyped(
       datetimeLocal({
         min: "2024-09-30T22:45",
       })[safeParse](data, "input"),
-      succeed("2024-09-30T22:45"),
+      succeed<`${number}-${number}-${number}T${number}:${number}`>("2024-09-30T22:45"),
     );
     assert.deepEqualTyped(
       datetimeLocal({
         max: "2024-09-30T22:45",
       })[safeParse](data, "input"),
-      succeed("2024-09-30T22:45"),
+      succeed<`${number}-${number}-${number}T${number}:${number}`>("2024-09-30T22:45"),
     );
     assert.deepEqualTyped(
       datetimeLocal().asNumber()[safeParse](data, "input"),

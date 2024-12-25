@@ -8,10 +8,19 @@ describe("month()", async () => {
     const data = new FormData();
     data.append("input", "2024-09");
     data.append("empty", "");
-    assert.deepEqualTyped(month({ required: true })[safeParse](data, "input"), succeed("2024-09"));
+    assert.deepEqualTyped(
+      month({ required: true })[safeParse](data, "input"),
+      succeed<`${number}-${number}`>("2024-09"),
+    );
     assert.deepEqualTyped(month()[safeParse](data, "empty"), succeed(null));
-    assert.deepEqualTyped(month({ min: "2024-09" })[safeParse](data, "input"), succeed("2024-09"));
-    assert.deepEqualTyped(month({ max: "2024-09" })[safeParse](data, "input"), succeed("2024-09"));
+    assert.deepEqualTyped(
+      month({ min: "2024-09" })[safeParse](data, "input"),
+      succeed<`${number}-${number}`>("2024-09"),
+    );
+    assert.deepEqualTyped(
+      month({ max: "2024-09" })[safeParse](data, "input"),
+      succeed<`${number}-${number}`>("2024-09"),
+    );
     assert.deepEqualTyped(
       month().asNumber()[safeParse](data, "input"),
       succeed(Date.parse("2024-09")),

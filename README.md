@@ -387,7 +387,7 @@ Supported attributes:
 - `min` - Minimum date.
 - `max` - Maximum date.
 
-The output value is a string with the format `yyyy-mm-dd`.
+The output value is a string with the format `yyyy-mm`.
 
 </details>
 

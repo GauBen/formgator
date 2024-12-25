@@ -10,16 +10,16 @@ describe("date()", async () => {
     data.append("empty", "");
     assert.deepEqualTyped(
       date({ required: true })[safeParse](data, "input"),
-      succeed("2024-09-30"),
+      succeed<`${number}-${number}-${number}`>("2024-09-30"),
     );
     assert.deepEqualTyped(date()[safeParse](data, "empty"), succeed(null));
     assert.deepEqualTyped(
       date({ min: "2024-09-30" })[safeParse](data, "input"),
-      succeed("2024-09-30"),
+      succeed<`${number}-${number}-${number}`>("2024-09-30"),
     );
     assert.deepEqualTyped(
       date({ max: "2024-09-30" })[safeParse](data, "input"),
-      succeed("2024-09-30"),
+      succeed<`${number}-${number}-${number}`>("2024-09-30"),
     );
     assert.deepEqualTyped(
       date().asNumber()[safeParse](data, "input"),

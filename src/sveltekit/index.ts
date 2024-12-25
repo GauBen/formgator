@@ -64,7 +64,7 @@ export function formfail(issues: Record<string, string>): never {
 /**
  * Reports validation issues to the user interface using the `setCustomValidity` API.
  *
- * Usage: `<form use:enhance={reportValidity} />`
+ * Usage: `<form use:enhance={() => reportValidity(options)} />`
  */
 export function reportValidity(options?: {
   reset?: boolean;
