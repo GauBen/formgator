@@ -11,7 +11,7 @@
   </p>
 {/if}
 
-<form method="post" use:enhance={reportValidity}>
+<form method="post" use:enhance={() => reportValidity()}>
   <p>
     <label>
       Email:
