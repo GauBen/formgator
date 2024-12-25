@@ -1,5 +1,11 @@
 # formgator
 
+## 0.0.22
+
+### Patch Changes
+
+- 2560f5d: Improved type-safety of date validators
+
 ## 0.0.21
 
 ### Patch Changes
