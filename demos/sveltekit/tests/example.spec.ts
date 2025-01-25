@@ -1,5 +1,5 @@
-import { expect, test } from "@playwright/test";
 import { fileURLToPath } from "node:url";
+import { expect, test } from "@playwright/test";
 
 test("correct form is accepted", async ({ page }) => {
   await page.goto("/");

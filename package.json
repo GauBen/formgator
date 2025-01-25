@@ -47,13 +47,13 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@changesets/cli": "^2.27.11",
-    "@sveltejs/kit": "^2.14.1",
-    "@types/node": "^22.10.2",
-    "pkgroll": "^2.5.1",
-    "publint": "^0.2.12",
+    "@changesets/cli": "^2.27.12",
+    "@sveltejs/kit": "^2.16.1",
+    "@types/node": "^22.10.10",
+    "pkgroll": "^2.6.1",
+    "publint": "^0.3.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   },
   "peerDependencies": {
     "@sveltejs/kit": ">=2.0.0"

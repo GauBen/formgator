@@ -1,5 +1,5 @@
-import * as ts from "typescript";
 import * as fs from "node:fs";
+import * as ts from "typescript";
 
 const file = fs.readFileSync("../README.md", "utf-8");
 

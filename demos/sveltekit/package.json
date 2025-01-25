@@ -13,14 +13,14 @@
     "formgator": "workspace:*"
   },
   "devDependencies": {
-    "@playwright/test": "^1.49.1",
-    "@sveltejs/kit": "^2.14.1",
+    "@playwright/test": "^1.50.0",
+    "@sveltejs/kit": "^2.16.1",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
-    "@types/node": "^22.10.2",
+    "@types/node": "^22.10.10",
     "modern-normalize": "^3.0.1",
-    "svelte": "^5.15.0",
-    "svelte-check": "^4.1.1",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.5"
+    "svelte": "^5.19.3",
+    "svelte-check": "^4.1.4",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.11"
   }
 }

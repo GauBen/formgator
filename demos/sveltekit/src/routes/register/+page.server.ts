@@ -1,5 +1,5 @@
-import { formfail, formgate } from "formgator/sveltekit";
 import * as fg from "formgator";
+import { formfail, formgate } from "formgator/sveltekit";
 
 export const actions = {
   default: formgate(
