@@ -16,7 +16,7 @@ jobs:
       id-token: write # Used to authentify the release on npm and jsr
     steps:
       - uses: actions/checkout@v4
-      - uses: pkgxdev/dev@v0
+      - uses: pkgxdev/dev@v1
       - uses: changesets/action@v1
         with:
           title: "chore: release formgator"
