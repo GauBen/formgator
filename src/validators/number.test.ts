@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
-import assert from "../assert.js";
-import { failures, safeParse, succeed } from "../definitions.js";
-import { number } from "./number.js";
+import assert from "../assert.ts";
+import { failures, safeParse, succeed } from "../definitions.ts";
+import { number } from "./number.ts";
 
 describe("number()", async () => {
   it("should accept valid inputs", () => {

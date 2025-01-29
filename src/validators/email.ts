@@ -1,4 +1,4 @@
-import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.js";
+import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.ts";
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation
 const emailRegex =

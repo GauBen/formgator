@@ -40,27 +40,27 @@ import {
   fail,
   safeParse,
   succeed,
-} from "./definitions.js";
+} from "./definitions.ts";
 
-export { checkbox } from "./validators/checkbox.js";
-export { color } from "./validators/color.js";
-export { custom } from "./validators/custom.js";
-export { date } from "./validators/date.js";
-export { datetimeLocal } from "./validators/datetimeLocal.js";
-export { email } from "./validators/email.js";
-export { file } from "./validators/file.js";
-export { hidden } from "./validators/hidden.js";
-export { image } from "./validators/image.js";
-export { month } from "./validators/month.js";
-export { number } from "./validators/number.js";
-export { radio } from "./validators/radio.js";
-export { range } from "./validators/range.js";
-export { select } from "./validators/select.js";
-export { text, text as password, text as search, text as tel } from "./validators/text.js";
-export { textarea } from "./validators/textarea.js";
-export { time } from "./validators/time.js";
-export { url } from "./validators/url.js";
-export { week } from "./validators/week.js";
+export { checkbox } from "./validators/checkbox.ts";
+export { color } from "./validators/color.ts";
+export { custom } from "./validators/custom.ts";
+export { date } from "./validators/date.ts";
+export { datetimeLocal } from "./validators/datetimeLocal.ts";
+export { email } from "./validators/email.ts";
+export { file } from "./validators/file.ts";
+export { hidden } from "./validators/hidden.ts";
+export { image } from "./validators/image.ts";
+export { month } from "./validators/month.ts";
+export { number } from "./validators/number.ts";
+export { radio } from "./validators/radio.ts";
+export { range } from "./validators/range.ts";
+export { select } from "./validators/select.ts";
+export { text, text as password, text as search, text as tel } from "./validators/text.ts";
+export { textarea } from "./validators/textarea.ts";
+export { time } from "./validators/time.ts";
+export { url } from "./validators/url.ts";
+export { week } from "./validators/week.ts";
 export type { FormInput, ValidationIssue };
 
 const stringifyRegex = (regex: RegExp) => {
@@ -118,12 +118,13 @@ export type Issues<T extends Record<string, FormInput> = Record<string, FormInpu
  * `form.safeParse()`.
  */
 export class FormgatorError extends Error {
-  constructor(
-    public issues: Issues,
-    public accepted: Partial<Output>,
-  ) {
+  issues: Issues;
+  accepted: Partial<Output>;
+  constructor(issues: Issues, accepted: Partial<Output>) {
     super("Form validation failed");
     this.name = "FormgatorError";
+    this.issues = issues;
+    this.accepted = accepted;
   }
 }
 

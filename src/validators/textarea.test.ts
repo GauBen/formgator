@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
-import assert from "../assert.js";
-import { failures, safeParse, succeed } from "../definitions.js";
-import { textarea } from "./textarea.js";
+import assert from "../assert.ts";
+import { failures, safeParse, succeed } from "../definitions.ts";
+import { textarea } from "./textarea.ts";
 
 describe("textarea()", async () => {
   it("should accept valid inputs", () => {

@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
-import assert from "../assert.js";
-import { failures, safeParse, succeed } from "../definitions.js";
-import { email } from "./email.js";
+import assert from "../assert.ts";
+import { failures, safeParse, succeed } from "../definitions.ts";
+import { email } from "./email.ts";
 
 describe("email()", async () => {
   it("should accept valid inputs", () => {

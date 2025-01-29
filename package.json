@@ -43,17 +43,16 @@
     "build": "pkgroll --clean-dist --sourcemap && publint",
     "dev": "pkgroll --sourcemap --watch",
     "lint": "biome check --fix",
-    "test": "tsc --noEmit && tsx --experimental-test-coverage --experimental-test-isolation=none --test-coverage-exclude='src/**/*.test.ts' --test-coverage-branches=100 --test 'src/**/*.test.ts'"
+    "test": "tsc && node --experimental-test-coverage --experimental-test-isolation=none --test-coverage-exclude='src/**/*.test.ts' --test-coverage-branches=100 --test 'src/**/*.test.ts'"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@changesets/cli": "^2.27.12",
     "@sveltejs/kit": "^2.16.1",
-    "@types/node": "^22.10.10",
+    "@types/node": "^22.12.0",
     "pkgroll": "^2.6.1",
     "publint": "^0.3.2",
-    "tsx": "^4.19.2",
-    "typescript": "^5.7.3"
+    "typescript": "5.8.0-dev.20250129"
   },
   "peerDependencies": {
     "@sveltejs/kit": ">=2.0.0"
@@ -63,5 +62,5 @@
       "optional": true
     }
   },
-  "packageManager": "yarn@4.5.3"
+  "packageManager": "yarn@4.6.0"
 }

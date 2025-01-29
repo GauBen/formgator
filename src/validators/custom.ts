@@ -5,7 +5,7 @@ import {
   methods,
   safeParse,
   succeed,
-} from "../definitions.js";
+} from "../definitions.ts";
 
 /**
  * A custom validator, transformer, whatever, for you to implement if formgator falls short on

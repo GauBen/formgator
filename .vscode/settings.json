@@ -1,10 +1,11 @@
 {
   "editor.defaultFormatter": "biomejs.biome",
+  "typescript.tsdk": "node_modules/typescript/lib",
   // Until biome supports svelte, use svelte-vscode
   "prettier.printWidth": 100,
   "prettier.quoteProps": "consistent",
   "prettier.singleQuote": false,
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode"
-  }
+  },
 }

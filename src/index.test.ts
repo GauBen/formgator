@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
-import assert from "./assert.js";
-import { fail, failures } from "./definitions.js";
-import * as fg from "./index.js";
+import assert from "./assert.ts";
+import { fail, failures } from "./definitions.ts";
+import * as fg from "./index.ts";
 
 describe("form()", () => {
   describe(".safeParse()", () => {

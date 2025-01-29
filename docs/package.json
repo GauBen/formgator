@@ -4,10 +4,9 @@
   "type": "module",
   "devDependencies": {
     "formgator": "workspace:*",
-    "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   },
   "scripts": {
-    "build": "tsx src/index.ts"
+    "build": "node src/index.ts"
   }
 }

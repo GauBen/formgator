@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
-import assert from "../assert.js";
-import { failures, safeParse, succeed } from "../definitions.js";
-import { hidden } from "./hidden.js";
+import assert from "../assert.ts";
+import { failures, safeParse, succeed } from "../definitions.ts";
+import { hidden } from "./hidden.ts";
 
 describe("hidden()", async () => {
   it("should accept valid inputs", () => {

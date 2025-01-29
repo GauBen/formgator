@@ -1,5 +1,5 @@
-import type { FormInput } from "../definitions.js";
-import { number } from "./number.js";
+import type { FormInput } from "../definitions.ts";
+import { number } from "./number.ts";
 
 /**
  * `<input type="range">` form input validator.

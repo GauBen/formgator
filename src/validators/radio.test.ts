@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
-import assert from "../assert.js";
-import { failures, safeParse, succeed } from "../definitions.js";
-import { radio } from "./radio.js";
+import assert from "../assert.ts";
+import { failures, safeParse, succeed } from "../definitions.ts";
+import { radio } from "./radio.ts";
 
 describe("radio()", async () => {
   it("should accept valid inputs", () => {

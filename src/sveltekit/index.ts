@@ -26,11 +26,13 @@
  */
 
 import { type SubmitFunction, error, fail } from "@sveltejs/kit";
-import * as fg from "../index.js";
+import * as fg from "../index.ts";
 
 class FormError extends Error {
-  constructor(public issues: Record<string, string>) {
+  issues: Record<string, string>;
+  constructor(issues: Record<string, string>) {
     super("Form validation failed");
+    this.issues = issues;
   }
 }
 

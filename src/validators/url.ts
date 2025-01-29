@@ -1,5 +1,5 @@
-import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.js";
-import { text } from "./text.js";
+import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.ts";
+import { text } from "./text.ts";
 
 /**
  * `<input type="url">` form input validator.

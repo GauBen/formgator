@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
-import assert from "../assert.js";
-import { failures, safeParse, succeed } from "../definitions.js";
-import { checkbox } from "./checkbox.js";
+import assert from "../assert.ts";
+import { failures, safeParse, succeed } from "../definitions.ts";
+import { checkbox } from "./checkbox.ts";
 
 describe("checkbox()", async () => {
   it("should accept valid inputs", () => {

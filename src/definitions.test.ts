@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
-import assert from "./assert.js";
-import { failures, safeParse, succeed } from "./definitions.js";
-import { text } from "./validators/text.js";
+import assert from "./assert.ts";
+import { failures, safeParse, succeed } from "./definitions.ts";
+import { text } from "./validators/text.ts";
 
 describe("methods", () => {
   describe(".transform()", () => {

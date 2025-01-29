@@ -1,4 +1,4 @@
-import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.js";
+import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.ts";
 
 /**
  * `<select>` form input validator.
