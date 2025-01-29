@@ -32,14 +32,15 @@
  * @module
  */
 
+import type { StandardSchemaV1 } from "@standard-schema/spec";
 import {
   type FormInput,
   type ReadonlyFormData,
   type Result,
   type ValidationIssue,
   fail,
-  safeParse,
   succeed,
+  safeParse as symbol,
 } from "./definitions.ts";
 
 export { checkbox } from "./validators/checkbox.ts";
@@ -159,29 +160,46 @@ export function form<T extends Record<string, FormInput<unknown>>>(
       accepted: Partial<Output<T>>;
     }
   >;
+  "~standard": StandardSchemaV1.Props<ReadonlyFormData, Output<T>>;
 } {
+  const safeParse = (data: ReadonlyFormData) => {
+    const entries: Array<[string, unknown]> = [];
+    const errorEntries: Array<[string, ValidationIssue | null]> = [];
+    for (const [name, input] of Object.entries(inputs)) {
+      const result = input[symbol](data, name);
+      if (result.success === false) errorEntries.push([name, result.error]);
+      else entries.push([name, result.data]);
+    }
+    return errorEntries.length === 0
+      ? succeed(Object.fromEntries(entries) as Output<T>)
+      : fail({
+          issues: Object.fromEntries(errorEntries) as Issues<T>,
+          accepted: Object.fromEntries(entries) as Partial<Output<T>>,
+        });
+  };
   return {
     inputs,
-    safeParse: (data) => {
-      const entries: Array<[string, unknown]> = [];
-      const errorEntries: Array<[string, ValidationIssue | null]> = [];
-      for (const [name, input] of Object.entries(inputs)) {
-        const result = input[safeParse](data, name);
-        if (result.success === false) errorEntries.push([name, result.error]);
-        else entries.push([name, result.data]);
-      }
-      return errorEntries.length === 0
-        ? succeed(Object.fromEntries(entries) as Output<T>)
-        : fail({
-            issues: Object.fromEntries(errorEntries) as Issues<T>,
-            accepted: Object.fromEntries(entries) as Partial<Output<T>>,
-          });
-    },
-    parse(data) {
-      const result = this.safeParse(data);
+    safeParse,
+    parse: (data) => {
+      const result = safeParse(data);
       if (result.success === false)
         throw new FormgatorError(result.error.issues, result.error.accepted);
       return result.data;
+    },
+    "~standard": {
+      version: 1,
+      vendor: "formgator",
+      validate: (value) => {
+        if (!(value instanceof URLSearchParams) && !(value instanceof FormData))
+          return { issues: [{ message: "value must be FormData or URLSearchParams" }] };
+        const result = safeParse(value);
+        if (result.success) return { value: result.data };
+        return {
+          issues: Object.entries<ValidationIssue>(result.error.issues).map(
+            ([key, { message }]) => ({ message, path: [key] }),
+          ),
+        };
+      },
     },
   };
 }

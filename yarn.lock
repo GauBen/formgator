@@ -949,6 +949,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@standard-schema/spec@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@standard-schema/spec@npm:1.0.0"
+  checksum: 10c0/a1ab9a8bdc09b5b47aa8365d0e0ec40cc2df6437be02853696a0e377321653b0d3ac6f079a8c67d5ddbe9821025584b1fb71d9cc041a6666a96f1fadf2ece15f
+  languageName: node
+  linkType: hard
+
 "@sveltejs/kit@npm:^2.16.1":
   version: 2.16.1
   resolution: "@sveltejs/kit@npm:2.16.1"
@@ -1646,6 +1653,7 @@ __metadata:
   dependencies:
     "@biomejs/biome": "npm:1.9.4"
     "@changesets/cli": "npm:^2.27.12"
+    "@standard-schema/spec": "npm:^1.0.0"
     "@sveltejs/kit": "npm:^2.16.1"
     "@types/node": "npm:^22.12.0"
     pkgroll: "npm:^2.6.1"

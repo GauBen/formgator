@@ -7,5 +7,5 @@
   "prettier.singleQuote": false,
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode"
-  },
+  }
 }

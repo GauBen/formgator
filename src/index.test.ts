@@ -1,6 +1,7 @@
 import { describe, it } from "node:test";
+import type { StandardSchemaV1 } from "@standard-schema/spec";
 import assert from "./assert.ts";
-import { fail, failures } from "./definitions.ts";
+import { type ReadonlyFormData, fail, failures } from "./definitions.ts";
 import * as fg from "./index.ts";
 
 describe("form()", () => {
@@ -56,6 +57,52 @@ describe("form()", () => {
         assert(error instanceof fg.FormgatorError);
         assert.deepEqualTyped(fail(error.issues.input), failures.maxlength(10));
       }
+    });
+  });
+
+  describe(".~standard()", () => {
+    it("should accept valid inputs", () => {
+      const schema = fg.form({
+        text: fg.text(),
+        number: fg.range(),
+      }) satisfies StandardSchemaV1<ReadonlyFormData, { text: string | null; number: number }>;
+
+      const data = new FormData();
+      data.append("text", "Hello World!");
+      data.append("number", "50");
+      assert.deepEqualTyped(schema["~standard"].validate(data), {
+        value: { text: "Hello World!", number: 50 },
+      });
+    });
+
+    it("should reject invalid inputs", () => {
+      const schema = fg.form({
+        text: fg.text(),
+        number: fg.range(),
+      }) satisfies StandardSchemaV1<ReadonlyFormData, { text: string | null; number: number }>;
+
+      const data = new FormData();
+      data.append("number", "123");
+      assert.deepEqualTyped(schema["~standard"].validate(data), {
+        issues: [
+          {
+            message: "Invalid type",
+            path: ["text"],
+          },
+          {
+            message: "Too big, maximum value is 100",
+            path: ["number"],
+          },
+        ],
+      });
+
+      assert.deepEqualTyped(schema["~standard"].validate({}), {
+        issues: [
+          {
+            message: "value must be FormData or URLSearchParams",
+          },
+        ],
+      });
     });
   });
 });
