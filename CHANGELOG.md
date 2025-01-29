@@ -1,5 +1,11 @@
 # formgator
 
+## 0.1.0
+
+### Minor Changes
+
+- 12c8a90: Formgator is now standard-schema compliant! Read more on https://standardschema.dev/
+
 ## 0.0.22
 
 ### Patch Changes
