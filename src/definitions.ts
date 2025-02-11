@@ -1,3 +1,5 @@
+import type { StandardSchemaV1 } from "@standard-schema/spec";
+
 /** Symbol used to hide the internal `safeParse` method on validators. */
 export const safeParse = Symbol("fg.safeParse");
 
@@ -70,6 +72,18 @@ export interface FormInput<T = unknown> {
    */
   optional(): FormInput<T | undefined>;
   optional<U>(value: U): FormInput<T | U>;
+
+  /**
+   * Transforms the value using a [Standard Schema](https://github.com/standard-schema/standard-schema)
+   * compliant validator.
+   *
+   * Async validators are not supported.
+   *
+   * @example
+   *   import z from 'zod';
+   *   fg.text().pipe(z.string().email());
+   */
+  pipe<U>(schema: StandardSchemaV1<T, U>): FormInput<U>;
 
   /** @private @internal */
   [safeParse]: (data: ReadonlyFormData, name: string) => Result<T, ValidationIssue>;
@@ -160,4 +174,22 @@ function optional<T, U>(this: FormInput<T>, value?: U): FormInput<T | U> {
   };
 }
 
-export const methods = { transform, refine, optional };
+function pipe<T, U>(this: FormInput<T>, schema: StandardSchemaV1<T, U>): FormInput<U> {
+  return {
+    ...this,
+    ...methods,
+    [safeParse]: (data, name) => {
+      const result = this[safeParse](data, name);
+      if (result.success === false) return result;
+
+      const standardResult = schema["~standard"].validate(result.data);
+      if ("then" in standardResult) throw new Error("Async validation is not supported");
+
+      if (standardResult.issues)
+        return failures.custom(standardResult.issues[0]?.message ?? "Unknown error");
+      return succeed(standardResult.value);
+    },
+  };
+}
+
+export const methods = { transform, refine, optional, pipe };

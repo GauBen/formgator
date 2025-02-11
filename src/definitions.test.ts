@@ -1,4 +1,6 @@
 import { describe, it } from "node:test";
+import * as v from "valibot";
+import z from "zod";
 import assert from "./assert.ts";
 import { failures, safeParse, succeed } from "./definitions.ts";
 import { text } from "./validators/text.ts";
@@ -114,6 +116,77 @@ describe("methods", () => {
       data.append("input", "123");
 
       assert.deepEqualTyped(text().optional()[safeParse](data, "input"), succeed("123"));
+    });
+  });
+
+  describe("pipe", () => {
+    it("should work with Zod and Valibot", () => {
+      const data = new FormData();
+      data.append("input", "hello@example.com");
+      data.append("invalid", "hello world!");
+
+      const zodInput = text().pipe(z.string().email());
+      assert.deepEqualTyped(zodInput[safeParse](data, "input"), succeed("hello@example.com"));
+      assert.deepEqualTyped(zodInput[safeParse](data, "invalid"), failures.custom("Invalid email"));
+
+      const valibotInput = text().pipe(v.pipe(v.string(), v.email("Invalid email")));
+      assert.deepEqualTyped(valibotInput[safeParse](data, "input"), succeed("hello@example.com"));
+      assert.deepEqualTyped(
+        valibotInput[safeParse](data, "invalid"),
+        failures.custom("Invalid email"),
+      );
+
+      // To complete the coverage, we need a case that fails before the pipe
+      assert.deepEqualTyped(text().pipe(z.string())[safeParse](data, "missing"), failures.type());
+    });
+
+    it("should refuse async validators", () => {
+      const data = new FormData();
+      data.append("input", "hello@example.com");
+
+      assert.throws(() => {
+        text()
+          .pipe({
+            "~standard": {
+              vendor: "test",
+              version: 1,
+              validate: (value) => Promise.resolve({ value }),
+            },
+          })
+          [safeParse](data, "input");
+      });
+    });
+
+    it("should fix missing errors", () => {
+      const data = new FormData();
+      data.append("input", "hello@example.com");
+
+      assert.deepEqualTyped(
+        text()
+          .pipe({
+            "~standard": {
+              vendor: "test",
+              version: 1,
+              validate: () => ({ issues: [] }),
+            },
+          })
+          [safeParse](data, "input"),
+        failures.custom("Unknown error"),
+      );
+
+      assert.deepEqualTyped(
+        text()
+          .pipe({
+            "~standard": {
+              vendor: "test",
+              version: 1,
+              // @ts-expect-error Invalid type to check robustness
+              validate: () => ({ issues: [null] }),
+            },
+          })
+          [safeParse](data, "input"),
+        failures.custom("Unknown error"),
+      );
     });
   });
 
