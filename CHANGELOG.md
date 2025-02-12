@@ -1,5 +1,11 @@
 # formgator
 
+## 0.1.1
+
+### Patch Changes
+
+- aeb4c8c: Added `.pipe()` method to compose other Standard Schema compliant validators
+
 ## 0.1.0
 
 ### Minor Changes
