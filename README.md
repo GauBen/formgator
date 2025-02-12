@@ -161,6 +161,17 @@ interface FormInput<T = unknown> {
      */
     optional(): FormInput<T | undefined>;
     optional<U>(value: U): FormInput<T | U>;
+    /**
+     * Transforms the value using a [Standard Schema](https://github.com/standard-schema/standard-schema)
+     * compliant validator.
+     *
+     * Async validators are not supported.
+     *
+     * @example
+     *   import z from 'zod';
+     *   fg.text().pipe(z.string().email());
+     */
+    pipe<U>(schema: StandardSchemaV1<T, U>): FormInput<U>;
     /** @private @internal */
     [safeParse]: (data: ReadonlyFormData, name: string) => Result<T, ValidationIssue>;
 }
