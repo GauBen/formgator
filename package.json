@@ -35,7 +35,6 @@
     "dist"
   ],
   "workspaces": [
-    ".",
     "docs",
     "demos/*"
   ],
@@ -47,7 +46,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@changesets/cli": "^2.27.12",
+    "@chachalog/types": "^0.3.3",
     "@standard-schema/spec": "^1.0.0",
     "@sveltejs/kit": "^2.17.1",
     "@types/node": "^22.13.1",

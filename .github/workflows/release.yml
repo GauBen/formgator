@@ -2,27 +2,34 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+permissions:
+  contents: write
+  id-token: write
+  pull-requests: write
 
 jobs:
-  release:
-    name: Release
+  prepare-next-release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      id-token: write # Used to authentify the release on npm and jsr
+    steps:
+      - uses: actions/checkout@v4
+      - run: npx chachalog@0.3 prepare-next-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-release:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: pkgxdev/dev@v1
-      - uses: changesets/action@v1
-        with:
-          title: "chore: release formgator"
-          version: just version
-          publish: just release
+      - name: Build and publish
+        run: |
+          just build
+          yarn dlx --quiet jsr publish
+          yarn config set npmAuthToken '${{ secrets.NPM_TOKEN }}'
+          yarn workspaces foreach -Avv --no-private npm publish --access public --tolerate-republish
+      - run: npx chachalog@0.3 publish-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
