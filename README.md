@@ -402,6 +402,17 @@ The output value is a string with the format `yyyy-mm`.
 
 </details>
 
+<details><summary><code>function multi()</code></summary>
+
+Validator for multiple inputs with the same name.
+
+Supported attributes:
+
+- `min` - Minimum number of values, defaults to 0.
+- `max` - Maximum number of values, defaults to `Infinity`.
+
+</details>
+
 <details><summary><code>function number()</code></summary>
 
 `<input type="number">` form input validator.
