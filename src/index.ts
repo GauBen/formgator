@@ -53,6 +53,7 @@ export { file } from "./validators/file.ts";
 export { hidden } from "./validators/hidden.ts";
 export { image } from "./validators/image.ts";
 export { month } from "./validators/month.ts";
+export { multi } from "./validators/multi.ts";
 export { number } from "./validators/number.ts";
 export { radio } from "./validators/radio.ts";
 export { range } from "./validators/range.ts";
