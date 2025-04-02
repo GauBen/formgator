@@ -1,7 +1,3 @@
-<div align="center">
-	<img src="https://raw.githubusercontent.com/GauBen/formgator/refs/heads/main/formgator.jpg" alt="Ali, the friendly alligator that guards your forms" width="200" height="200">
-</div>
-
 # Formgator
 
 A validation library for JavaScript `FormData` and `URLSearchParams` objects.
