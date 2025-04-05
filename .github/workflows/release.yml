@@ -28,7 +28,7 @@ jobs:
         run: |
           just build
           yarn config set npmAuthToken '${{ secrets.NPM_TOKEN }}'
-          yarn workspaces foreach -Avv --no-private npm publish --access public --tolerate-republish
+          yarn workspaces foreach -Avv --no-private npm publish --access public --tolerate-republish --provenance
           yarn dlx --quiet jsr publish --allow-dirty
       - run: npx chachalog@0.3 publish-release
         env:
