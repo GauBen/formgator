@@ -1,5 +1,9 @@
 # formgator
 
+## 0.1.3
+
+* Bring back provenance.
+
 ## 0.1.2
 
 * New validator: `fg.multi()` for inputs under the same name. (#19)
