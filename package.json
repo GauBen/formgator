@@ -48,10 +48,10 @@
     "@biomejs/biome": "1.9.4",
     "@chachalog/types": "^0.3.8",
     "@standard-schema/spec": "^1.0.0",
-    "@sveltejs/kit": "^2.20.4",
-    "@types/node": "^22.14.0",
+    "@sveltejs/kit": "^2.20.5",
+    "@types/node": "^22.14.1",
     "pkgroll": "^2.12.1",
-    "publint": "^0.3.10",
+    "publint": "^0.3.11",
     "typescript": "^5.8.3",
     "valibot": "^1.0.0",
     "zod": "^3.24.2"
@@ -64,5 +64,5 @@
       "optional": true
     }
   },
-  "packageManager": "yarn@4.8.1"
+  "packageManager": "yarn@4.9.1"
 }
