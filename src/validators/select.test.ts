@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { select } from "./select.ts";
 
 describe("select()", async () => {
@@ -36,23 +36,26 @@ describe("select()", async () => {
     data.append("empty", "");
     data.append("file", new File([], "file.txt"));
 
-    assert.deepEqualTyped(select(["option"])[safeParse](data, "input"), failures.invalid());
+    assert.deepEqualTyped(select(["option"])[safeParse](data, "input"), failParse("invalid", {}));
     assert.deepEqualTyped(
       select(["option"], { multiple: true })[safeParse](data, "input"),
-      failures.invalid(),
+      failParse("invalid", {}),
     );
     assert.deepEqualTyped(
       select([], { required: true })[safeParse](data, "missing"),
-      failures.type(),
+      failParse("type", {}),
     );
     assert.deepEqualTyped(
       select([], { multiple: true, required: true })[safeParse](data, "missing"),
-      failures.required(),
+      failParse("required", {}),
     );
     assert.deepEqualTyped(
       select([], { required: true })[safeParse](data, "empty"),
-      failures.required(),
+      failParse("required", {}),
     );
-    assert.deepEqualTyped(select([], { multiple: true })[safeParse](data, "file"), failures.type());
+    assert.deepEqualTyped(
+      select([], { multiple: true })[safeParse](data, "file"),
+      failParse("type", {}),
+    );
   });
 });

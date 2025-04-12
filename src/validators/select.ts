@@ -1,4 +1,11 @@
-import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.ts";
+import {
+  type Failures,
+  type FormInput,
+  failParse,
+  methods,
+  safeParse,
+  succeed,
+} from "../definitions.ts";
 
 /**
  * `<select>` form input validator.
@@ -14,14 +21,17 @@ import { type FormInput, failures, methods, safeParse, succeed } from "../defini
 export function select<T extends string>(
   values: Iterable<T> | ((value: string) => boolean),
   attributes?: { multiple?: false; required?: boolean },
+  failures?: Failures<"required" | "invalid" | "type">,
 ): FormInput<T>;
 export function select<T extends string>(
   values: Iterable<T> | ((value: string) => boolean),
   attributes: { multiple: true; required?: boolean },
+  failures?: Failures<"required" | "invalid" | "type">,
 ): FormInput<T[]>;
 export function select<T extends string>(
   values: Iterable<T> | ((value: string) => boolean),
   attributes: { multiple?: boolean; required?: boolean } = {},
+  failures: Failures<"required" | "invalid" | "type"> = {},
 ): FormInput<T | T[]> {
   const accept =
     values instanceof Set
@@ -39,18 +49,18 @@ export function select<T extends string>(
     [safeParse]: attributes.multiple
       ? (data, name) => {
           const values = data.getAll(name);
-          if (values.length === 0 && attributes.required) return failures.required();
+          if (values.length === 0 && attributes.required) return failParse("required", failures);
           for (const value of values) {
-            if (typeof value !== "string") return failures.type();
-            if (!accept(value)) return failures.invalid();
+            if (typeof value !== "string") return failParse("type", failures);
+            if (!accept(value)) return failParse("invalid", failures);
           }
           return succeed(values as T[]);
         }
       : (data, name) => {
           const value = data.get(name);
-          if (typeof value !== "string") return failures.type();
-          if (attributes.required && value === "") return failures.required();
-          if (!accept(value)) return failures.invalid();
+          if (typeof value !== "string") return failParse("type", failures);
+          if (attributes.required && value === "") return failParse("required", failures);
+          if (!accept(value)) return failParse("invalid", failures);
           return succeed(value as T);
         },
   };

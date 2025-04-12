@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { fail, failParse, safeParse, succeed } from "../definitions.ts";
 import { multi } from "./multi.ts";
 
 describe("multi()", async () => {
@@ -44,9 +44,15 @@ describe("multi()", async () => {
     data.append("input", "");
     data.append("file", new File(["hmm"], "file.txt"));
 
-    assert.deepEqualTyped(multi()[safeParse](data, "file"), failures.type());
-    assert.deepEqualTyped(multi({ min: 4 })[safeParse](data, "input"), failures.minlength(4));
-    assert.deepEqualTyped(multi({ max: 2 })[safeParse](data, "input"), failures.maxlength(2));
+    assert.deepEqualTyped(multi()[safeParse](data, "file"), failParse("type", {}));
+    assert.deepEqualTyped(
+      multi({ min: 4 })[safeParse](data, "input"),
+      failParse("minlength", {}, { minlength: 4 }),
+    );
+    assert.deepEqualTyped(
+      multi({ max: 2 })[safeParse](data, "input"),
+      failParse("maxlength", {}, { maxlength: 2 }),
+    );
     assert.deepEqualTyped(
       multi()
         .map(
@@ -56,7 +62,7 @@ describe("multi()", async () => {
           (error) => (error as Error).message,
         )
         [safeParse](data, "input"),
-      failures.transform("Custom error"),
+      fail({ code: "transform" as const, message: "Custom error" }),
     );
   });
 });

@@ -94,26 +94,47 @@ export interface FormInput<T = unknown> {
 export const succeed = <T>(data: T): Result<T, never> => ({ success: true as const, data });
 export const fail = <T>(error: T): Result<never, T> => ({ success: false as const, error });
 
-export const failures = {
-  accept: (accept: string[]) => fail({ code: "accept", accept, message: "Invalid file type" }),
-  custom: (message: string) => fail({ code: "custom", message }),
-  invalid: () => fail({ code: "invalid", message: "Invalid value" }),
-  max: (max: number | string) =>
-    fail({ code: "max", max, message: `Too big, maximum value is ${max}` }),
-  maxlength: (maxlength: number) =>
-    fail({ code: "maxlength", maxlength, message: `Too long, maximum length is ${maxlength}` }),
-  min: (min: number | string) =>
-    fail({ code: "min", min, message: `Too small, minimum value is ${min}` }),
-  minlength: (minlength: number) =>
-    fail({ code: "minlength", minlength, message: `Too short, minimum length is ${minlength}` }),
-  pattern: (pattern: RegExp) => fail({ code: "pattern", pattern, message: "Invalid format" }),
-  refine: (received: unknown, message: string) => fail({ code: "refine", received, message }),
-  required: () => fail({ code: "required", message: "Required" }),
-  step: (step: number) => fail({ code: "step", step, message: "Invalid step" }),
-  transform: (message: string) => fail({ code: "transform", message }),
-  type: () => fail({ code: "type", message: "Invalid type" }),
-} satisfies {
-  [K in ValidationIssue["code"]]: (...args: never) => Result<never, ValidationIssue>;
+export type Failures<K extends ValidationIssue["code"] = ValidationIssue["code"]> = Pick<
+  {
+    [K in ValidationIssue["code"]]?: Omit<
+      ValidationIssue & { code: K },
+      "code" | "message"
+    > extends Record<string, never>
+      ? string
+      : string | ((data: Omit<ValidationIssue & { code: K }, "code" | "message">) => string);
+  },
+  K
+>;
+
+export const failParse = <T extends ValidationIssue["code"]>(
+  ...[code, customFailures, data]: Omit<
+    ValidationIssue & { code: T },
+    "code" | "message"
+  > extends Record<string, never>
+    ? [T, Failures]
+    : [T, Failures, Omit<ValidationIssue & { code: T }, "code" | "message">]
+): Result<never, ValidationIssue> => {
+  const failures = { ...defaultFailures, ...customFailures };
+  return fail({
+    code,
+    // @ts-expect-error If failures[code] is a function, data is defined
+    message: typeof failures[code] === "function" ? failures[code](data) : failures[code],
+    ...data,
+  } as never);
+};
+
+export const defaultFailures: Failures = {
+  accept: "Invalid file type",
+  custom: "Invalid value",
+  invalid: "Invalid value",
+  max: ({ max }) => `Too big, maximum value is ${max}`,
+  maxlength: ({ maxlength }) => `Too long, maximum length is ${maxlength}`,
+  min: ({ min }) => `Too small, minimum value is ${min}`,
+  minlength: ({ minlength }) => `Too short, minimum length is ${minlength}`,
+  pattern: "Invalid format",
+  required: "Required",
+  step: "Invalid step",
+  type: "Invalid type",
 };
 
 // #region Methods
@@ -133,7 +154,7 @@ function transform<T, U>(
       try {
         return succeed(fn(result.data));
       } catch (error) {
-        return failures.transform(catcher(error));
+        return fail({ code: "transform", message: catcher(error) });
       }
     },
   };
@@ -153,10 +174,11 @@ function refine<T, U extends T>(
       if (result.success === false) return result;
 
       if (!fn(result.data)) {
-        return failures.refine(
-          result.data,
-          typeof message === "string" ? message : message(result.data),
-        );
+        return fail({
+          code: "refine",
+          received: result.data,
+          message: typeof message === "string" ? message : message(result.data),
+        });
       }
 
       return succeed(result.data);
@@ -185,8 +207,12 @@ function pipe<T, U>(this: FormInput<T>, schema: StandardSchemaV1<T, U>): FormInp
       const standardResult = schema["~standard"].validate(result.data);
       if ("then" in standardResult) throw new Error("Async validation is not supported");
 
-      if (standardResult.issues)
-        return failures.custom(standardResult.issues[0]?.message ?? "Unknown error");
+      if (standardResult.issues) {
+        return fail({
+          code: "custom",
+          message: standardResult.issues[0]?.message ?? "Unknown error",
+        });
+      }
       return succeed(standardResult.value);
     },
   };

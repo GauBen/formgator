@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import type { StandardSchemaV1 } from "@standard-schema/spec";
 import assert from "./assert.ts";
-import { type ReadonlyFormData, fail, failures } from "./definitions.ts";
+import { type ReadonlyFormData, fail, failParse } from "./definitions.ts";
 import * as fg from "./index.ts";
 
 describe("form()", () => {
@@ -32,7 +32,10 @@ describe("form()", () => {
       const result = fg.form({ input: fg.text({ maxlength: 10 }) }).safeParse(data);
 
       assert(!result.success);
-      assert.deepEqualTyped(fail(result.error.issues.input), failures.maxlength(10));
+      assert.deepEqualTyped(
+        fail(result.error.issues.input),
+        failParse("maxlength", {}, { maxlength: 10 }),
+      );
     });
   });
 
@@ -55,7 +58,10 @@ describe("form()", () => {
         assert.fail("Expected an error");
       } catch (error) {
         assert(error instanceof fg.FormgatorError);
-        assert.deepEqualTyped(fail(error.issues.input), failures.maxlength(10));
+        assert.deepEqualTyped(
+          fail(error.issues.input),
+          failParse("maxlength", {}, { maxlength: 10 }),
+        );
       }
     });
   });

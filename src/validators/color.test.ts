@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { color } from "./color.ts";
 
 describe("color()", async () => {
@@ -19,7 +19,7 @@ describe("color()", async () => {
     const data = new FormData();
     data.append("input", "invalid");
 
-    assert.deepEqualTyped(color()[safeParse](data, "input"), failures.invalid());
-    assert.deepEqualTyped(color()[safeParse](data, "missing"), failures.type());
+    assert.deepEqualTyped(color()[safeParse](data, "input"), failParse("invalid", {}));
+    assert.deepEqualTyped(color()[safeParse](data, "missing"), failParse("type", {}));
   });
 });

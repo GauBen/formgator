@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { textarea } from "./textarea.ts";
 
 describe("textarea()", async () => {
@@ -32,18 +32,18 @@ describe("textarea()", async () => {
     data.append("empty", "");
     data.append("ok", "hello world!");
 
-    assert.deepEqualTyped(textarea()[safeParse](data, "missing"), failures.type());
+    assert.deepEqualTyped(textarea()[safeParse](data, "missing"), failParse("type", {}));
     assert.deepEqualTyped(
       textarea({ required: true })[safeParse](data, "empty"),
-      failures.required(),
+      failParse("required", {}),
     );
     assert.deepEqualTyped(
       textarea({ minlength: 13 })[safeParse](data, "ok"),
-      failures.minlength(13),
+      failParse("minlength", {}, { minlength: 13 }),
     );
     assert.deepEqualTyped(
       textarea({ maxlength: 11 })[safeParse](data, "ok"),
-      failures.maxlength(11),
+      failParse("maxlength", {}, { maxlength: 11 }),
     );
   });
 });

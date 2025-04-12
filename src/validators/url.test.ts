@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { url } from "./url.ts";
 
 describe("url()", async () => {
@@ -23,8 +23,11 @@ describe("url()", async () => {
     data.append("input", "invalid");
     data.append("empty", "");
 
-    assert.deepEqualTyped(url()[safeParse](data, "missing"), failures.type());
-    assert.deepEqualTyped(url({ required: true })[safeParse](data, "empty"), failures.required());
-    assert.deepEqualTyped(url()[safeParse](data, "input"), failures.invalid());
+    assert.deepEqualTyped(url()[safeParse](data, "missing"), failParse("type", {}));
+    assert.deepEqualTyped(
+      url({ required: true })[safeParse](data, "empty"),
+      failParse("required", {}),
+    );
+    assert.deepEqualTyped(url()[safeParse](data, "input"), failParse("invalid", {}));
   });
 });

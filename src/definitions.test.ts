@@ -2,7 +2,7 @@ import { describe, it } from "node:test";
 import * as v from "valibot";
 import z from "zod";
 import assert from "./assert.ts";
-import { failures, safeParse, succeed } from "./definitions.ts";
+import { fail, failParse, safeParse, succeed } from "./definitions.ts";
 import { text } from "./validators/text.ts";
 
 describe("methods", () => {
@@ -25,7 +25,7 @@ describe("methods", () => {
         text({ required: true })
           .transform(BigInt, () => "Not a number")
           [safeParse](data, "input"),
-        failures.transform("Not a number"),
+        fail({ code: "transform" as const, message: "Not a number" }),
       );
     });
 
@@ -35,7 +35,10 @@ describe("methods", () => {
 
       const input = text({ required: true, pattern: /^\d+$/ }).transform(BigInt);
 
-      assert.deepEqualTyped(input[safeParse](data, "input"), failures.pattern(/^\d+$/));
+      assert.deepEqualTyped(
+        input[safeParse](data, "input"),
+        failParse("pattern", {}, { pattern: /^\d+$/ }),
+      );
     });
   });
 
@@ -66,13 +69,13 @@ describe("methods", () => {
         text({ required: true })
           .refine((value) => value.startsWith("1"))
           [safeParse](data, "input"),
-        failures.refine("nan", "Invalid value"),
+        fail({ code: "refine" as const, message: "Invalid value", received: "nan" }),
       );
       assert.deepEqualTyped(
         text({ required: true })
           .refine((value) => value === "124")
           [safeParse](data, "input"),
-        failures.refine("nan", "Invalid value"),
+        fail({ code: "refine" as const, message: "Invalid value", received: "nan" }),
       );
     });
 
@@ -87,7 +90,7 @@ describe("methods", () => {
             () => "Nope",
           )
           [safeParse](data, "input"),
-        failures.refine("nan", "Nope"),
+        fail({ code: "refine" as const, message: "Nope", received: "nan" }),
       );
     });
 
@@ -99,7 +102,10 @@ describe("methods", () => {
         value.startsWith("1"),
       );
 
-      assert.deepEqualTyped(input[safeParse](data, "input"), failures.pattern(/^\d+$/));
+      assert.deepEqualTyped(
+        input[safeParse](data, "input"),
+        failParse("pattern", {}, { pattern: /^\d+$/ }),
+      );
     });
   });
 
@@ -127,17 +133,23 @@ describe("methods", () => {
 
       const zodInput = text().pipe(z.string().email());
       assert.deepEqualTyped(zodInput[safeParse](data, "input"), succeed("hello@example.com"));
-      assert.deepEqualTyped(zodInput[safeParse](data, "invalid"), failures.custom("Invalid email"));
+      assert.deepEqualTyped(
+        zodInput[safeParse](data, "invalid"),
+        fail({ code: "custom" as const, message: "Invalid email" }),
+      );
 
       const valibotInput = text().pipe(v.pipe(v.string(), v.email("Invalid email")));
       assert.deepEqualTyped(valibotInput[safeParse](data, "input"), succeed("hello@example.com"));
       assert.deepEqualTyped(
         valibotInput[safeParse](data, "invalid"),
-        failures.custom("Invalid email"),
+        fail({ code: "custom" as const, message: "Invalid email" }),
       );
 
       // To complete the coverage, we need a case that fails before the pipe
-      assert.deepEqualTyped(text().pipe(z.string())[safeParse](data, "missing"), failures.type());
+      assert.deepEqualTyped(
+        text().pipe(z.string())[safeParse](data, "missing"),
+        failParse("type", {}),
+      );
     });
 
     it("should refuse async validators", () => {
@@ -171,7 +183,7 @@ describe("methods", () => {
             },
           })
           [safeParse](data, "input"),
-        failures.custom("Unknown error"),
+        fail({ code: "custom" as const, message: "Unknown error" }),
       );
 
       assert.deepEqualTyped(
@@ -185,7 +197,7 @@ describe("methods", () => {
             },
           })
           [safeParse](data, "input"),
-        failures.custom("Unknown error"),
+        fail({ code: "custom" as const, message: "Unknown error" }),
       );
     });
   });

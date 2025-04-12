@@ -1,4 +1,11 @@
-import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.ts";
+import {
+  type Failures,
+  type FormInput,
+  failParse,
+  methods,
+  safeParse,
+  succeed,
+} from "../definitions.ts";
 
 /**
  * `<input type="time">` form input validator.
@@ -11,22 +18,29 @@ import { type FormInput, failures, methods, safeParse, succeed } from "../defini
  *
  * The output value is a string with the format `yyyy-mm-dd`.
  */
-export function time(attributes?: {
-  required?: false;
-  min?: string;
-  max?: string;
-}): FormInput<string | null> & {
+export function time(
+  attributes?: {
+    required?: false;
+    min?: string;
+    max?: string;
+  },
+  failures?: Failures<"type" | "required" | "invalid" | "min" | "max">,
+): FormInput<string | null> & {
   asSeconds(): FormInput<number | null>;
 };
-export function time(attributes: {
-  required: true;
-  min?: string;
-  max?: string;
-}): FormInput<string> & {
+export function time(
+  attributes: {
+    required: true;
+    min?: string;
+    max?: string;
+  },
+  failures?: Failures<"type" | "required" | "invalid" | "min" | "max">,
+): FormInput<string> & {
   asSeconds(): FormInput<number>;
 };
 export function time(
   attributes: { required?: boolean; min?: string; max?: string } = {},
+  failures: Failures<"type" | "required" | "invalid" | "min" | "max"> = {},
 ): FormInput<string | null> & {
   asSeconds(): FormInput<number | null>;
 } {
@@ -35,11 +49,14 @@ export function time(
     attributes,
     [safeParse]: (data, name) => {
       const value = data.get(name);
-      if (typeof value !== "string") return failures.type();
-      if (value === "") return attributes.required ? failures.required() : succeed(null);
-      if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)) return failures.invalid();
-      if (attributes.min && value < attributes.min) return failures.min(attributes.min);
-      if (attributes.max && value > attributes.max) return failures.max(attributes.max);
+      if (typeof value !== "string") return failParse("type", failures);
+      if (value === "")
+        return attributes.required ? failParse("required", failures) : succeed(null);
+      if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)) return failParse("invalid", failures);
+      if (attributes.min && value < attributes.min)
+        return failParse("min", failures, { min: attributes.min });
+      if (attributes.max && value > attributes.max)
+        return failParse("max", failures, { max: attributes.max });
       return succeed(value);
     },
     /** Returns the time as a number of seconds. */

@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { image } from "./image.ts";
 
 describe("image()", async () => {
@@ -20,7 +20,7 @@ describe("image()", async () => {
     data.append("input.x", "invalid");
     data.append("input.y", "invalid");
 
-    assert.deepEqualTyped(image()[safeParse](data, "input"), failures.invalid());
-    assert.deepEqualTyped(image()[safeParse](data, "missing"), failures.type());
+    assert.deepEqualTyped(image()[safeParse](data, "input"), failParse("invalid", {}));
+    assert.deepEqualTyped(image()[safeParse](data, "missing"), failParse("type", {}));
   });
 });

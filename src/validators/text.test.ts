@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { text } from "./text.ts";
 
 describe("text()", async () => {
@@ -33,14 +33,23 @@ describe("text()", async () => {
     data.append("empty", "");
     data.append("ok", "hello world!");
 
-    assert.deepEqualTyped(text()[safeParse](data, "input"), failures.invalid());
-    assert.deepEqualTyped(text()[safeParse](data, "missing"), failures.type());
-    assert.deepEqualTyped(text({ required: true })[safeParse](data, "empty"), failures.required());
-    assert.deepEqualTyped(text({ minlength: 13 })[safeParse](data, "ok"), failures.minlength(13));
-    assert.deepEqualTyped(text({ maxlength: 11 })[safeParse](data, "ok"), failures.maxlength(11));
+    assert.deepEqualTyped(text()[safeParse](data, "input"), failParse("invalid", {}));
+    assert.deepEqualTyped(text()[safeParse](data, "missing"), failParse("type", {}));
+    assert.deepEqualTyped(
+      text({ required: true })[safeParse](data, "empty"),
+      failParse("required", {}),
+    );
+    assert.deepEqualTyped(
+      text({ minlength: 13 })[safeParse](data, "ok"),
+      failParse("minlength", {}, { minlength: 13 }),
+    );
+    assert.deepEqualTyped(
+      text({ maxlength: 11 })[safeParse](data, "ok"),
+      failParse("maxlength", {}, { maxlength: 11 }),
+    );
     assert.deepEqualTyped(
       text({ pattern: /^\w+ \w+\?$/u })[safeParse](data, "ok"),
-      failures.pattern(/^\w+ \w+\?$/u),
+      failParse("pattern", {}, { pattern: /^\w+ \w+\?$/u }),
     );
   });
 });
