@@ -33,7 +33,10 @@ describe("text()", async () => {
     data.append("empty", "");
     data.append("ok", "hello world!");
 
-    assert.deepEqualTyped(text()[safeParse](data, "input"), failParse("invalid", {}));
+    assert.deepEqualTyped(
+      text({}, { invalid: "Nope, not valid" })[safeParse](data, "input"),
+      failParse("invalid", { invalid: "Nope, not valid" }),
+    );
     assert.deepEqualTyped(text()[safeParse](data, "missing"), failParse("type", {}));
     assert.deepEqualTyped(
       text({ required: true })[safeParse](data, "empty"),
@@ -44,8 +47,10 @@ describe("text()", async () => {
       failParse("minlength", {}, { minlength: 13 }),
     );
     assert.deepEqualTyped(
-      text({ maxlength: 11 })[safeParse](data, "ok"),
-      failParse("maxlength", {}, { maxlength: 11 }),
+      text({ maxlength: 11 }, { maxlength: ({ maxlength }) => `${maxlength} chars plz` })[
+        safeParse
+      ](data, "ok"),
+      failParse("maxlength", { maxlength: "11 chars plz" }, { maxlength: 11 }),
     );
     assert.deepEqualTyped(
       text({ pattern: /^\w+ \w+\?$/u })[safeParse](data, "ok"),
