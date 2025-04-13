@@ -1,4 +1,4 @@
-import type { FormInput } from "../definitions.ts";
+import type { Failures, FormInput } from "../definitions.ts";
 import { number } from "./number.ts";
 
 /**
@@ -12,14 +12,18 @@ import { number } from "./number.ts";
  */
 export function range(
   attributes: { min?: number; max?: number; step?: number } = {},
+  failures: Failures<"type" | "required" | "invalid" | "min" | "max" | "step"> = {},
 ): FormInput<number> {
   return {
-    ...number({
-      required: true,
-      min: attributes.min ?? 0,
-      max: attributes.max ?? 100,
-      step: attributes.step ?? 1,
-    }),
+    ...number(
+      {
+        required: true,
+        min: attributes.min ?? 0,
+        max: attributes.max ?? 100,
+        step: attributes.step ?? 1,
+      },
+      failures,
+    ),
     attributes,
   };
 }

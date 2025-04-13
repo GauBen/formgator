@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { checkbox } from "./checkbox.ts";
 
 describe("checkbox()", async () => {
@@ -16,10 +16,10 @@ describe("checkbox()", async () => {
     const data = new FormData();
     data.append("input", "invalid");
 
-    assert.deepEqualTyped(checkbox()[safeParse](data, "input"), failures.invalid());
+    assert.deepEqualTyped(checkbox()[safeParse](data, "input"), failParse("invalid", {}));
     assert.deepEqualTyped(
       checkbox({ required: true })[safeParse](data, "missing"),
-      failures.required(),
+      failParse("required", {}),
     );
   });
 });

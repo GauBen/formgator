@@ -1,7 +1,7 @@
 import {
   type FormInput,
   type ReadonlyFormData,
-  failures,
+  fail,
   methods,
   safeParse,
   succeed,
@@ -26,7 +26,7 @@ export function custom<T>(
         return succeed(fn(data, name));
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        return failures.custom(message);
+        return fail({ code: "custom" as const, message });
       }
     },
   };

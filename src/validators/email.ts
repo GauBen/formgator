@@ -1,4 +1,11 @@
-import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.ts";
+import {
+  type Failures,
+  type FormInput,
+  failParse,
+  methods,
+  safeParse,
+  succeed,
+} from "../definitions.ts";
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation
 const emailRegex =
@@ -16,27 +23,36 @@ const emailRegex =
  * - `multiple` - Whether the input allows multiple comma-separated email
  *   addresses.
  */
-export function email(attributes?: {
-  multiple?: false;
-  required?: false;
-  minlength?: number;
-  maxlength?: number;
-  pattern?: RegExp;
-}): FormInput<string | null>;
-export function email(attributes: {
-  multiple?: false;
-  required: true;
-  minlength?: number;
-  maxlength?: number;
-  pattern?: RegExp;
-}): FormInput<string>;
-export function email(attributes: {
-  multiple: true;
-  required?: boolean;
-  minlength?: number;
-  maxlength?: number;
-  pattern?: RegExp;
-}): FormInput<string[]>;
+export function email(
+  attributes?: {
+    multiple?: false;
+    required?: false;
+    minlength?: number;
+    maxlength?: number;
+    pattern?: RegExp;
+  },
+  failures?: Failures<"type" | "required" | "maxlength" | "minlength" | "invalid" | "pattern">,
+): FormInput<string | null>;
+export function email(
+  attributes: {
+    multiple?: false;
+    required: true;
+    minlength?: number;
+    maxlength?: number;
+    pattern?: RegExp;
+  },
+  failures?: Failures<"type" | "required" | "maxlength" | "minlength" | "invalid" | "pattern">,
+): FormInput<string>;
+export function email(
+  attributes: {
+    multiple: true;
+    required?: boolean;
+    minlength?: number;
+    maxlength?: number;
+    pattern?: RegExp;
+  },
+  failures?: Failures<"type" | "required" | "maxlength" | "minlength" | "invalid" | "pattern">,
+): FormInput<string[]>;
 export function email(
   attributes: {
     multiple?: boolean;
@@ -45,34 +61,37 @@ export function email(
     maxlength?: number;
     pattern?: RegExp;
   } = {},
+  failures: Failures<"type" | "required" | "maxlength" | "minlength" | "invalid" | "pattern"> = {},
 ): FormInput<string | string[] | null> {
   return {
     ...methods,
     attributes,
     [safeParse]: (data, name) => {
       const value = data.get(name);
-      if (typeof value !== "string") return failures.type();
-      if (/[\r\n]/.test(value)) return failures.invalid();
+      if (typeof value !== "string") return failParse("type", failures);
+      if (/[\r\n]/.test(value)) return failParse("invalid", failures);
       if (value === "")
-        return attributes.required ? failures.required() : succeed(attributes.multiple ? [] : null);
+        return attributes.required
+          ? failParse("required", failures)
+          : succeed(attributes.multiple ? [] : null);
       if (attributes.maxlength && value.length > attributes.maxlength)
-        return failures.maxlength(attributes.maxlength);
+        return failParse("maxlength", failures, { maxlength: attributes.maxlength });
       if (attributes.minlength && value.length < attributes.minlength)
-        return failures.minlength(attributes.minlength);
+        return failParse("minlength", failures, { minlength: attributes.minlength });
 
       if (attributes.multiple) {
         // Emails are comma-separated, with optional white space
         const values = value.split(",").map((value) => value.trim());
         for (const email of values) {
-          if (!emailRegex.test(email)) return failures.invalid();
+          if (!emailRegex.test(email)) return failParse("invalid", failures);
           if (attributes.pattern && !attributes.pattern.test(email))
-            return failures.pattern(attributes.pattern);
+            return failParse("pattern", failures, { pattern: attributes.pattern });
         }
         return succeed(values);
       } else {
-        if (!emailRegex.test(value)) return failures.invalid();
+        if (!emailRegex.test(value)) return failParse("invalid", failures);
         if (attributes.pattern && !attributes.pattern.test(value))
-          return failures.pattern(attributes.pattern);
+          return failParse("pattern", failures, { pattern: attributes.pattern });
         return succeed(value);
       }
     },

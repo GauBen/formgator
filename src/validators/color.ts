@@ -1,4 +1,11 @@
-import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.ts";
+import {
+  type Failures,
+  type FormInput,
+  failParse,
+  methods,
+  safeParse,
+  succeed,
+} from "../definitions.ts";
 
 /**
  * `<input type="color">` form input validator.
@@ -7,7 +14,7 @@ import { type FormInput, failures, methods, safeParse, succeed } from "../defini
  *
  * The output value is a string with the format `#rrggbb`.
  */
-export function color(): FormInput<`#${string}`> & {
+export function color(failures: Failures<"type" | "invalid"> = {}): FormInput<`#${string}`> & {
   /** Returns the color as a [R, G, B] 8-bit integer triplet */
   asRGB(): FormInput<[number, number, number]>;
 } {
@@ -16,8 +23,8 @@ export function color(): FormInput<`#${string}`> & {
     attributes: {},
     [safeParse]: (data, name) => {
       const value = data.get(name);
-      if (typeof value !== "string") return failures.type();
-      if (!/^#[0-9a-f]{6}$/.test(value)) return failures.invalid();
+      if (typeof value !== "string") return failParse("type", failures);
+      if (!/^#[0-9a-f]{6}$/.test(value)) return failParse("invalid", failures);
       return succeed(value as `#${string}`);
     },
     asRGB() {

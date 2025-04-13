@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { number } from "./number.ts";
 
 describe("number()", async () => {
@@ -29,14 +29,23 @@ describe("number()", async () => {
     data.append("empty", "");
     data.append("ok", "123");
 
-    assert.deepEqualTyped(number()[safeParse](data, "missing"), failures.type());
+    assert.deepEqualTyped(number()[safeParse](data, "missing"), failParse("type", {}));
     assert.deepEqualTyped(
       number({ required: true })[safeParse](data, "empty"),
-      failures.required(),
+      failParse("required", {}),
     );
-    assert.deepEqualTyped(number()[safeParse](data, "input"), failures.invalid());
-    assert.deepEqualTyped(number({ min: 124 })[safeParse](data, "ok"), failures.min(124));
-    assert.deepEqualTyped(number({ max: 122 })[safeParse](data, "ok"), failures.max(122));
-    assert.deepEqualTyped(number({ step: 2 })[safeParse](data, "ok"), failures.step(2));
+    assert.deepEqualTyped(number()[safeParse](data, "input"), failParse("invalid", {}));
+    assert.deepEqualTyped(
+      number({ min: 124 })[safeParse](data, "ok"),
+      failParse("min", {}, { min: 124 }),
+    );
+    assert.deepEqualTyped(
+      number({ max: 122 })[safeParse](data, "ok"),
+      failParse("max", {}, { max: 122 }),
+    );
+    assert.deepEqualTyped(
+      number({ step: 2 })[safeParse](data, "ok"),
+      failParse("step", {}, { step: 2 }),
+    );
   });
 });

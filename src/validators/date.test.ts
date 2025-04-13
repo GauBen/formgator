@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { date } from "./date.ts";
 
 describe("date()", async () => {
@@ -40,17 +40,20 @@ describe("date()", async () => {
     data.append("nad", "2024-13-01");
     data.append("ok", "2024-09-30");
 
-    assert.deepEqualTyped(date()[safeParse](data, "missing"), failures.type());
-    assert.deepEqualTyped(date({ required: true })[safeParse](data, "empty"), failures.required());
-    assert.deepEqualTyped(date()[safeParse](data, "input"), failures.invalid());
-    assert.deepEqualTyped(date()[safeParse](data, "nad"), failures.invalid());
+    assert.deepEqualTyped(date()[safeParse](data, "missing"), failParse("type", {}));
+    assert.deepEqualTyped(
+      date({ required: true })[safeParse](data, "empty"),
+      failParse("required", {}),
+    );
+    assert.deepEqualTyped(date()[safeParse](data, "input"), failParse("invalid", {}));
+    assert.deepEqualTyped(date()[safeParse](data, "nad"), failParse("invalid", {}));
     assert.deepEqualTyped(
       date({ min: "2024-10-01" })[safeParse](data, "ok"),
-      failures.min("2024-10-01"),
+      failParse("min", {}, { min: "2024-10-01" }),
     );
     assert.deepEqualTyped(
       date({ max: "2024-09-29" })[safeParse](data, "ok"),
-      failures.max("2024-09-29"),
+      failParse("max", {}, { max: "2024-09-29" }),
     );
   });
 });

@@ -1,4 +1,11 @@
-import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.ts";
+import {
+  type Failures,
+  type FormInput,
+  failParse,
+  methods,
+  safeParse,
+  succeed,
+} from "../definitions.ts";
 
 /**
  * `<input type="checkbox">` form input validator.
@@ -11,14 +18,17 @@ import { type FormInput, failures, methods, safeParse, succeed } from "../defini
  * instead if you want to handle several checkboxes with the same name but
  * different values.
  */
-export function checkbox(attributes: { required?: boolean } = {}): FormInput<boolean> {
+export function checkbox(
+  attributes: { required?: boolean } = {},
+  failures: Failures<"invalid" | "required"> = {},
+): FormInput<boolean> {
   return {
     ...methods,
     attributes,
     [safeParse]: (data, name) => {
       const value = data.get(name);
-      if (value !== null && value !== "on") return failures.invalid();
-      if (attributes.required && value === null) return failures.required();
+      if (value !== null && value !== "on") return failParse("invalid", failures);
+      if (attributes.required && value === null) return failParse("required", failures);
       return succeed(value === "on");
     },
   };

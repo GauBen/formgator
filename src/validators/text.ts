@@ -1,4 +1,11 @@
-import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.ts";
+import {
+  type Failures,
+  type FormInput,
+  failParse,
+  methods,
+  safeParse,
+  succeed,
+} from "../definitions.ts";
 
 /**
  * `<input type="text">` form input validator.
@@ -12,18 +19,24 @@ import { type FormInput, failures, methods, safeParse, succeed } from "../defini
  * - `minlength` - Minimum length of the input.
  * - `pattern` - Regular expression pattern to match.
  */
-export function text(attributes?: {
-  required?: false;
-  minlength?: number;
-  maxlength?: number;
-  pattern?: RegExp;
-}): FormInput<string | null> & { trim(): FormInput<string> };
-export function text(attributes: {
-  required: true;
-  minlength?: number;
-  maxlength?: number;
-  pattern?: RegExp;
-}): FormInput<string> & { trim(): FormInput<string> };
+export function text(
+  attributes?: {
+    required?: false;
+    minlength?: number;
+    maxlength?: number;
+    pattern?: RegExp;
+  },
+  failures?: Failures<"type" | "invalid" | "required" | "maxlength" | "minlength" | "pattern">,
+): FormInput<string | null> & { trim(): FormInput<string> };
+export function text(
+  attributes: {
+    required: true;
+    minlength?: number;
+    maxlength?: number;
+    pattern?: RegExp;
+  },
+  failures?: Failures<"type" | "invalid" | "required" | "maxlength" | "minlength" | "pattern">,
+): FormInput<string> & { trim(): FormInput<string> };
 export function text(
   attributes: {
     required?: boolean;
@@ -31,21 +44,23 @@ export function text(
     maxlength?: number;
     pattern?: RegExp;
   } = {},
+  failures: Failures<"type" | "invalid" | "required" | "maxlength" | "minlength" | "pattern"> = {},
 ): FormInput<string | null> & { trim(): FormInput<string> } {
   return {
     ...methods,
     attributes,
     [safeParse]: (data, name) => {
       const value = data.get(name);
-      if (typeof value !== "string") return failures.type();
-      if (/[\r\n]/.test(value)) return failures.invalid();
-      if (value === "") return attributes.required ? failures.required() : succeed(null);
+      if (typeof value !== "string") return failParse("type", failures);
+      if (/[\r\n]/.test(value)) return failParse("invalid", failures);
+      if (value === "")
+        return attributes.required ? failParse("required", failures) : succeed(null);
       if (attributes.maxlength && value.length > attributes.maxlength)
-        return failures.maxlength(attributes.maxlength);
+        return failParse("maxlength", failures, { maxlength: attributes.maxlength });
       if (attributes.minlength && value.length < attributes.minlength)
-        return failures.minlength(attributes.minlength);
+        return failParse("minlength", failures, { minlength: attributes.minlength });
       if (attributes.pattern && !attributes.pattern.test(value))
-        return failures.pattern(attributes.pattern);
+        return failParse("pattern", failures, { pattern: attributes.pattern });
       return succeed(value);
     },
     /**

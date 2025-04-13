@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { month } from "./month.ts";
 
 describe("month()", async () => {
@@ -37,17 +37,20 @@ describe("month()", async () => {
     data.append("nad", "2024-13");
     data.append("ok", "2024-09");
 
-    assert.deepEqualTyped(month()[safeParse](data, "missing"), failures.type());
-    assert.deepEqualTyped(month({ required: true })[safeParse](data, "empty"), failures.required());
-    assert.deepEqualTyped(month()[safeParse](data, "input"), failures.invalid());
-    assert.deepEqualTyped(month()[safeParse](data, "nad"), failures.invalid());
+    assert.deepEqualTyped(month()[safeParse](data, "missing"), failParse("type", {}));
+    assert.deepEqualTyped(
+      month({ required: true })[safeParse](data, "empty"),
+      failParse("required", {}),
+    );
+    assert.deepEqualTyped(month()[safeParse](data, "input"), failParse("invalid", {}));
+    assert.deepEqualTyped(month()[safeParse](data, "nad"), failParse("invalid", {}));
     assert.deepEqualTyped(
       month({ min: "2024-10" })[safeParse](data, "ok"),
-      failures.min("2024-10"),
+      failParse("min", {}, { min: "2024-10" }),
     );
     assert.deepEqualTyped(
       month({ max: "2024-08" })[safeParse](data, "ok"),
-      failures.max("2024-08"),
+      failParse("max", {}, { max: "2024-08" }),
     );
   });
 });

@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { hidden } from "./hidden.ts";
 
 describe("hidden()", async () => {
@@ -12,6 +12,6 @@ describe("hidden()", async () => {
   });
 
   it("should refuse invalid inputs", () => {
-    assert.deepEqualTyped(hidden()[safeParse](new FormData(), "missing"), failures.type());
+    assert.deepEqualTyped(hidden()[safeParse](new FormData(), "missing"), failParse("type", {}));
   });
 });

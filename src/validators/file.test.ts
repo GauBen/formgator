@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { file } from "./file.ts";
 
 describe("file()", async () => {
@@ -23,31 +23,34 @@ describe("file()", async () => {
     data.append("input", "invalid");
     data.append("ok", f);
 
-    assert.deepEqualTyped(file()[safeParse](data, "input"), failures.type());
+    assert.deepEqualTyped(file()[safeParse](data, "input"), failParse("type", {}));
     assert.deepEqualTyped(
       file({ required: true })[safeParse](data, "missing"),
-      failures.required(),
+      failParse("required", {}),
     );
-    assert.deepEqualTyped(file({ multiple: true })[safeParse](data, "input"), failures.type());
+    assert.deepEqualTyped(
+      file({ multiple: true })[safeParse](data, "input"),
+      failParse("type", {}),
+    );
     assert.deepEqualTyped(
       file({ multiple: true, required: true })[safeParse](data, "missing"),
-      failures.required(),
+      failParse("required", {}),
     );
     assert.deepEqualTyped(
       file({ accept: [".jpg"] })[safeParse](data, "ok"),
-      failures.accept([".jpg"]),
+      failParse("accept", {}),
     );
     assert.deepEqualTyped(
       file({ accept: ["image/*"] })[safeParse](data, "ok"),
-      failures.accept(["image/*"]),
+      failParse("accept", {}),
     );
     assert.deepEqualTyped(
       file({ accept: ["image/jpeg"] })[safeParse](data, "ok"),
-      failures.accept(["image/jpeg"]),
+      failParse("accept", {}),
     );
     assert.deepEqualTyped(
       file({ multiple: true, accept: [".jpg"] })[safeParse](data, "ok"),
-      failures.accept([".jpg"]),
+      failParse("accept", {}),
     );
   });
 });

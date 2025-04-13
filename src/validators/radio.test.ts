@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { radio } from "./radio.ts";
 
 describe("radio()", async () => {
@@ -21,11 +21,11 @@ describe("radio()", async () => {
     data.append("input", "invalid");
     data.append("file", new File([], "file.txt"));
 
-    assert.deepEqualTyped(radio([])[safeParse](data, "input"), failures.invalid());
-    assert.deepEqualTyped(radio([])[safeParse](data, "file"), failures.type());
+    assert.deepEqualTyped(radio([])[safeParse](data, "input"), failParse("invalid", {}));
+    assert.deepEqualTyped(radio([])[safeParse](data, "file"), failParse("type", {}));
     assert.deepEqualTyped(
       radio([], { required: true })[safeParse](data, "missing"),
-      failures.required(),
+      failParse("required", {}),
     );
   });
 });

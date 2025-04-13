@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { fail, safeParse, succeed } from "../definitions.ts";
 import { custom } from "./custom.ts";
 
 describe("custom()", async () => {
@@ -25,7 +25,13 @@ describe("custom()", async () => {
     data.append("input", "invalid");
     data.append("file", new File([], "file.txt"));
 
-    assert.deepEqualTyped(validator(data, "input"), failures.custom("Odd number of values"));
-    assert.deepEqualTyped(validator(data, "file"), failures.custom("Invalid value type"));
+    assert.deepEqualTyped(
+      validator(data, "input"),
+      fail({ code: "custom" as const, message: "Odd number of values" }),
+    );
+    assert.deepEqualTyped(
+      validator(data, "file"),
+      fail({ code: "custom" as const, message: "Invalid value type" }),
+    );
   });
 });

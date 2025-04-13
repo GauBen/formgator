@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "../assert.ts";
-import { failures, safeParse, succeed } from "../definitions.ts";
+import { failParse, safeParse, succeed } from "../definitions.ts";
 import { range } from "./range.ts";
 
 describe("range()", async () => {
@@ -17,8 +17,8 @@ describe("range()", async () => {
     data.append("high", "101");
     data.append("float", "1.5");
 
-    assert.deepEqualTyped(range()[safeParse](data, "low"), failures.min(0));
-    assert.deepEqualTyped(range()[safeParse](data, "high"), failures.max(100));
-    assert.deepEqualTyped(range()[safeParse](data, "float"), failures.step(1));
+    assert.deepEqualTyped(range()[safeParse](data, "low"), failParse("min", {}, { min: 0 }));
+    assert.deepEqualTyped(range()[safeParse](data, "high"), failParse("max", {}, { max: 100 }));
+    assert.deepEqualTyped(range()[safeParse](data, "float"), failParse("step", {}, { step: 1 }));
   });
 });

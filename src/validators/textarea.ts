@@ -1,4 +1,11 @@
-import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.ts";
+import {
+  type Failures,
+  type FormInput,
+  failParse,
+  methods,
+  safeParse,
+  succeed,
+} from "../definitions.ts";
 
 /**
  * `<textarea>` form input validator.
@@ -9,34 +16,42 @@ import { type FormInput, failures, methods, safeParse, succeed } from "../defini
  * - `maxlength` - Maximum length of the input.
  * - `minlength` - Minimum length of the input.
  */
-export function textarea(attributes?: {
-  required?: false;
-  maxlength?: number;
-  minlength?: number;
-}): FormInput<string | null> & { trim: () => FormInput<string> };
-export function textarea(attributes: {
-  required: true;
-  maxlength?: number;
-  minlength?: number;
-}): FormInput<string> & { trim: () => FormInput<string> };
+export function textarea(
+  attributes?: {
+    required?: false;
+    maxlength?: number;
+    minlength?: number;
+  },
+  failures?: Failures<"type" | "maxlength" | "minlength" | "required">,
+): FormInput<string | null> & { trim: () => FormInput<string> };
+export function textarea(
+  attributes: {
+    required: true;
+    maxlength?: number;
+    minlength?: number;
+  },
+  failures?: Failures<"type" | "maxlength" | "minlength" | "required">,
+): FormInput<string> & { trim: () => FormInput<string> };
 export function textarea(
   attributes: {
     required?: boolean;
     maxlength?: number;
     minlength?: number;
   } = {},
+  failures: Failures<"type" | "maxlength" | "minlength" | "required"> = {},
 ): FormInput<string | null> & { trim(): FormInput<string> } {
   return {
     ...methods,
     attributes,
     [safeParse]: (data, name) => {
       const value = data.get(name);
-      if (typeof value !== "string") return failures.type();
-      if (value === "") return attributes.required ? failures.required() : succeed(null);
+      if (typeof value !== "string") return failParse("type", failures);
+      if (value === "")
+        return attributes.required ? failParse("required", failures) : succeed(null);
       if (attributes.maxlength && value.length > attributes.maxlength)
-        return failures.maxlength(attributes.maxlength);
+        return failParse("maxlength", failures, { maxlength: attributes.maxlength });
       if (attributes.minlength && value.length < attributes.minlength)
-        return failures.minlength(attributes.minlength);
+        return failParse("minlength", failures, { minlength: attributes.minlength });
       return succeed(value);
     },
     /** Removes the leading and trailing white space from the value. */

@@ -1,4 +1,11 @@
-import { type FormInput, failures, methods, safeParse, succeed } from "../definitions.ts";
+import {
+  type Failures,
+  type FormInput,
+  failParse,
+  methods,
+  safeParse,
+  succeed,
+} from "../definitions.ts";
 
 /**
  * `<input type="radio">` form input validator.
@@ -10,20 +17,27 @@ import { type FormInput, failures, methods, safeParse, succeed } from "../defini
 export function radio<T extends string>(
   values: T[],
   attributes?: { required?: false },
+  failures?: Failures<"required" | "invalid" | "type">,
 ): FormInput<T | null>;
-export function radio<T extends string>(values: T[], attributes: { required: true }): FormInput<T>;
+export function radio<T extends string>(
+  values: T[],
+  attributes: { required: true },
+  failures?: Failures<"required" | "invalid" | "type">,
+): FormInput<T>;
 export function radio<T extends string>(
   values: T[],
   attributes: { required?: boolean } = {},
+  failures: Failures<"required" | "invalid" | "type"> = {},
 ): FormInput<T | null> {
   return {
     ...methods,
     attributes,
     [safeParse]: (data, name) => {
       const value = data.get(name);
-      if (value === null) return attributes.required ? failures.required() : succeed(null);
-      if (typeof value !== "string") return failures.type();
-      if (!(values as string[]).includes(value)) return failures.invalid();
+      if (value === null)
+        return attributes.required ? failParse("required", failures) : succeed(null);
+      if (typeof value !== "string") return failParse("type", failures);
+      if (!(values as string[]).includes(value)) return failParse("invalid", failures);
       return succeed(value as T);
     },
   };
