@@ -144,32 +144,36 @@ export function formgate<
       return fail(400, {
         id: options.id ?? "default",
         success: false,
-        ...data.error,
+        issues: data.error.issues,
+        accepted: Object.fromEntries(
+          // Remove non-serializable values like Blobs
+          Object.entries(data.error.accepted).filter(([, value]) => !(value instanceof Blob)),
+        ),
       });
     }
 
     try {
       return await action(data.data, event as never);
     } catch (error) {
-      if (error instanceof FormError) {
-        return fail(400, {
-          id: options.id ?? "default",
-          success: false,
-          // Process incoming issues to mark them as "custom" issues
-          issues: Object.fromEntries(
-            Object.entries(error.issues).map(([name, message]) => [
-              name,
-              { code: "custom", message } satisfies fg.ValidationIssue,
-            ]),
-          ),
-          // Remove values that were rejected
-          accepted: Object.fromEntries(
-            Object.entries(data.data).filter(([name]) => !(name in error.issues)),
-          ),
-        });
-      }
+      if (!(error instanceof FormError)) throw error;
 
-      throw error;
+      return fail(400, {
+        id: options.id ?? "default",
+        success: false,
+        // Process incoming issues to mark them as "custom" issues
+        issues: Object.fromEntries(
+          Object.entries(error.issues).map(([name, message]) => [
+            name,
+            { code: "custom", message } satisfies fg.ValidationIssue,
+          ]),
+        ),
+        // Remove values that were rejected, remove non-serializable values like Blobs
+        accepted: Object.fromEntries(
+          Object.entries(data.data).filter(
+            ([name, value]) => !(name in error.issues) && !(value instanceof Blob),
+          ),
+        ),
+      });
     }
   }) as never;
 }
