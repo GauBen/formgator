@@ -1,7 +1,7 @@
 import {
-  failParse,
   type Failures,
   type FormInput,
+  failParse,
   methods,
   safeParse,
   succeed,

@@ -249,7 +249,6 @@ type ValidationIssue = {
     message: string;
 } | {
     code: "refine";
-    received: unknown;
     message: string;
 } | {
     code: "required";
