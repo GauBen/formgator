@@ -5,4 +5,4 @@ formgator: minor
 
 # Breaking Changes
 
-**SvelteKit:** non-serializable (files, blobs) values are no-longer sent back through `form.accepted`. (#26)
+**SvelteKit:** non-serializable values (files, blobs) are no longer sent back through `form.accepted`. (#26)
