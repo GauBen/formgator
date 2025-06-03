@@ -69,13 +69,13 @@ describe("methods", () => {
         text({ required: true })
           .refine((value) => value.startsWith("1"))
           [safeParse](data, "input"),
-        fail({ code: "refine" as const, message: "Invalid value", received: "nan" }),
+        fail({ code: "refine" as const, message: "Invalid value" }),
       );
       assert.deepEqualTyped(
         text({ required: true })
           .refine((value) => value === "124")
           [safeParse](data, "input"),
-        fail({ code: "refine" as const, message: "Invalid value", received: "nan" }),
+        fail({ code: "refine" as const, message: "Invalid value" }),
       );
     });
 
@@ -90,7 +90,7 @@ describe("methods", () => {
             () => "Nope",
           )
           [safeParse](data, "input"),
-        fail({ code: "refine" as const, message: "Nope", received: "nan" }),
+        fail({ code: "refine" as const, message: "Nope" }),
       );
     });
 

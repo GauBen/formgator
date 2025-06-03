@@ -29,7 +29,7 @@ export type ValidationIssue =
   | { code: "min"; min: number | string; message: string }
   | { code: "minlength"; minlength: number; message: string }
   | { code: "pattern"; pattern: RegExp; message: string }
-  | { code: "refine"; received: unknown; message: string }
+  | { code: "refine"; message: string }
   | { code: "required"; message: string }
   | { code: "step"; step: number; message: string }
   | { code: "transform"; message: string }
@@ -176,7 +176,6 @@ function refine<T, U extends T>(
       if (!fn(result.data)) {
         return fail({
           code: "refine",
-          received: result.data,
           message: typeof message === "string" ? message : message(result.data),
         });
       }
