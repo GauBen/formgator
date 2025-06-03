@@ -1,5 +1,13 @@
 # formgator
 
+## 0.2.0
+
+### Breaking Changes
+
+* **SvelteKit:** non-serializable values (files, blobs) are no longer sent back through `form.accepted`. (#26)
+
+* Refinement issues no longer expose the refused value through `issue.received`. (#26)
+
 ## 0.1.4
 
 * Add support for custom error messages. (#22)
