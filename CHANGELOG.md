@@ -1,5 +1,9 @@
 # formgator
 
+## 0.2.1
+
+* Use the `v` flag for RegExps.
+
 ## 0.2.0
 
 ### Breaking Changes
