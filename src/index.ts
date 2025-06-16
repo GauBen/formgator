@@ -66,7 +66,9 @@ export { week } from "./validators/week.ts";
 export type { FormInput, ValidationIssue };
 
 const stringifyRegex = (regex: RegExp) => {
-  if (regex.flags !== "u") console.warn("[formgator] RegExp attribute must be written with u flag");
+  // The compiled pattern of an input uses v mode.
+  // https://html.spec.whatwg.org/multipage/input.html#compiled-pattern-regular-expression
+  if (regex.flags !== "v") console.warn("[formgator] RegExp attribute must be written with v flag");
   if (!regex.source.startsWith("^") || !regex.source.endsWith("$"))
     console.warn("[formgator] RegExp attribute must start with ^ and end with $");
   return regex.source.replaceAll(/^\^|\$$/g, "");

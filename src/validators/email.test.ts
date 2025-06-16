@@ -20,7 +20,7 @@ describe("email()", async () => {
       succeed("gautier@example.com"),
     );
     assert.deepEqualTyped(
-      email({ pattern: /^.+@example\.com$/u })[safeParse](data, "input"),
+      email({ pattern: /^.+@example\.com$/v })[safeParse](data, "input"),
       succeed("gautier@example.com"),
     );
     assert.deepEqualTyped(email()[safeParse](data, "empty"), succeed(null));
@@ -29,7 +29,7 @@ describe("email()", async () => {
       succeed(["gautier@example.com", "gautier@example.net"]),
     );
     assert.deepEqualTyped(
-      email({ multiple: true, pattern: /^gautier@.+$/u })[safeParse](data, "multiple"),
+      email({ multiple: true, pattern: /^gautier@.+$/v })[safeParse](data, "multiple"),
       succeed(["gautier@example.com", "gautier@example.net"]),
     );
     assert.deepEqualTyped(email({ multiple: true })[safeParse](data, "empty"), succeed([]));
@@ -65,12 +65,12 @@ describe("email()", async () => {
       failParse("maxlength", {}, { maxlength: 18 }),
     );
     assert.deepEqualTyped(
-      email({ pattern: /^.+@example\.net$/u })[safeParse](data, "ok"),
-      failParse("pattern", {}, { pattern: /^.+@example\.net$/u }),
+      email({ pattern: /^.+@example\.net$/v })[safeParse](data, "ok"),
+      failParse("pattern", {}, { pattern: /^.+@example\.net$/v }),
     );
     assert.deepEqualTyped(
-      email({ multiple: true, pattern: /^.+@example\.net$/u })[safeParse](data, "ok"),
-      failParse("pattern", {}, { pattern: /^.+@example\.net$/u }),
+      email({ multiple: true, pattern: /^.+@example\.net$/v })[safeParse](data, "ok"),
+      failParse("pattern", {}, { pattern: /^.+@example\.net$/v }),
     );
   });
 });

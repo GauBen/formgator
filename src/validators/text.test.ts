@@ -20,7 +20,7 @@ describe("text()", async () => {
       succeed("hello world!"),
     );
     assert.deepEqualTyped(
-      text({ pattern: /^\w+ \w+!$/u })[safeParse](data, "input"),
+      text({ pattern: /^\w+ \w+!$/v })[safeParse](data, "input"),
       succeed("hello world!"),
     );
     assert.deepEqualTyped(text().trim()[safeParse](data, "trim"), succeed("hello"));
@@ -53,8 +53,8 @@ describe("text()", async () => {
       failParse("maxlength", { maxlength: "11 chars plz" }, { maxlength: 11 }),
     );
     assert.deepEqualTyped(
-      text({ pattern: /^\w+ \w+\?$/u })[safeParse](data, "ok"),
-      failParse("pattern", {}, { pattern: /^\w+ \w+\?$/u }),
+      text({ pattern: /^\w+ \w+\?$/v })[safeParse](data, "ok"),
+      failParse("pattern", {}, { pattern: /^\w+ \w+\?$/v }),
     );
   });
 });
