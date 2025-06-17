@@ -1,5 +1,9 @@
 # formgator
 
+## 0.2.2
+
+* New `.enrich(attrs)` form input method to add custom attributes. (#32)
+
 ## 0.2.1
 
 * Use the `v` flag for RegExps.
