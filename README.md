@@ -117,6 +117,34 @@ Validators can be chained with additional methods to transform the value:
 
   You can provide a value to `optional` to replace `undefined` with a default value.
 
+- `pipe(schema)` allows you to use a [Standard Schema](https://github.com/standard-schema/standard-schema) compliant validator/transformer.
+
+  ```ts
+  import z from 'zod';
+  const schema = fg.form({
+    id: fg.text().pipe(z.string().uuid());
+  });
+  ```
+
+- `enrich(attributes)` allows you to add custom attributes to the input, which can be used for Svelte bindings or other purposes.
+
+  ```ts
+  const schema = fg.form({
+    username: fg.text({ required: true }).enrich({ title: "Your username" }),
+  });
+  ```
+
+  If the argument is a function, it will be called with the current attributes and should return a new attributes object. This is useful for dynamic attributes that depend on the current state of the form.
+
+  ```ts
+  const schema = fg.form({
+    username: fg.text({ minlength: 6 }).enrich((attributes) => ({
+      ...attributes,
+      title: `Your username (${attributes.minlength} characters minimum)`,
+    })),
+  });
+  ```
+
 The schema produced by `fg.form()` has two methods:
 
 - `.parse()` that returns the parsed form data or throws an error if the form data is invalid.
@@ -131,7 +159,7 @@ Base interface for all form inputs.
 ```ts
 interface FormInput<T = unknown> {
     /** Attributes given when creating the validator. */
-    attributes: Record<string, string | string[] | number | boolean | RegExp | undefined>;
+    attributes: Attributes;
     /**
      * Transforms the output of the validator into another value.
      *
@@ -168,6 +196,24 @@ interface FormInput<T = unknown> {
      *   fg.text().pipe(z.string().email());
      */
     pipe<U>(schema: StandardSchemaV1<T, U>): FormInput<U>;
+    /**
+     * Adds attributes to the input.
+     *
+     * An object can be provided to merge with the existing attributes, or a function
+     * that receives the current attributes and returns the merged object.
+     *
+     * @example
+     *   // Merges the title attribute with the existing attributes
+     *   fg.text().enrich({ title: "Format: ABCD-12" });
+     *
+     *   // Provide a function to enrich the attributes dynamically
+     *   fg.text().enrich((attributes) => ({
+     *     ...attributes,
+     *     title: `Format: ${attributes.pattern}`,
+     *   }));
+     */
+    enrich(attributes: Attributes): FormInput<T>;
+    enrich(merge: (attributes: Attributes) => Attributes): FormInput<T>;
     /** @private @internal */
     [safeParse]: (data: ReadonlyFormData, name: string) => Result<T, ValidationIssue>;
 }

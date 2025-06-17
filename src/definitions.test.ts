@@ -125,7 +125,7 @@ describe("methods", () => {
     });
   });
 
-  describe("pipe", () => {
+  describe(".pipe()", () => {
     it("should work with Zod and Valibot", () => {
       const data = new FormData();
       data.append("input", "hello@example.com");
@@ -199,6 +199,26 @@ describe("methods", () => {
           [safeParse](data, "input"),
         fail({ code: "custom" as const, message: "Unknown error" }),
       );
+    });
+  });
+
+  describe(".enrich()", () => {
+    it("should merge attributes", () => {
+      const schema = text({ required: true, pattern: /previous/ }).enrich({
+        custom: "value",
+        pattern: /new/,
+      });
+      assert.deepEqualTyped(schema.attributes, { required: true, custom: "value", pattern: /new/ });
+    });
+
+    it("should accept a function", () => {
+      let required: unknown;
+      const schema = text({ required: true }).enrich((attributes) => {
+        required = attributes.required;
+        return { ...attributes, custom: "value" };
+      });
+      assert.equal(required, true);
+      assert.deepEqualTyped(schema.attributes, { required: true, custom: "value" });
     });
   });
 

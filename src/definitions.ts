@@ -35,12 +35,14 @@ export type ValidationIssue =
   | { code: "transform"; message: string }
   | { code: "type"; message: string };
 
+export type Attributes = Record<string, string | string[] | number | boolean | RegExp | undefined>;
+
 /**
  * Base interface for all form inputs.
  */
 export interface FormInput<T = unknown> {
   /** Attributes given when creating the validator. */
-  attributes: Record<string, string | string[] | number | boolean | RegExp | undefined>;
+  attributes: Attributes;
 
   /**
    * Transforms the output of the validator into another value.
@@ -84,6 +86,25 @@ export interface FormInput<T = unknown> {
    *   fg.text().pipe(z.string().email());
    */
   pipe<U>(schema: StandardSchemaV1<T, U>): FormInput<U>;
+
+  /**
+   * Adds attributes to the input.
+   *
+   * An object can be provided to merge with the existing attributes, or a function
+   * that receives the current attributes and returns the merged object.
+   *
+   * @example
+   *   // Merges the title attribute with the existing attributes
+   *   fg.text().enrich({ title: "Format: ABCD-12" });
+   *
+   *   // Provide a function to enrich the attributes dynamically
+   *   fg.text().enrich((attributes) => ({
+   *     ...attributes,
+   *     title: `Format: ${attributes.pattern}`,
+   *   }));
+   */
+  enrich(attributes: Attributes): FormInput<T>;
+  enrich(merge: (attributes: Attributes) => Attributes): FormInput<T>;
 
   /** @private @internal */
   [safeParse]: (data: ReadonlyFormData, name: string) => Result<T, ValidationIssue>;
@@ -217,4 +238,15 @@ function pipe<T, U>(this: FormInput<T>, schema: StandardSchemaV1<T, U>): FormInp
   };
 }
 
-export const methods = { transform, refine, optional, pipe };
+function enrich<T>(
+  this: FormInput<T>,
+  arg: Attributes | ((attributes: Attributes) => Attributes),
+): FormInput<T> {
+  const merge = typeof arg === "function" ? arg : (prev: Attributes) => ({ ...prev, ...arg });
+  return {
+    ...this,
+    attributes: merge(this.attributes),
+  };
+}
+
+export const methods = { transform, refine, optional, pipe, enrich };
