@@ -13,6 +13,7 @@ export type Result<Data, Error> = { success: true; data: Data } | { success: fal
  */
 export interface ReadonlyFormData {
   has(name: string): boolean;
+  hasAll(name: string[]): boolean;
   get(name: string): string | File | null;
   getAll(name: string): Array<string | File>;
 }
