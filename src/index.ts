@@ -64,7 +64,7 @@ export { textarea } from "./validators/textarea.ts";
 export { time } from "./validators/time.ts";
 export { url } from "./validators/url.ts";
 export { week } from "./validators/week.ts";
-export type { FormInput, ValidationIssue };
+export type { Failures, FormInput, ValidationIssue };
 
 const stringifyRegex = (regex: RegExp) => {
   // The compiled pattern of an input uses v mode.
