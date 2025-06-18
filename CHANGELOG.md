@@ -1,5 +1,9 @@
 # formgator
 
+## 0.2.3
+
+* Expose the `Failures` type. (#37)
+
 ## 0.2.2
 
 * New `.enrich(attrs)` form input method to add custom attributes. (#32)
