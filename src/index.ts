@@ -34,6 +34,7 @@
 
 import type { StandardSchemaV1 } from "@standard-schema/spec";
 import {
+  type Failures,
   type FormInput,
   type ReadonlyFormData,
   type Result,
