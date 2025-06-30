@@ -489,6 +489,7 @@ Supported attributes:
 - `required` - Whether the input is required.
 - `min` - Minimum value.
 - `max` - Maximum value.
+- `step` - Accepted granularity of the value. Default is 1 (integer), set to 0 to allow floating numbers.
 
 </details>
 
