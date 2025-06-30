@@ -1,5 +1,9 @@
 # formgator
 
+## 0.2.4
+
+* Add support for floating number steps. (#40)
+
 ## 0.2.3
 
 * Expose the `Failures` type. (#37)
