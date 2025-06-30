@@ -1,8 +1,8 @@
 import {
   type FormInput,
-  type ReadonlyFormData,
   fail,
   methods,
+  type ReadonlyFormData,
   safeParse,
   succeed,
 } from "../definitions.ts";

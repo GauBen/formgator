@@ -45,16 +45,16 @@
     "test": "tsc && node --experimental-test-coverage --experimental-test-isolation=none --test-coverage-exclude='src/**/*.test.ts' --test-coverage-branches=100 --test 'src/**/*.test.ts'"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@chachalog/types": "^0.3.8",
+    "@biomejs/biome": "^2.0.6",
+    "@chachalog/types": "^0.4.1",
     "@standard-schema/spec": "^1.0.0",
-    "@sveltejs/kit": "^2.20.5",
-    "@types/node": "^22.14.1",
-    "pkgroll": "^2.12.1",
-    "publint": "^0.3.11",
+    "@sveltejs/kit": "^2.22.2",
+    "@types/node": "^24.0.8",
+    "pkgroll": "^2.13.1",
+    "publint": "^0.3.12",
     "typescript": "^5.8.3",
-    "valibot": "^1.0.0",
-    "zod": "^3.24.2"
+    "valibot": "^1.1.0",
+    "zod": "^3.25.67"
   },
   "peerDependencies": {
     "@sveltejs/kit": ">=2.0.0"

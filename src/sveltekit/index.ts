@@ -25,7 +25,7 @@
  * @module
  */
 
-import { type SubmitFunction, error, fail } from "@sveltejs/kit";
+import { error, fail, type SubmitFunction } from "@sveltejs/kit";
 import * as fg from "../index.ts";
 
 class FormError extends Error {

@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import type { StandardSchemaV1 } from "@standard-schema/spec";
 import assert from "./assert.ts";
-import { type ReadonlyFormData, fail, failParse } from "./definitions.ts";
+import { fail, failParse, type ReadonlyFormData } from "./definitions.ts";
 import * as fg from "./index.ts";
 
 describe("form()", () => {

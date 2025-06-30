@@ -152,6 +152,32 @@ The schema produced by `fg.form()` has two methods:
 
 ## Complete API
 
+<details><summary><code>type Failures</code></summary>
+
+Custom error messages for validators.
+
+It's a plain object whose keys are the possible validation issues, and values
+can be a string or a function that receives the original issue and returns a string.
+
+```ts
+const failures: Failures = {
+  accept: "Invalid file type",
+  maxlength: ({ maxlength }) => `Too long, maximum length is ${maxlength}`,
+};
+```
+
+```ts
+type Failures<K extends ValidationIssue["code"] = ValidationIssue["code"]> = Pick<{
+    [K in ValidationIssue["code"]]?: Omit<ValidationIssue & {
+        code: K;
+    }, "code" | "message"> extends Record<string, never> ? string : string | ((data: Omit<ValidationIssue & {
+        code: K;
+    }, "code" | "message">) => string);
+}, K>;
+```
+
+</details>
+
 <details><summary><code>interface FormInput</code></summary>
 
 Base interface for all form inputs.

@@ -115,6 +115,19 @@ export interface FormInput<T = unknown> {
 export const succeed = <T>(data: T): Result<T, never> => ({ success: true as const, data });
 export const fail = <T>(error: T): Result<never, T> => ({ success: false as const, error });
 
+/**
+ * Custom error messages for validators.
+ *
+ * It's a plain object whose keys are the possible validation issues, and values
+ * can be a string or a function that receives the original issue and returns a string.
+ *
+ * ```ts
+ * const failures: Failures = {
+ *   accept: "Invalid file type",
+ *   maxlength: ({ maxlength }) => `Too long, maximum length is ${maxlength}`,
+ * };
+ * ```
+ */
 export type Failures<K extends ValidationIssue["code"] = ValidationIssue["code"]> = Pick<
   {
     [K in ValidationIssue["code"]]?: Omit<

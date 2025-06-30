@@ -36,12 +36,12 @@ import type { StandardSchemaV1 } from "@standard-schema/spec";
 import {
   type Failures,
   type FormInput,
+  fail,
   type ReadonlyFormData,
   type Result,
-  type ValidationIssue,
-  fail,
   succeed,
   safeParse as symbol,
+  type ValidationIssue,
 } from "./definitions.ts";
 
 export { checkbox } from "./validators/checkbox.ts";

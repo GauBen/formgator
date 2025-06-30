@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npx chachalog@0.3 prepare-next-release
+      - run: npx chachalog@0.4 prepare-next-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -30,6 +30,6 @@ jobs:
           yarn config set npmAuthToken '${{ secrets.NPM_TOKEN }}'
           yarn workspaces foreach -Avv --no-private npm publish --access public --tolerate-republish --provenance
           yarn dlx --quiet jsr publish --allow-dirty
-      - run: npx chachalog@0.3 publish-release
+      - run: npx chachalog@0.4 publish-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
