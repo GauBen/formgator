@@ -23,12 +23,14 @@ export function number(
     max?: number;
     /**
      * Accepted granularity of the value. Default is 1 (integer), set to 0 to
-     * allow any number.
+     * allow any number. Floating numbers are supported.
+     *
+     * **Must be a positive number.**
      *
      * The value must be a multiple of the step attribute, i.e. it could be
      * written as: `value = (min ?? 0) + k * step` with `k` an integer.
      *
-     * @default 1 (only integers are accepted)
+     * @default 1
      */
     step?: number;
   },
@@ -65,7 +67,8 @@ export function number(
       if (Number.isNaN(number)) return failParse("invalid", failures);
 
       const step = attributes.step ?? 1;
-      if (step > 0 && (number - (attributes.min ?? 0)) % step !== 0)
+
+      if (step > 0 && !isMultiple(number - (attributes.min ?? 0), step))
         return failParse("step", failures, { step: step });
 
       if (attributes.min !== undefined && number < attributes.min)
@@ -75,4 +78,19 @@ export function number(
       return succeed(number);
     },
   };
+}
+
+/**
+ * Checks whether `a` is a multiple of `b`, i.e. if `a % b === 0`.
+ *
+ * When `a` and `b` are decimal numbers, JS can be unreliable. (`5 % 0.1 === 0.09999999999999973`)
+ *
+ * This function returns a more reliable value.
+ *
+ * Useful until [Decimals](https://github.com/tc39/proposal-decimal) are available in JS for exact computations.
+ *
+ */
+function isMultiple(a: number, b: number): boolean {
+  const r = a % b;
+  return r < 1e-12 || b - r < 1e-12;
 }
