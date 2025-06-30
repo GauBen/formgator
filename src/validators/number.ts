@@ -65,7 +65,8 @@ export function number(
       if (Number.isNaN(number)) return failParse("invalid", failures);
 
       const step = attributes.step ?? 1;
-      if (step > 0 && (number - (attributes.min ?? 0)) % step !== 0)
+
+      if (step > 0 && !isMultiple(number - (attributes.min ?? 0), step))
         return failParse("step", failures, { step: step });
 
       if (attributes.min !== undefined && number < attributes.min)
@@ -75,4 +76,24 @@ export function number(
       return succeed(number);
     },
   };
+}
+
+/**
+ * Checks whether `a` is a multiple of `b`, ie if `a % b === 0 `
+ *
+ * When `a` and `b` are decimal numbers, JS can be unreliable (`5 % 0.1 === 0.09999999999999973`)
+ *
+ * This function returns a more reliable value.
+ *
+ * Useful until [Decimals](https://github.com/tc39/proposal-decimal) are available in JS for exact computations
+ *
+ */
+function isMultiple(a: number, b:number, precision = 12): boolean{
+  // When `a` and `b` are integers do the standard computation
+  if(a % 1 === 0 && b % 1 === 0){
+    return a % b === 0
+  }
+
+  const c = a % b;
+  return Math.min(c, b - c) < Math.pow(10, -1 * precision);
 }

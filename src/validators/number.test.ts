@@ -12,6 +12,7 @@ describe("number()", async () => {
 
     assert.deepEqualTyped(number()[safeParse](data, "input"), succeed(123));
     assert.deepEqualTyped(number({ step: 0 })[safeParse](data, "float"), succeed(123.456));
+    assert.deepEqualTyped(number({ step: 0.1 })[safeParse](data, "input"), succeed(123));
     assert.deepEqualTyped(number()[safeParse](data, "empty"), succeed(null));
     assert.deepEqualTyped(number({ min: 123 })[safeParse](data, "input"), succeed(123));
     assert.deepEqualTyped(number({ max: 123 })[safeParse](data, "input"), succeed(123));
