@@ -23,12 +23,14 @@ export function number(
     max?: number;
     /**
      * Accepted granularity of the value. Default is 1 (integer), set to 0 to
-     * allow any number.
+     * allow any number. Floating numbers are supported.
+     *
+     * **Must be a positive number.**
      *
      * The value must be a multiple of the step attribute, i.e. it could be
      * written as: `value = (min ?? 0) + k * step` with `k` an integer.
      *
-     * @default 1 (only integers are accepted)
+     * @default 1
      */
     step?: number;
   },
@@ -79,21 +81,16 @@ export function number(
 }
 
 /**
- * Checks whether `a` is a multiple of `b`, ie if `a % b === 0 `
+ * Checks whether `a` is a multiple of `b`, i.e. if `a % b === 0`.
  *
- * When `a` and `b` are decimal numbers, JS can be unreliable (`5 % 0.1 === 0.09999999999999973`)
+ * When `a` and `b` are decimal numbers, JS can be unreliable. (`5 % 0.1 === 0.09999999999999973`)
  *
  * This function returns a more reliable value.
  *
- * Useful until [Decimals](https://github.com/tc39/proposal-decimal) are available in JS for exact computations
+ * Useful until [Decimals](https://github.com/tc39/proposal-decimal) are available in JS for exact computations.
  *
  */
-function isMultiple(a: number, b:number, precision = 12): boolean{
-  // When `a` and `b` are integers do the standard computation
-  if(a % 1 === 0 && b % 1 === 0){
-    return a % b === 0
-  }
-
-  const c = a % b;
-  return Math.min(c, b - c) < Math.pow(10, -1 * precision);
+function isMultiple(a: number, b: number): boolean {
+  const r = a % b;
+  return r < 1e-12 || b - r < 1e-12;
 }
