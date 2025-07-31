@@ -1,5 +1,9 @@
 # formgator
 
+## 0.2.5
+
+* SvelteKit: add `reportValidityBase` for better `use:enhance` composability. (#43)
+
 ## 0.2.4
 
 * Add support for floating number steps. (#40)
