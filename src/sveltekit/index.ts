@@ -25,7 +25,7 @@
  * @module
  */
 
-import { error, fail, type ActionResult, type SubmitFunction } from "@sveltejs/kit";
+import { type ActionResult, error, fail, type SubmitFunction } from "@sveltejs/kit";
 import * as fg from "../index.ts";
 
 class FormError extends Error {
@@ -72,50 +72,47 @@ export function formfail(issues: Record<string, string>): never {
  *
  * ```ts
  * export const disableSubmitterAndSetValidity: (options?: {
- * 	reset?: boolean;
- * 	invalidateAll?: boolean;
+ *   reset?: boolean;
+ *   invalidateAll?: boolean;
  * }) => SubmitFunction = (options) => (input) => {
- * 	input.submitter?.setAttribute("disabled", "");
+ *   input.submitter?.setAttribute("disabled", "");
  *
- * 	return async ({ update, result, formElement }) => {
- * 		await update(options);
- * 		reportValidityBase({ result, formElement });
- * 		input.submitter?.removeAttribute("disabled");
- * 	};
+ *   return async ({ update, result, formElement }) => {
+ *     await update(options);
+ *     reportValidityBase({ result, formElement });
+ *     input.submitter?.removeAttribute("disabled");
+ *   };
  * };
  * ```
  */
-export const reportValidityBase = <
-	Success extends Record<string, unknown> | undefined = Record<string, any>,
-	Failure extends Record<string, unknown> | undefined = Record<string, any>,
->(options: {
-	result: ActionResult<Success, Failure>;
-	formElement: HTMLFormElement;
-}) => {
-	const result = options.result;
+export const reportValidityBase = (options: {
+  result: ActionResult;
+  formElement: HTMLFormElement;
+}): void => {
+  const result = options.result;
 
-	if (result.type === "failure" &&
+  if (
+    result.type === "failure" &&
     result.data?.issues !== null &&
-     typeof result.data?.issues === "object") {
-		const issues = result.data.issues as Record<string, fg.ValidationIssue>;
+    typeof result.data?.issues === "object"
+  ) {
+    const issues = result.data.issues as Record<string, fg.ValidationIssue>;
 
-		for (const element of options.formElement.elements) {
-			if (
-				!(element instanceof HTMLInputElement) &&
-				!(element instanceof HTMLTextAreaElement) &&
-				!(element instanceof HTMLSelectElement)
-			) {
-				continue;
-			}
+    for (const element of options.formElement.elements) {
+      if (
+        !(element instanceof HTMLInputElement) &&
+        !(element instanceof HTMLTextAreaElement) &&
+        !(element instanceof HTMLSelectElement)
+      ) {
+        continue;
+      }
 
-			const issue = issues[element.name]?.message ?? "";
-			element.setCustomValidity(issue);
-			element.reportValidity();
-			element.addEventListener("input", () => element.setCustomValidity(""), {
-				once: true,
-			});
-		}
-	}
+      const issue = issues[element.name]?.message ?? "";
+      element.setCustomValidity(issue);
+      element.reportValidity();
+      element.addEventListener("input", () => element.setCustomValidity(""), { once: true });
+    }
+  }
 };
 
 /**
@@ -129,7 +126,7 @@ export function reportValidity(options?: {
 }): ReturnType<SubmitFunction> {
   return async ({ update, result, formElement }) => {
     await update(options);
-    reportValidityBase({result, formElement})
+    reportValidityBase({ result, formElement });
   };
 }
 

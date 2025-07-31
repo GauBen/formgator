@@ -1,6 +1,6 @@
 ---
 # Allowed version bumps: patch, minor, major
-formgator: minor
+formgator: patch
 ---
 
-Add reportValidityBase (#43)
+SvelteKit: add `reportValidityBase` for better `use:enhance` composability. (#43)
