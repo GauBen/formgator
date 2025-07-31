@@ -25,7 +25,7 @@
  * @module
  */
 
-import { error, fail, type SubmitFunction } from "@sveltejs/kit";
+import { type ActionResult, error, fail, type SubmitFunction } from "@sveltejs/kit";
 import * as fg from "../index.ts";
 
 class FormError extends Error {
@@ -66,31 +66,71 @@ export function formfail(issues: Record<string, string>): never {
 /**
  * Reports validation issues to the user interface using the `setCustomValidity` API.
  *
+ * This function is meant to be used when making your own `SubmitFunction`s
+ *
+ * @example
+ *
+ * ```ts
+ * export const disableSubmitterAndSetValidity: (options?: {
+ *   reset?: boolean;
+ *   invalidateAll?: boolean;
+ * }) => SubmitFunction = (options) => (input) => {
+ *   input.submitter?.setAttribute("disabled", "");
+ *
+ *   return async ({ update, result, formElement }) => {
+ *     await update(options);
+ *     reportValidityBase({ result, formElement });
+ *     input.submitter?.removeAttribute("disabled");
+ *   };
+ * };
+ * ```
+ */
+export const reportValidityBase = (options: {
+  result: ActionResult;
+  formElement: HTMLFormElement;
+}): void => {
+  const result = options.result;
+
+  if (
+    result.type === "failure" &&
+    result.data?.issues !== null &&
+    typeof result.data?.issues === "object"
+  ) {
+    const issues = result.data.issues as Record<string, fg.ValidationIssue>;
+
+    for (const element of options.formElement.elements) {
+      if (
+        !(element instanceof HTMLInputElement) &&
+        !(element instanceof HTMLTextAreaElement) &&
+        !(element instanceof HTMLSelectElement)
+      ) {
+        continue;
+      }
+
+      // If an issue exists for the element, set the custom validity,
+      // otherwise, clear the custom validity with an empty string
+      const issue = issues[element.name]?.message ?? "";
+      element.setCustomValidity(issue);
+      element.reportValidity();
+
+      // Clear the custom validity when the user interacts with the element
+      element.addEventListener("input", () => element.setCustomValidity(""), { once: true });
+    }
+  }
+};
+
+/**
+ * Reports validation issues to the user interface using the `setCustomValidity` API.
+ *
  * Usage: `<form use:enhance={() => reportValidity(options)} />`
  */
 export function reportValidity(options?: {
   reset?: boolean;
   invalidateAll?: boolean;
 }): ReturnType<SubmitFunction> {
-  return ({ update, result, formElement }) => {
-    update(options);
-
-    if (result.type === "failure" && typeof result.data?.issues === "object") {
-      const issues = result.data.issues as Record<string, fg.ValidationIssue>;
-
-      for (const element of formElement.elements) {
-        if (!(element instanceof HTMLInputElement)) continue;
-
-        // If an issue exists for the element, set the custom validity,
-        // otherwise, clear the custom validity with an empty string
-        const issue = issues[element.name]?.message ?? "";
-        element.setCustomValidity(issue);
-        element.reportValidity();
-
-        // Clear the custom validity when the user interacts with the element
-        element.addEventListener("input", () => element.setCustomValidity(""), { once: true });
-      }
-    }
+  return async ({ update, result, formElement }) => {
+    await update(options);
+    reportValidityBase({ result, formElement });
   };
 }
 
