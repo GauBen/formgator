@@ -107,9 +107,13 @@ export const reportValidityBase = (options: {
         continue;
       }
 
+      // If an issue exists for the element, set the custom validity,
+      // otherwise, clear the custom validity with an empty string
       const issue = issues[element.name]?.message ?? "";
       element.setCustomValidity(issue);
       element.reportValidity();
+
+      // Clear the custom validity when the user interacts with the element
       element.addEventListener("input", () => element.setCustomValidity(""), { once: true });
     }
   }
